@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">台北倒垃圾</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">設定</string>
+    <string name="exit_settings">離開</string>
+    <string name="refresh_settings">更新</string>
+
+    <string name="loading">載入中</string>
+    <string name="network_error">無法連線，請檢查手機是否正常連網</string>
+    <string name="location_error">請開啟定位服務</string>
+    <string name="location_failure">無法定位座標</string>
+    <string name="data_not_found">附近沒有垃圾車</string>
+
+    <string name="yes_label">好</string>
+    <string name="no_label">不要</string>
+
+    <string name="ok_label">確認</string>
+    <string name="about_subject">關於</string>
+    <string name="processing">正在取得資料..</string>
+
+
+    <string name="pref_distance">查詢範圍</string>
+    <string name="pref_distance_summary">查詢距離(公里)</string>
+    <string-array name="pref_distance_item">
+        <item>3 公里</item>
+        <item>5公里</item>
+        <item>10公里</item>
+        <item>15公里</item>
+    </string-array>
+    <string-array name="pref_distance_code">
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+    </string-array>
+
+    <string name="pref_rownum">資料筆數</string>
+    <string name="pref_rownum_summary">每次顯示的資料筆數</string>
+    <string-array name="pref_rownum_item">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </string-array>
+    <string-array name="pref_rownum_code">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </string-array>
+
+</resources>
