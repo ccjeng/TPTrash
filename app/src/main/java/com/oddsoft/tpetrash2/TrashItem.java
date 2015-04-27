@@ -14,9 +14,7 @@ public class TrashItem implements Comparable<TrashItem> {
 	
 	@Override
 	public String toString() {
-
-		String result = getTime() + " " + getName();
-		return result;
+		return getTime() + " " + getName();
 	}
     @Override
     public int compareTo(TrashItem fi) {
@@ -32,8 +30,12 @@ public class TrashItem implements Comparable<TrashItem> {
 	public String getTime() {
 		return time;
 	}
-
 	public String getItemLabel() {
 		return time + " " + name;
 	}
+
+    public String getStartTime() {
+        return time.substring(0,5).replace(":","");
+    }
+
 }

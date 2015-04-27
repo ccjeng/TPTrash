@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -53,6 +55,7 @@ public class MainActivity extends ListActivity {
     private static int rownum;
     private static int distance;
     private static int hour;
+    private static String sorting;
 
     private LocationManager lms;
     private String bestProvider = LocationManager.GPS_PROVIDER;
@@ -121,8 +124,12 @@ public class MainActivity extends ListActivity {
                 .getDefaultSharedPreferences(getBaseContext());
         String distancePreference = prefs.getString("distance", "5");
         String rownumPreference = prefs.getString("rownum", "5");
+        String sortingPreference = prefs.getString("sorting", "DIST");
+
         distance = Integer.valueOf(distancePreference);
         rownum = Integer.valueOf(rownumPreference);
+        sorting = String.valueOf(sortingPreference);
+
     }
 
     @Override
@@ -189,6 +196,8 @@ public class MainActivity extends ListActivity {
                 Toast.makeText(MainActivity.this, R.string.data_not_found, Toast.LENGTH_LONG)
                         .show();
             }
+            sorting();
+
         }
     }
 
@@ -299,6 +308,24 @@ public class MainActivity extends ListActivity {
             return reader.readLine();
         }
 }
+
+    private void sorting() {
+        if (sorting.equals("TIME")) { //check time sorting
+            if (result != null) {
+                Collections.sort(result, new Comparator<TrashItem>() {
+                    @Override
+                    public int compare(TrashItem item1, TrashItem item2) {
+                        return item1.getStartTime().compareTo(item2.getStartTime());
+                    }
+                });
+            }
+        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sorting();
+    }
 
     private void goBrowser(String toLocation) {
         String from = "saddr=" + latitude + "," + longitude;

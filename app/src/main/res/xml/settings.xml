@@ -15,6 +15,13 @@
             android:key="rownum"
             android:defaultValue="5"
             android:entries="@array/pref_rownum_item"
-            android:entryValues="@array/pref_rownum_code" />      
-    </PreferenceCategory>        
+            android:entryValues="@array/pref_rownum_code" />
+        <ListPreference
+            android:title="@string/pref_sorting"
+            android:summary="@string/pref_sorting_summary"
+            android:key="sorting"
+            android:defaultValue="DIST"
+            android:entries="@array/pref_sorting_item"
+            android:entryValues="@array/pref_sorting_code" />
+    </PreferenceCategory>
 </PreferenceScreen>
