@@ -1,13 +1,9 @@
 package com.oddsoft.tpetrash2;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
+import com.google.android.gms.ads.*;
+import com.oddsoft.tpetrash2.adapter.JSONResponseHandler;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -34,15 +30,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 
 public class MainActivity extends ListActivity {
@@ -62,6 +56,7 @@ public class MainActivity extends ListActivity {
     private MyLocationListener mylistener;
     private Context context;
     private ArrayList<TrashItem> result;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +86,19 @@ public class MainActivity extends ListActivity {
         if (getNetworkStatus && getLocationStatus) {
             new HttpGetTask(MainActivity.this).execute();
         }
-
+        adView();
     }
 
+    private void adView() {
+        adView = (AdView) findViewById(R.id.adView);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+/*        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)       // 仿真器
+                .addTestDevice("7710C21FF2537758BF3F80963477D68E") // 我的 Galaxy Nexus 測試手機
+                .build();*/
+        adView.loadAd(adRequest);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -138,6 +143,27 @@ public class MainActivity extends ListActivity {
         goBrowser(result.get(position).getLocation().toString());
 
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (adView != null)
+            adView.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (adView != null)
+            adView.resume();
+    }
+    @Override
+    protected void onDestroy() {
+        if (adView != null)
+            adView.destroy();
+        super.onDestroy();
+    }
+
 
     private class HttpGetTask extends AsyncTask<Void, Void, ArrayList<TrashItem>> {
         private ProgressDialog dialog;
@@ -201,114 +227,6 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    private class JSONResponseHandler implements ResponseHandler<ArrayList<TrashItem>> {
-
-        @Override
-        public ArrayList<TrashItem> handleResponse(HttpResponse response)
-                throws ClientProtocolException, IOException {
-            TrashItem item = null;
-            String text = null;
-            result = new ArrayList<TrashItem>();
-
-            HttpEntity entity = response.getEntity();
-            text = getUTF8ContentFromEntity(entity);
-
-            try {
-                String lng = "";
-                String lat = "";
-                String address = "";
-                String carTime = "";
-                String location = "";
-                String name = "";
-                String time = "";
-
-                JsonFactory jsonfactory = new JsonFactory();
-                JsonParser jsonParser = jsonfactory.createJsonParser(text);
-                JsonToken token = jsonParser.nextToken();
-
-                // ArrayList objectArray = new ArrayList();
-                // Expected JSON is an array so if current token is "[" then
-                // while
-                // we don't get
-                // "]" we will keep parsing
-
-                if (token == JsonToken.START_ARRAY) {
-                    while (token != JsonToken.END_ARRAY) {
-                        // Inside array there are many objects, so it has to
-                        // start
-                        // with "{" and end with "}"
-                        token = jsonParser.nextToken();
-                        if (token == JsonToken.START_OBJECT) {
-                            while (token != JsonToken.END_OBJECT) {
-                                // Each object has a name which we will use to
-                                // identify the type.
-                                token = jsonParser.nextToken();
-                                if (token == JsonToken.FIELD_NAME) {
-                                    String fieldname = jsonParser
-                                            .getCurrentName();
-                                    // Log.d(TAG, fieldname);
-
-                                    if ("Address".equals(fieldname)) {
-                                        jsonParser.nextToken();
-                                        address = jsonParser.getText();
-                                    }
-
-                                    if ("CarTime".equals(fieldname)) {
-                                        jsonParser.nextToken();
-                                        carTime = jsonParser.getText();
-                                    }
-
-                                    if ("Lng".equals(fieldname)) {
-                                        jsonParser.nextToken();
-                                        lng = jsonParser.getText();
-                                    }
-
-                                    if ("Lat".equals(fieldname)) {
-                                        jsonParser.nextToken();
-                                        lat = jsonParser.getText();
-                                    }
-
-                                }
-
-                            }
-                            location = lat + "," + lng;
-                            name = address.substring(6, address.length());
-                            time = carTime;
-
-                            Log.d(TAG, "location=" + location);
-                            Log.d(TAG, "name=" + name);
-                            Log.d(TAG, "time=" + time);
-
-                            item = new TrashItem(location, time, name);
-                            result.add(item);
-                        }
-
-                    }
-
-                }
-                jsonParser.close();
-
-            } catch (JsonParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } finally {
-            }
-
-        return result;
-    }
-
-        protected String getUTF8ContentFromEntity(HttpEntity entity)
-                throws IllegalStateException, IOException {
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    entity.getContent(), "UTF-8"));
-            return reader.readLine();
-        }
-}
-
     private void sorting() {
         if (sorting.equals("TIME")) { //check time sorting
             if (result != null) {
@@ -320,11 +238,6 @@ public class MainActivity extends ListActivity {
                 });
             }
         }
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sorting();
     }
 
     private void goBrowser(String toLocation) {
