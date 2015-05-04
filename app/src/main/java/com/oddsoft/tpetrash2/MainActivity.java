@@ -5,6 +5,13 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.google.android.gms.ads.*;
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +20,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -34,9 +43,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -47,7 +59,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends Activity {
 
     private static final String TAG = "MainActivity";
     private static boolean getLocationStatus = false;
@@ -65,6 +77,62 @@ public class MainActivity extends ListActivity {
     private Context context;
     private ArrayList<TrashItem> result;
     private AdView adView;
+
+
+    /*
+     * Define a request code to send to Google Play services This code is returned in
+     * Activity.onActivityResult
+     */
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+
+    /*
+     * Constants for location update parameters
+     */
+    // Milliseconds per second
+    private static final int MILLISECONDS_PER_SECOND = 1000;
+
+    // The update interval
+    private static final int UPDATE_INTERVAL_IN_SECONDS = 5;
+
+    // A fast interval ceiling
+    private static final int FAST_CEILING_IN_SECONDS = 1;
+
+    // Update interval in milliseconds
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
+            * UPDATE_INTERVAL_IN_SECONDS;
+
+    // A fast ceiling of update intervals, used when the app is visible
+    private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
+            * FAST_CEILING_IN_SECONDS;
+
+    /*
+     * Constants for handling location results
+     */
+    // Initial offset for calculating the map bounds
+    private static final double OFFSET_CALCULATION_INIT_DIFF = 1.0;
+
+    // Accuracy for calculating the map bounds
+    private static final float OFFSET_CALCULATION_ACCURACY = 0.01f;
+
+    // Maximum results returned from a Parse query
+    private static final int MAX_POST_SEARCH_RESULTS = 20;
+
+    // Maximum post search radius for map in kilometers
+    private static final int MAX_POST_SEARCH_DISTANCE = 100;
+
+    private static final String PARSE_APPLICATION_ID = "nxkxfDhpFQBXOReTPFIPhGIaYowmT5uuscj3w3Kb";
+    private static final String PARSE_CLIENT_KEY = "oo7CwnSrT3XCjVHuN3r1JBw7rvJzjmYZCRCX9e2U";
+
+    // Adapter for the Parse query
+    private ParseQueryAdapter<ArrayItem> trashQueryAdapter;
+
+    // Fields for the map radius in feet
+    private float radius;
+    private float lastRadius;
+
+    // Fields for helping process map and location changes
+    private Location lastLocation;
+    private Location currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,15 +154,20 @@ public class MainActivity extends ListActivity {
 
         Calendar calendar = Calendar.getInstance();
         hour = calendar.get(Calendar.HOUR_OF_DAY);
-        if (hour < 16)
-            hour = 16;
+
+        //TODO compare Car Start Time (add CarStartTime column on TaipeiAll object)
+
+        //if (hour < 16)
+        //    hour = 16;
 
         getPref();
 
+        parse();
+
         if (getNetworkStatus && getLocationStatus) {
-            new HttpGetTask(MainActivity.this).execute();
+            //new HttpGetTask(MainActivity.this).execute();
         }
-        adView();
+        //adView();
     }
 
     private void adView() {
@@ -106,6 +179,81 @@ public class MainActivity extends ListActivity {
                 .addTestDevice("7710C21FF2537758BF3F80963477D68E") // 我的 Galaxy Nexus 測試手機
                 .build();*/
         adView.loadAd(adRequest);
+    }
+
+    private void parse() {
+        ParseObject.registerSubclass(ArrayItem.class);
+        Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
+
+        // Set up a customized query
+        ParseQueryAdapter.QueryFactory<ArrayItem> factory =
+                new ParseQueryAdapter.QueryFactory<ArrayItem>() {
+                    public ParseQuery<ArrayItem> create() {
+                        Location myLoc = currentLocation; //(currentLocation == null) ? lastLocation : currentLocation;
+
+                        Log.d(TAG, "location = " + myLoc.toString());
+
+                        ParseQuery<ArrayItem> query = ArrayItem.getQuery();
+                        query.whereContains("CarTime", hour + ":");
+
+                        //TODO Sort by distance or car start time
+                        //query.orderByDescending("createdAt");
+
+                        query.whereWithinKilometers("location"
+                                , geoPointFromLocation(myLoc)
+                                , distance
+                        );
+                        query.setLimit(rownum);
+                        return query;
+                    }
+                };
+
+        // Set up the query adapter
+        trashQueryAdapter = new ParseQueryAdapter<ArrayItem>(this, factory) {
+            @Override
+            public View getItemView(ArrayItem trash, View view, ViewGroup parent) {
+                if (view == null) {
+                    view = View.inflate(getContext(), R.layout.trash_item, null);
+                }
+
+                super.getItemView(trash, view, parent);
+
+                TextView timeView = (TextView) view.findViewById(R.id.time_view);
+                TextView addressView = (TextView) view.findViewById(R.id.address_view);
+                TextView distanceView = (TextView) view.findViewById(R.id.distance_view);
+
+                timeView.setText(trash.getCarTime());
+                distanceView.setText(trash.getDistance(geoPointFromLocation(currentLocation)).toString());
+                addressView.setText(trash.getAddress());
+
+                return view;
+            }
+        };
+
+        // Disable automatic loading when the adapter is attached to a view.
+        trashQueryAdapter.setAutoload(true);
+
+        // Disable pagination, we'll manage the query limit ourselves
+        trashQueryAdapter.setPaginationEnabled(false);
+
+        ListView trashListView = (ListView) findViewById(R.id.trashList);
+        trashListView.setAdapter(trashQueryAdapter);
+
+        // Set up the handler for an item's selection
+        trashListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final ArrayItem item = trashQueryAdapter.getItem(position);
+                //TODO go intent google map
+                
+            }
+        });
+    }
+
+    /*
+ * Helper method to get the Parse GEO point representation of a location
+ */
+    private ParseGeoPoint geoPointFromLocation(Location loc) {
+        return new ParseGeoPoint(loc.getLatitude(), loc.getLongitude());
     }
 
     @Override
@@ -145,12 +293,13 @@ public class MainActivity extends ListActivity {
 
     }
 
+    /*
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         goBrowser(result.get(position).getLocation().toString());
 
-    }
+    }*/
 
     @Override
     protected void onPause() {
@@ -172,7 +321,7 @@ public class MainActivity extends ListActivity {
         super.onDestroy();
     }
 
-
+/*
     private class HttpGetTask extends AsyncTask<Void, Void, ArrayList<TrashItem>> {
         private ProgressDialog dialog;
 
@@ -343,7 +492,7 @@ public class MainActivity extends ListActivity {
             return reader.readLine();
         }
     }
-
+*/
     private void sorting() {
         if (sorting.equals("TIME")) { //check time sorting
             if (result != null) {
@@ -430,6 +579,9 @@ private class MyLocationListener implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+
+        currentLocation = location;
+
         // Initialize the location fields
         longitude = location.getLongitude();
         latitude = location.getLatitude();

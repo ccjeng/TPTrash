@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dip"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/time_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/address_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/time_view"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/distance_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"/>
+
+</LinearLayout>

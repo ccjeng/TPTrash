@@ -6,8 +6,9 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <!-- android:id="@android:id/list"-->
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/trashList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"></ListView>
