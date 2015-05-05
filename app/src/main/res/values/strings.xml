@@ -19,7 +19,7 @@
     <string name="ok_label">確認</string>
     <string name="about_subject">關於</string>
     <string name="processing">正在取得資料..</string>
-
+    <string name="google_play_service_missing">裝置沒有安裝Google Play服務</string>
 
     <string name="pref_distance">查詢範圍</string>
     <string name="pref_distance_summary">查詢距離(公里)</string>

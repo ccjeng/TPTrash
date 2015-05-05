@@ -1,43 +1,29 @@
 package com.oddsoft.tpetrash2;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.google.android.gms.ads.*;
-import com.parse.FindCallback;
-import com.parse.Parse;
-import com.parse.ParseException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.content.Context;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.net.http.AndroidHttpClient;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -45,39 +31,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity
+        implements LocationListener,
+        ConnectionCallbacks,
+        OnConnectionFailedListener {
 
-    private static final String TAG = "MainActivity";
-    private static boolean getLocationStatus = false;
-    private static boolean getNetworkStatus = false;
+    private static final String TAG = Application.APPTAG;
     private static Double longitude;
     private static Double latitude;
     private static int rownum;
     private static int distance;
     private static int hour;
     private static String sorting;
-
-    private LocationManager lms;
-    private String bestProvider = LocationManager.GPS_PROVIDER;
-    private MyLocationListener mylistener;
-    private Context context;
-    private ArrayList<TrashItem> result;
     private AdView adView;
-
 
     /*
      * Define a request code to send to Google Play services This code is returned in
@@ -120,9 +90,6 @@ public class MainActivity extends Activity {
     // Maximum post search radius for map in kilometers
     private static final int MAX_POST_SEARCH_DISTANCE = 100;
 
-    private static final String PARSE_APPLICATION_ID = "nxkxfDhpFQBXOReTPFIPhGIaYowmT5uuscj3w3Kb";
-    private static final String PARSE_CLIENT_KEY = "oo7CwnSrT3XCjVHuN3r1JBw7rvJzjmYZCRCX9e2U";
-
     // Adapter for the Parse query
     private ParseQueryAdapter<ArrayItem> trashQueryAdapter;
 
@@ -134,6 +101,13 @@ public class MainActivity extends Activity {
     private Location lastLocation;
     private Location currentLocation;
 
+    // A request to connect to Location Services
+    private LocationRequest locationRequest;
+
+    // Stores the current instantiation of the location client in this object
+    private GoogleApiClient locationClient;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,16 +115,18 @@ public class MainActivity extends Activity {
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
 
-        // Check Network Status
-        if (!isNetworkAvailable()) {
-            getNetworkStatus = false;
-            showNetworkError();
-        } else {
-            getNetworkStatus = true;
-        }
+            // 建立Google API用戶端物件
+            configGoogleApiClient();
 
-        // Check GPS Status
-        locationServiceInitial();
+            // 建立Location請求物件
+            configLocationRequest();
+
+            // 連線到Google API用戶端
+            //if (!locationClient.isConnected()) {
+            locationClient.connect();
+            //}
+
+        Log.d(TAG, "isConnected = " + locationClient.isConnected());
 
         Calendar calendar = Calendar.getInstance();
         hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -160,42 +136,50 @@ public class MainActivity extends Activity {
         //if (hour < 16)
         //    hour = 16;
 
+        hour = 16;
+
         getPref();
 
         parse();
 
-        if (getNetworkStatus && getLocationStatus) {
+        //if (getNetworkStatus && getLocationStatus) {
             //new HttpGetTask(MainActivity.this).execute();
-        }
+        //}
         //adView();
     }
 
     private void adView() {
         adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest;
 
-        AdRequest adRequest = new AdRequest.Builder().build();
-/*        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)       // 仿真器
-                .addTestDevice("7710C21FF2537758BF3F80963477D68E") // 我的 Galaxy Nexus 測試手機
-                .build();*/
+        if (Application.APPDEBUG) {
+            //Test Mode
+            adRequest = new AdRequest.Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .addTestDevice("7710C21FF2537758BF3F80963477D68E")
+                    .build();
+        } else {
+            adRequest = new AdRequest.Builder().build();
+
+        }
         adView.loadAd(adRequest);
     }
 
     private void parse() {
-        ParseObject.registerSubclass(ArrayItem.class);
-        Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
 
         // Set up a customized query
         ParseQueryAdapter.QueryFactory<ArrayItem> factory =
                 new ParseQueryAdapter.QueryFactory<ArrayItem>() {
                     public ParseQuery<ArrayItem> create() {
-                        Location myLoc = currentLocation; //(currentLocation == null) ? lastLocation : currentLocation;
+                        Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
-                        Log.d(TAG, "location = " + myLoc.toString());
-
+                        //Log.d(TAG, "location = " + myLoc.toString());
                         ParseQuery<ArrayItem> query = ArrayItem.getQuery();
-                        query.whereContains("CarTime", hour + ":");
 
+                        //String[] hours = {String.valueOf(hour) + ":", String.valueOf(hour+1) + ":"};
+                        //query.whereContainedIn("CarTime", Arrays.asList(hours));
+
+                        query.whereContains("CarTime", String.valueOf(hour) + ":");
                         //TODO Sort by distance or car start time
                         //query.orderByDescending("createdAt");
 
@@ -244,7 +228,7 @@ public class MainActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final ArrayItem item = trashQueryAdapter.getItem(position);
                 //TODO go intent google map
-                
+
             }
         });
     }
@@ -281,16 +265,9 @@ public class MainActivity extends Activity {
     }
 
     private void getPref() {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(getBaseContext());
-        String distancePreference = prefs.getString("distance", "5");
-        String rownumPreference = prefs.getString("rownum", "5");
-        String sortingPreference = prefs.getString("sorting", "DIST");
-
-        distance = Integer.valueOf(distancePreference);
-        rownum = Integer.valueOf(rownumPreference);
-        sorting = String.valueOf(sortingPreference);
-
+        distance = Integer.valueOf(Application.getSearchDistance());
+        rownum = Integer.valueOf(Application.getLimitRowNumber());
+        sorting = String.valueOf(Application.getSortingType());
     }
 
     /*
@@ -301,18 +278,58 @@ public class MainActivity extends Activity {
 
     }*/
 
+    /*
+    * Called when the Activity is no longer visible at all. Stop updates and disconnect.
+    */
+    @Override
+    public void onStop() {
+        // If the client is connected
+        if (locationClient.isConnected()) {
+            locationClient.disconnect();
+        }
+        // After disconnect() is called, the client is considered "dead".
+        locationClient.disconnect();
+        super.onStop();
+    }
+
+    /*
+    * Called when the Activity is restarted, even before it becomes visible.
+    */
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Connect to the location services client
+        locationClient.connect();
+        Log.d("onStart", String.valueOf(locationClient.isConnected()));
+
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
         if (adView != null)
             adView.pause();
+
+        // 移除位置請求服務
+        if (locationClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    locationClient, this);
+        }
     }
 
+    /*
+    * Called when the Activity is resumed. Updates the view.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         if (adView != null)
             adView.resume();
+
+        // 連線到Google API用戶端
+        if (!locationClient.isConnected()) {
+            locationClient.connect();
+        }
     }
     @Override
     protected void onDestroy() {
@@ -321,178 +338,7 @@ public class MainActivity extends Activity {
         super.onDestroy();
     }
 
-/*
-    private class HttpGetTask extends AsyncTask<Void, Void, ArrayList<TrashItem>> {
-        private ProgressDialog dialog;
-
-        private ListActivity activity;
-
-        // private List<Message> messages;
-        public HttpGetTask(ListActivity activity) {
-            this.activity = activity;
-            context = activity;
-            dialog = new ProgressDialog(context);
-        }
-
-        private Context context;
-
-        // Build RESTful trash API
-        private String URL = "http://tptrash-api.herokuapp.com/" + +hour + "/"
-                + rownum + "/" + distance + "/" + longitude + "/" + latitude;
-
-        AndroidHttpClient mClient = AndroidHttpClient.newInstance("");
-
-        @Override
-        protected void onPreExecute() {
-            this.dialog.setMessage("處理中");
-            this.dialog.show();
-        }
-
-
-        @Override
-        protected ArrayList<TrashItem> doInBackground(Void... params) {
-            Log.d(TAG, URL);
-            HttpGet request = new HttpGet(URL);
-            JSONResponseHandler responseHandler = new JSONResponseHandler();
-            try {
-                return mClient.execute(request, responseHandler);
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<TrashItem> result) {
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
-            if (null != mClient)
-                mClient.close();
-            setListAdapter(new ArrayAdapter<TrashItem>(
-                    MainActivity.this,
-                    R.layout.listitem, result));
-
-            if (getListView().getAdapter().getCount() == 0) {
-                Toast.makeText(MainActivity.this, R.string.data_not_found, Toast.LENGTH_LONG)
-                        .show();
-            }
-            sorting();
-
-        }
-    }
-
-    public class JSONResponseHandler implements ResponseHandler<ArrayList<TrashItem>> {
-        private static final String TAG = "JSONResponseHandler";
-
-        @Override
-        public ArrayList<TrashItem> handleResponse(HttpResponse response)
-                throws ClientProtocolException, IOException {
-            TrashItem item = null;
-            String text = null;
-            result = new ArrayList<TrashItem>();
-
-            HttpEntity entity = response.getEntity();
-            text = getUTF8ContentFromEntity(entity);
-
-            try {
-                String lng = "";
-                String lat = "";
-                String address = "";
-                String carTime = "";
-                String location = "";
-                String name = "";
-                String time = "";
-
-                JsonFactory jsonfactory = new JsonFactory();
-                JsonParser jsonParser = jsonfactory.createJsonParser(text);
-                JsonToken token = jsonParser.nextToken();
-
-                // ArrayList objectArray = new ArrayList();
-                // Expected JSON is an array so if current token is "[" then
-                // while
-                // we don't get
-                // "]" we will keep parsing
-
-                if (token == JsonToken.START_ARRAY) {
-                    while (token != JsonToken.END_ARRAY) {
-                        // Inside array there are many objects, so it has to
-                        // start
-                        // with "{" and end with "}"
-                        token = jsonParser.nextToken();
-                        if (token == JsonToken.START_OBJECT) {
-                            while (token != JsonToken.END_OBJECT) {
-                                // Each object has a name which we will use to
-                                // identify the type.
-                                token = jsonParser.nextToken();
-                                if (token == JsonToken.FIELD_NAME) {
-                                    String fieldname = jsonParser
-                                            .getCurrentName();
-                                    // Log.d(TAG, fieldname);
-
-                                    if ("Address".equals(fieldname)) {
-                                        jsonParser.nextToken();
-                                        address = jsonParser.getText();
-                                    }
-
-                                    if ("CarTime".equals(fieldname)) {
-                                        jsonParser.nextToken();
-                                        carTime = jsonParser.getText();
-                                    }
-
-                                    if ("Lng".equals(fieldname)) {
-                                        jsonParser.nextToken();
-                                        lng = jsonParser.getText();
-                                    }
-
-                                    if ("Lat".equals(fieldname)) {
-                                        jsonParser.nextToken();
-                                        lat = jsonParser.getText();
-                                    }
-
-                                }
-
-                            }
-                            location = lat + "," + lng;
-                            name = address.substring(6, address.length());
-                            time = carTime;
-
-                            Log.d(TAG, "location=" + location);
-                            Log.d(TAG, "name=" + name);
-                            Log.d(TAG, "time=" + time);
-
-                            item = new TrashItem(location, time, name);
-                            result.add(item);
-                        }
-
-                    }
-
-                }
-                jsonParser.close();
-
-            } catch (JsonParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } finally {
-            }
-
-            return result;
-        }
-
-        protected String getUTF8ContentFromEntity(HttpEntity entity)
-                throws IllegalStateException, IOException {
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    entity.getContent(), "UTF-8"));
-            return reader.readLine();
-        }
-    }
-*/
+    /*
     private void sorting() {
         if (sorting.equals("TIME")) { //check time sorting
             if (result != null) {
@@ -504,7 +350,7 @@ public class MainActivity extends Activity {
                 });
             }
         }
-    }
+    }*/
 
     private void goBrowser(String toLocation) {
         String from = "saddr=" + latitude + "," + longitude;
@@ -516,99 +362,131 @@ public class MainActivity extends Activity {
 
     }
 
-    private boolean isNetworkAvailable() {
-        final ConnectivityManager connMgr = (ConnectivityManager) this
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+    /*
+ * Verify that Google Play services is available before making a request.
+ *
+ * @return true if Google Play services is available, otherwise false
+ */
+    private boolean isGoogleServicesAvailable() {
+        // Check that Google Play services is available
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
 
-        final android.net.NetworkInfo wifi = connMgr
-                .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        final android.net.NetworkInfo mobile = connMgr
-                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-
-        if (wifi.isAvailable()) {
+        // If Google Play services is available
+        if (ConnectionResult.SUCCESS == resultCode) {
+            if (Application.APPDEBUG) {
+                Log.d(Application.APPTAG, "Google play services available");
+            }
+            // Continue
             return true;
-        } else if (mobile.isAvailable()) {
-            return true;
+            // Google Play services was not available for some reason
         } else {
+            // Display an error dialog
+            Log.d(Application.APPTAG, "Google play services NOT  available");
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
+            if (dialog != null) {
+                dialog.show();
+            }
             return false;
         }
     }
 
-    private void showNetworkError() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.app_name)
-                .setMessage(R.string.network_error)
-                .setPositiveButton(R.string.ok_label,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(
-                                    DialogInterface dialoginterface, int i) {
-                                // empty
-                            }
-                        }).show();
-    }
-
-    private void locationServiceInitial() {
-        lms = (LocationManager) getSystemService(LOCATION_SERVICE); // ���o�t�Ωw���A��
-        // Define the criteria how to select the location provider
-        Criteria criteria = new Criteria(); // ���T���Ѫ̿����з�
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE); // default
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(false);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-        // get the best provider depending on the criteria
-        bestProvider = lms.getBestProvider(criteria, true); // ���ܺ��ǫ׳̰������Ѫ�
-        Location location = lms.getLastKnownLocation(bestProvider);
-
-        mylistener = new MyLocationListener();
-
-        if (location != null) {
-            mylistener.onLocationChanged(location);
+    /*
+ * Get the current location
+ */
+    private Location getLocation() {
+        // If Google Play Services is available
+        if (isGoogleServicesAvailable()) {
+            // Get the current location
+            return LocationServices.FusedLocationApi.getLastLocation(locationClient);
         } else {
-            // leads to the settings because there is no last known location
-            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(intent);
+            return null;
         }
-        // location updates: at least 5 meter and 1000 minsecs change
-        lms.requestLocationUpdates(bestProvider, 1000, 5, mylistener);
+    }
+
+    //Google Play Service ConnectionCallbacks
+    // 已經連線到Google Services
+    @Override
+    public void onConnected(Bundle bundle) {
+        if (Application.APPDEBUG) {
+            Log.d(TAG, "Connected to location services");
+        }
+        currentLocation = getLocation();
+
+        //startPeriodicUpdates();
+        // 已經連線到Google Services
+        // 啟動位置更新服務
+        // 位置資訊更新的時候，應用程式會自動呼叫LocationListener.onLocationChanged
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                locationClient, locationRequest, this);
 
     }
 
-private class MyLocationListener implements LocationListener {
+    // Google Services連線中斷
+    // int參數是連線中斷的代號
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(Application.APPTAG, "GoogleApiClient connection has been suspend");
+    }
 
+    // Google Services連線失敗
+    // ConnectionResult參數是連線失敗的資訊
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        int errorCode = connectionResult.getErrorCode();
+        Log.i(Application.APPTAG, "GoogleApiClient connection failed");
+
+        // 裝置沒有安裝Google Play服務
+        if (errorCode == ConnectionResult.SERVICE_MISSING) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.app_name)
+                    .setMessage(R.string.google_play_service_missing)
+                    .setPositiveButton(R.string.ok_label,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(
+                                        DialogInterface dialoginterface, int i) {
+                                    // empty
+                                }
+                            }).show();
+        }
+
+    }
+
+    private synchronized void configGoogleApiClient() {
+        // Create a new location client, using the enclosing class to handle callbacks.
+        locationClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+    }
+
+
+    private void configLocationRequest() {
+        // Create a new global location parameters object
+        locationRequest = LocationRequest.create();
+
+        // Set the update interval
+        locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+
+        // Use high accuracy
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        // Set the interval ceiling to one minute
+        locationRequest.setFastestInterval(FAST_INTERVAL_CEILING_IN_MILLISECONDS);
+    }
+
+    // 位置改變
+    // Location參數是目前的位置
     @Override
     public void onLocationChanged(Location location) {
-
         currentLocation = location;
-
-        // Initialize the location fields
-        longitude = location.getLongitude();
-        latitude = location.getLatitude();
-        getLocationStatus = true;
-
+        if (lastLocation != null
+                && geoPointFromLocation(location)
+                .distanceInKilometersTo(geoPointFromLocation(lastLocation)) < 0.01) {
+            // If the location hasn't changed by more than 10 meters, ignore it.
+            return;
+        }
+        lastLocation = location;
     }
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        // Toast.makeText(MainActivity.this,
-        // provider + "'s status changed to " + status + "!",
-        // Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        // Toast.makeText(MainActivity.this,
-        // "Provider " + provider + " enabled!", Toast.LENGTH_SHORT)
-        // .show();
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        // Toast.makeText(MainActivity.this,
-        // "Provider " + provider + " disabled!", Toast.LENGTH_SHORT)
-        // .show();
-    }
-}
 }

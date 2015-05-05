@@ -4,6 +4,7 @@ package com.oddsoft.tpetrash2;
  * Data model for a trash item.
  */
 
+import com.oddsoft.tpetrash2.utils.Time;
 import com.parse.ParseClassName;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -130,6 +131,16 @@ public class ArrayItem extends ParseObject {
 
     public String getRecycling7() {
         return getString("recycling_sun");
+    }
+
+    private void checkAvailable(String type) {
+        Time t = new Time();
+        switch (t.getDayOfWeekNumber()) {
+            case "1":
+
+                break;
+        }
+
     }
 
     public String getMemo() {
