@@ -4,9 +4,6 @@ import com.google.android.gms.ads.*;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -15,6 +12,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 import android.app.Activity;
@@ -22,9 +20,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,8 +37,8 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity
         implements LocationListener,
-        ConnectionCallbacks,
-        OnConnectionFailedListener {
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = Application.APPTAG;
     private static Double longitude;
@@ -93,10 +93,6 @@ public class MainActivity extends Activity
     // Adapter for the Parse query
     private ParseQueryAdapter<ArrayItem> trashQueryAdapter;
 
-    // Fields for the map radius in feet
-    private float radius;
-    private float lastRadius;
-
     // Fields for helping process map and location changes
     private Location lastLocation;
     private Location currentLocation;
@@ -115,18 +111,11 @@ public class MainActivity extends Activity
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
 
-            // 建立Google API用戶端物件
-            configGoogleApiClient();
+        // 建立Google API用戶端物件
+        configGoogleApiClient();
 
-            // 建立Location請求物件
-            configLocationRequest();
-
-            // 連線到Google API用戶端
-            //if (!locationClient.isConnected()) {
-            locationClient.connect();
-            //}
-
-        Log.d(TAG, "isConnected = " + locationClient.isConnected());
+        // 建立Location請求物件
+        configLocationRequest();
 
         Calendar calendar = Calendar.getInstance();
         hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -140,11 +129,6 @@ public class MainActivity extends Activity
 
         getPref();
 
-        parse();
-
-        //if (getNetworkStatus && getLocationStatus) {
-            //new HttpGetTask(MainActivity.this).execute();
-        //}
         //adView();
     }
 
@@ -176,17 +160,22 @@ public class MainActivity extends Activity
                         //Log.d(TAG, "location = " + myLoc.toString());
                         ParseQuery<ArrayItem> query = ArrayItem.getQuery();
 
-                        //String[] hours = {String.valueOf(hour) + ":", String.valueOf(hour+1) + ":"};
+                        //String[] hours = {String.valueOf(hour) + "", String.valueOf(hour+1) + ""};
                         //query.whereContainedIn("CarTime", Arrays.asList(hours));
 
                         query.whereContains("CarTime", String.valueOf(hour) + ":");
+                        //query.whereContains("CarTime", String.valueOf(hour+1) + ":");
+
                         //TODO Sort by distance or car start time
                         //query.orderByDescending("createdAt");
-
+                        if (sorting.equals("TIME")) {
+                            query.orderByDescending("CarTime");
+                        }
                         query.whereWithinKilometers("location"
                                 , geoPointFromLocation(myLoc)
                                 , distance
                         );
+
                         query.setLimit(rownum);
                         return query;
                     }
@@ -265,30 +254,26 @@ public class MainActivity extends Activity
     }
 
     private void getPref() {
-        distance = Integer.valueOf(Application.getSearchDistance());
-        rownum = Integer.valueOf(Application.getLimitRowNumber());
-        sorting = String.valueOf(Application.getSortingType());
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(getBaseContext());
+        String distancePreference = prefs.getString("distance", "5");
+        String rownumPreference = prefs.getString("rownum", "5");
+        String sortingPreference = prefs.getString("sorting", "DIST");
+
+        distance = Integer.valueOf(distancePreference);
+        rownum = Integer.valueOf(rownumPreference);
+        sorting = String.valueOf(sortingPreference);
     }
 
-    /*
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        goBrowser(result.get(position).getLocation().toString());
-
-    }*/
 
     /*
     * Called when the Activity is no longer visible at all. Stop updates and disconnect.
     */
     @Override
     public void onStop() {
-        // If the client is connected
         if (locationClient.isConnected()) {
             locationClient.disconnect();
         }
-        // After disconnect() is called, the client is considered "dead".
-        locationClient.disconnect();
         super.onStop();
     }
 
@@ -300,8 +285,6 @@ public class MainActivity extends Activity
         super.onStart();
         // Connect to the location services client
         locationClient.connect();
-        Log.d("onStart", String.valueOf(locationClient.isConnected()));
-
     }
 
     @Override
@@ -331,6 +314,7 @@ public class MainActivity extends Activity
             locationClient.connect();
         }
     }
+
     @Override
     protected void onDestroy() {
         if (adView != null)
@@ -338,19 +322,6 @@ public class MainActivity extends Activity
         super.onDestroy();
     }
 
-    /*
-    private void sorting() {
-        if (sorting.equals("TIME")) { //check time sorting
-            if (result != null) {
-                Collections.sort(result, new Comparator<TrashItem>() {
-                    @Override
-                    public int compare(TrashItem item1, TrashItem item2) {
-                        return item1.getStartTime().compareTo(item2.getStartTime());
-                    }
-                });
-            }
-        }
-    }*/
 
     private void goBrowser(String toLocation) {
         String from = "saddr=" + latitude + "," + longitude;
@@ -410,15 +381,15 @@ public class MainActivity extends Activity
         if (Application.APPDEBUG) {
             Log.d(TAG, "Connected to location services");
         }
-        currentLocation = getLocation();
-
-        //startPeriodicUpdates();
         // 已經連線到Google Services
         // 啟動位置更新服務
         // 位置資訊更新的時候，應用程式會自動呼叫LocationListener.onLocationChanged
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 locationClient, locationRequest, this);
 
+        currentLocation = getLocation();
+
+        parse();
     }
 
     // Google Services連線中斷
@@ -451,6 +422,7 @@ public class MainActivity extends Activity
 
     }
 
+    // 建立Google API用戶端物件
     private synchronized void configGoogleApiClient() {
         // Create a new location client, using the enclosing class to handle callbacks.
         locationClient = new GoogleApiClient.Builder(this)
