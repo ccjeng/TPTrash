@@ -129,6 +129,7 @@ public class MainActivity extends Activity
 
         getPref();
 
+        //parseAdapter();
         //adView();
     }
 
@@ -149,7 +150,9 @@ public class MainActivity extends Activity
         adView.loadAd(adRequest);
     }
 
-    private void parse() {
+    private void parseQuery() {
+
+        Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
         // Set up a customized query
         ParseQueryAdapter.QueryFactory<ArrayItem> factory =
@@ -171,10 +174,10 @@ public class MainActivity extends Activity
                         if (sorting.equals("TIME")) {
                             query.orderByDescending("CarTime");
                         }
-                        query.whereWithinKilometers("location"
-                                , geoPointFromLocation(myLoc)
-                                , distance
-                        );
+                            query.whereWithinKilometers("location"
+                                    , geoPointFromLocation(myLoc)
+                                    , distance
+                            );
 
                         query.setLimit(rownum);
                         return query;
@@ -189,8 +192,6 @@ public class MainActivity extends Activity
                     view = View.inflate(getContext(), R.layout.trash_item, null);
                 }
 
-                super.getItemView(trash, view, parent);
-
                 TextView timeView = (TextView) view.findViewById(R.id.time_view);
                 TextView addressView = (TextView) view.findViewById(R.id.address_view);
                 TextView distanceView = (TextView) view.findViewById(R.id.distance_view);
@@ -203,24 +204,6 @@ public class MainActivity extends Activity
             }
         };
 
-        // Disable automatic loading when the adapter is attached to a view.
-        trashQueryAdapter.setAutoload(true);
-
-        // Disable pagination, we'll manage the query limit ourselves
-        trashQueryAdapter.setPaginationEnabled(false);
-
-        ListView trashListView = (ListView) findViewById(R.id.trashList);
-        trashListView.setAdapter(trashQueryAdapter);
-
-        // Set up the handler for an item's selection
-        trashListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final ArrayItem item = trashQueryAdapter.getItem(position);
-                //Open Google Map
-                goBrowser(String.valueOf(item.getLocation().getLatitude())+","+
-                          String.valueOf(item.getLocation().getLongitude()));
-            }
-        });
 
         trashQueryAdapter.addOnQueryLoadListener(new ParseQueryAdapter.OnQueryLoadListener<ArrayItem>() {
 
@@ -245,8 +228,58 @@ public class MainActivity extends Activity
             }
         });
 
+
+
     }
 
+    private void parseAdapter() {
+
+        Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
+
+        // Disable automatic loading when the adapter is attached to a view.
+        //trashQueryAdapter.setAutoload(true);
+
+        // Disable pagination, we'll manage the query limit ourselves
+        //trashQueryAdapter.setPaginationEnabled(false);
+
+        ListView trashListView = (ListView) findViewById(R.id.trashList);
+        trashListView.setAdapter(trashQueryAdapter);
+
+        // Set up the handler for an item's selection
+        trashListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final ArrayItem item = trashQueryAdapter.getItem(position);
+                //Open Google Map
+                goBrowser(String.valueOf(item.getLocation().getLatitude()) + "," +
+                        String.valueOf(item.getLocation().getLongitude()));
+            }
+        });
+
+        /*
+        if (trashListView.getCount() == 0) {
+            int msg;
+
+            if (myLoc == null) {
+                //unable to get current location
+                msg = R.string.location_error;
+            } else {
+                //no data
+                msg = R.string.data_not_found;
+            }
+            new AlertDialog.Builder(this)
+                    //.setTitle(R.string.app_name)
+                    .setMessage(R.string.data_not_found)
+                    .setPositiveButton(R.string.ok_label,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(
+                                        DialogInterface dialoginterface, int i) {
+                                    // empty
+                                }
+                            }).show();
+
+        }*/
+
+    }
     /*
  * Helper method to get the Parse GEO point representation of a location
  */
@@ -361,18 +394,6 @@ public class MainActivity extends Activity
 
     }
 
-    protected void startLoading() {
-        proDialog = new ProgressDialog(this);
-        proDialog.setMessage("loading...");
-        proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        proDialog.setCancelable(false);
-        proDialog.show();
-    }
-
-    protected void stopLoading() {
-        proDialog.dismiss();
-        proDialog = null;
-    }
     /*
  * Verify that Google Play services is available before making a request.
  *
@@ -421,16 +442,18 @@ public class MainActivity extends Activity
         if (Application.APPDEBUG) {
             Log.d(TAG, "Connected to location services");
         }
+
+        currentLocation = getLocation();
+
         // 已經連線到Google Services
         // 啟動位置更新服務
         // 位置資訊更新的時候，應用程式會自動呼叫LocationListener.onLocationChanged
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 locationClient, locationRequest, this);
 
-        currentLocation = getLocation();
-
-        parse();
-
+        //call Parse service to get data
+        parseQuery();
+        parseAdapter();
     }
 
     // Google Services連線中斷
@@ -450,7 +473,7 @@ public class MainActivity extends Activity
         // 裝置沒有安裝Google Play服務
         if (errorCode == ConnectionResult.SERVICE_MISSING) {
             new AlertDialog.Builder(this)
-                    .setTitle(R.string.app_name)
+                    //.setTitle(R.string.app_name)
                     .setMessage(R.string.google_play_service_missing)
                     .setPositiveButton(R.string.ok_label,
                             new DialogInterface.OnClickListener() {

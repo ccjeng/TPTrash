@@ -2,16 +2,15 @@
 <resources>
 
     <string name="app_name">台北倒垃圾</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">設定</string>
     <string name="exit_settings">離開</string>
     <string name="refresh_settings">更新</string>
 
     <string name="loading">載入中</string>
     <string name="network_error">無法連線，請檢查手機是否正常連網</string>
-    <string name="location_error">請開啟定位服務</string>
+    <string name="location_error">目前無法定位座標，請檢查定位服務是否開啟</string>
     <string name="location_failure">無法定位座標</string>
-    <string name="data_not_found">附近沒有垃圾車</string>
+    <string name="data_not_found">最近一個小時附近沒有垃圾車</string>
 
     <string name="yes_label">好</string>
     <string name="no_label">不要</string>
