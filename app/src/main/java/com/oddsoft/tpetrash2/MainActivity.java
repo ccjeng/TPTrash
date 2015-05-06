@@ -48,7 +48,9 @@ public class MainActivity extends Activity
     private static int hour;
     private static String sorting;
     private AdView adView;
+    private ListView trashListView;
     protected ProgressDialog proDialog;
+
     /*
      * Define a request code to send to Google Play services This code is returned in
      * Activity.onActivityResult
@@ -96,6 +98,7 @@ public class MainActivity extends Activity
     // Fields for helping process map and location changes
     private Location lastLocation;
     private Location currentLocation;
+    private Location myLoc;
 
     // A request to connect to Location Services
     private LocationRequest locationRequest;
@@ -152,123 +155,114 @@ public class MainActivity extends Activity
 
     private void parseQuery() {
 
-        Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
+        myLoc = (currentLocation == null) ? lastLocation : currentLocation;
+        trashListView = (ListView) findViewById(R.id.trashList);
 
-        // Set up a customized query
-        ParseQueryAdapter.QueryFactory<ArrayItem> factory =
-                new ParseQueryAdapter.QueryFactory<ArrayItem>() {
-                    public ParseQuery<ArrayItem> create() {
-                        Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
+        if (myLoc != null ) {
+            // Set up a customized query
+            ParseQueryAdapter.QueryFactory<ArrayItem> factory =
+                    new ParseQueryAdapter.QueryFactory<ArrayItem>() {
+                        public ParseQuery<ArrayItem> create() {
+                            Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
-                        //Log.d(TAG, "location = " + myLoc.toString());
-                        ParseQuery<ArrayItem> query = ArrayItem.getQuery();
+                            //Log.d(TAG, "location = " + myLoc.toString());
+                            ParseQuery<ArrayItem> query = ArrayItem.getQuery();
 
-                        //String[] hours = {String.valueOf(hour) + "", String.valueOf(hour+1) + ""};
-                        //query.whereContainedIn("CarTime", Arrays.asList(hours));
+                            //String[] hours = {String.valueOf(hour) + "", String.valueOf(hour+1) + ""};
+                            //query.whereContainedIn("CarTime", Arrays.asList(hours));
 
-                        query.whereContains("CarTime", String.valueOf(hour) + ":");
-                        //query.whereContains("CarTime", String.valueOf(hour+1) + ":");
+                            query.whereContains("CarTime", String.valueOf(hour) + ":");
+                            //query.whereContains("CarTime", String.valueOf(hour+1) + ":");
 
-                        //TODO Sort by distance or car start time
-                        //query.orderByDescending("createdAt");
-                        if (sorting.equals("TIME")) {
-                            query.orderByDescending("CarTime");
-                        }
+                            //TODO Sort by distance or car start time
+                            //query.orderByDescending("createdAt");
+                            if (sorting.equals("TIME")) {
+                                query.orderByAscending("CarTime");
+                            }
+
                             query.whereWithinKilometers("location"
                                     , geoPointFromLocation(myLoc)
                                     , distance
                             );
 
-                        query.setLimit(rownum);
-                        return query;
-                    }
-                };
 
-        // Set up the query adapter
-        trashQueryAdapter = new ParseQueryAdapter<ArrayItem>(this, factory) {
-            @Override
-            public View getItemView(ArrayItem trash, View view, ViewGroup parent) {
-                if (view == null) {
-                    view = View.inflate(getContext(), R.layout.trash_item, null);
+                            query.setLimit(rownum);
+                            return query;
+                        }
+                    };
+
+            // Set up the query adapter
+            trashQueryAdapter = new ParseQueryAdapter<ArrayItem>(this, factory) {
+                @Override
+                public View getItemView(ArrayItem trash, View view, ViewGroup parent) {
+                    if (view == null) {
+                        view = View.inflate(getContext(), R.layout.trash_item, null);
+                    }
+
+                    TextView timeView = (TextView) view.findViewById(R.id.time_view);
+                    TextView addressView = (TextView) view.findViewById(R.id.address_view);
+                    TextView distanceView = (TextView) view.findViewById(R.id.distance_view);
+
+                    timeView.setText(trash.getCarTime());
+                    distanceView.setText(trash.getDistance(geoPointFromLocation(currentLocation)).toString());
+                    addressView.setText(trash.getAddress());
+
+                    return view;
+                }
+            };
+            trashQueryAdapter.addOnQueryLoadListener(new ParseQueryAdapter.OnQueryLoadListener<ArrayItem>() {
+
+                @Override
+                public void onLoading() {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                    Log.w(TAG, "onLoading");
+                    proDialog = new ProgressDialog(MainActivity.this);
+                    proDialog.setMessage("處理中");
+                    proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    proDialog.setCancelable(false);
+                    proDialog.show();
                 }
 
-                TextView timeView = (TextView) view.findViewById(R.id.time_view);
-                TextView addressView = (TextView) view.findViewById(R.id.address_view);
-                TextView distanceView = (TextView) view.findViewById(R.id.distance_view);
+                @Override
+                public void onLoaded(List<ArrayItem> objects, Exception e) {
+                    //To change body of implemented methods use File | Settings | File Templates.
 
-                timeView.setText(trash.getCarTime());
-                distanceView.setText(trash.getDistance(geoPointFromLocation(currentLocation)).toString());
-                addressView.setText(trash.getAddress());
+                    if (proDialog != null && proDialog.isShowing())
+                        proDialog.dismiss();
 
-                return view;
-            }
-        };
+                    if (trashListView.getCount() == 0) {
+                        new AlertDialog.Builder(MainActivity.this)
+                                //.setTitle(R.string.app_name)
+                                .setMessage(R.string.data_not_found)
+                                .setPositiveButton(R.string.ok_label,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(
+                                                    DialogInterface dialoginterface, int i) {
+                                                // empty
+                                            }
+                                        }).show();
+                    }
+                }
+            });
 
+            trashListView.setAdapter(trashQueryAdapter);
 
-        trashQueryAdapter.addOnQueryLoadListener(new ParseQueryAdapter.OnQueryLoadListener<ArrayItem>() {
+            // Set up the handler for an item's selection
+            trashListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    final ArrayItem item = trashQueryAdapter.getItem(position);
+                    //Open Google Map
+                    goBrowser(String.valueOf(item.getLocation().getLatitude()) + "," +
+                            String.valueOf(item.getLocation().getLongitude()));
+                }
+            });
 
-            @Override
-            public void onLoading() {
-                //To change body of implemented methods use File | Settings | File Templates.
-                Log.w(TAG, "onLoading");
-                proDialog = new ProgressDialog(MainActivity.this);
-                proDialog.setMessage("loading...");
-                proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                proDialog.setCancelable(false);
-                proDialog.show();
-            }
-
-            @Override
-            public void onLoaded(List<ArrayItem> objects, Exception e) {
-                //To change body of implemented methods use File | Settings | File Templates.
-
-                if (proDialog != null && proDialog.isShowing())
-                    proDialog.dismiss();
-
-            }
-        });
-
-
-
-    }
-
-    private void parseAdapter() {
-
-        Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
-
-        // Disable automatic loading when the adapter is attached to a view.
-        //trashQueryAdapter.setAutoload(true);
-
-        // Disable pagination, we'll manage the query limit ourselves
-        //trashQueryAdapter.setPaginationEnabled(false);
-
-        ListView trashListView = (ListView) findViewById(R.id.trashList);
-        trashListView.setAdapter(trashQueryAdapter);
-
-        // Set up the handler for an item's selection
-        trashListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final ArrayItem item = trashQueryAdapter.getItem(position);
-                //Open Google Map
-                goBrowser(String.valueOf(item.getLocation().getLatitude()) + "," +
-                        String.valueOf(item.getLocation().getLongitude()));
-            }
-        });
-
-        /*
-        if (trashListView.getCount() == 0) {
-            int msg;
-
-            if (myLoc == null) {
-                //unable to get current location
-                msg = R.string.location_error;
-            } else {
-                //no data
-                msg = R.string.data_not_found;
-            }
-            new AlertDialog.Builder(this)
+        }
+        else {
+            //location error
+            new AlertDialog.Builder(MainActivity.this)
                     //.setTitle(R.string.app_name)
-                    .setMessage(R.string.data_not_found)
+                    .setMessage(R.string.location_error)
                     .setPositiveButton(R.string.ok_label,
                             new DialogInterface.OnClickListener() {
                                 public void onClick(
@@ -276,10 +270,13 @@ public class MainActivity extends Activity
                                     // empty
                                 }
                             }).show();
+        }
 
-        }*/
+
+
 
     }
+
     /*
  * Helper method to get the Parse GEO point representation of a location
  */
@@ -453,7 +450,6 @@ public class MainActivity extends Activity
 
         //call Parse service to get data
         parseQuery();
-        parseAdapter();
     }
 
     // Google Services連線中斷
