@@ -14,10 +14,12 @@ import com.parse.ParseQueryAdapter;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,14 +43,12 @@ public class MainActivity extends Activity
         GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = Application.APPTAG;
-    private static Double longitude;
-    private static Double latitude;
     private static int rownum;
     private static int distance;
     private static int hour;
     private static String sorting;
     private AdView adView;
-
+    protected ProgressDialog proDialog;
     /*
      * Define a request code to send to Google Play services This code is returned in
      * Activity.onActivityResult
@@ -216,10 +216,35 @@ public class MainActivity extends Activity
         trashListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final ArrayItem item = trashQueryAdapter.getItem(position);
-                //TODO go intent google map
+                //Open Google Map
+                goBrowser(String.valueOf(item.getLocation().getLatitude())+","+
+                          String.valueOf(item.getLocation().getLongitude()));
+            }
+        });
+
+        trashQueryAdapter.addOnQueryLoadListener(new ParseQueryAdapter.OnQueryLoadListener<ArrayItem>() {
+
+            @Override
+            public void onLoading() {
+                //To change body of implemented methods use File | Settings | File Templates.
+                Log.w(TAG, "onLoading");
+                proDialog = new ProgressDialog(MainActivity.this);
+                proDialog.setMessage("loading...");
+                proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                proDialog.setCancelable(false);
+                proDialog.show();
+            }
+
+            @Override
+            public void onLoaded(List<ArrayItem> objects, Exception e) {
+                //To change body of implemented methods use File | Settings | File Templates.
+
+                if (proDialog != null && proDialog.isShowing())
+                    proDialog.dismiss();
 
             }
         });
+
     }
 
     /*
@@ -324,7 +349,10 @@ public class MainActivity extends Activity
 
 
     private void goBrowser(String toLocation) {
-        String from = "saddr=" + latitude + "," + longitude;
+
+        Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
+
+        String from = "saddr=" + myLoc.getLatitude() + "," + myLoc.getLongitude();
         String to = "daddr=" + toLocation.toString();
         String para = "&hl=zh&dirflg=w";
         String url = "http://maps.google.com.tw/maps?" + from + "&" + to + para;
@@ -333,6 +361,18 @@ public class MainActivity extends Activity
 
     }
 
+    protected void startLoading() {
+        proDialog = new ProgressDialog(this);
+        proDialog.setMessage("loading...");
+        proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        proDialog.setCancelable(false);
+        proDialog.show();
+    }
+
+    protected void stopLoading() {
+        proDialog.dismiss();
+        proDialog = null;
+    }
     /*
  * Verify that Google Play services is available before making a request.
  *
@@ -390,6 +430,7 @@ public class MainActivity extends Activity
         currentLocation = getLocation();
 
         parse();
+
     }
 
     // Google Services連線中斷
