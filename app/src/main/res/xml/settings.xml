@@ -6,16 +6,9 @@
             android:title="@string/pref_distance"
             android:summary="@string/pref_distance_summary"
             android:key="distance"
-            android:defaultValue="5"
+            android:defaultValue="3"
             android:entries="@array/pref_distance_item"
             android:entryValues="@array/pref_distance_code" />
-       	<ListPreference
-            android:title="@string/pref_rownum"
-            android:summary="@string/pref_rownum_summary"
-            android:key="rownum"
-            android:defaultValue="5"
-            android:entries="@array/pref_rownum_item"
-            android:entryValues="@array/pref_rownum_code" />
         <ListPreference
             android:title="@string/pref_sorting"
             android:summary="@string/pref_sorting_summary"

@@ -6,20 +6,57 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <!-- android:id="@android:id/list"-->
-    <ListView
-        android:id="@+id/trashList"
+    <LinearLayout
+        android:id="@+id/spinner_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"></ListView>
+        android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textSize="18dp"
+                android:textColor="#ff2460ff"
+                android:text="@string/hour_spinner_prompt"/>
+            <Spinner
+                android:id="@+id/hour_spinnner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#ff2460ff"
+                android:entries="@array/hour_spinnner_name"
+                android:prompt="@string/hour_spinner_prompt"/>
+    </LinearLayout>
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/home_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/footerLayout"
+        android:layout_below="@+id/spinner_layout"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/trashList"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/footerLayout"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        app:adSize="SMART_BANNER"
-        app:adUnitId="ca-app-pub-6914084100751028/1776974015"></com.google.android.gms.ads.AdView>
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:adSize="SMART_BANNER"
+            app:adUnitId="ca-app-pub-6914084100751028/1776974015" />
+    </LinearLayout>
 
 </RelativeLayout>

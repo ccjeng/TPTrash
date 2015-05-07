@@ -20,10 +20,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -33,7 +36,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 
@@ -43,12 +48,14 @@ public class MainActivity extends Activity
         GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = Application.APPTAG;
-    private static int rownum;
     private static int distance;
     private static int hour;
     private static String sorting;
     private AdView adView;
     private ListView trashListView;
+    private Spinner hourSpinner;
+    private String[] hourCode;
+
     protected ProgressDialog proDialog;
 
     /*
@@ -77,21 +84,6 @@ public class MainActivity extends Activity
     private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
             * FAST_CEILING_IN_SECONDS;
 
-    /*
-     * Constants for handling location results
-     */
-    // Initial offset for calculating the map bounds
-    private static final double OFFSET_CALCULATION_INIT_DIFF = 1.0;
-
-    // Accuracy for calculating the map bounds
-    private static final float OFFSET_CALCULATION_ACCURACY = 0.01f;
-
-    // Maximum results returned from a Parse query
-    private static final int MAX_POST_SEARCH_RESULTS = 20;
-
-    // Maximum post search radius for map in kilometers
-    private static final int MAX_POST_SEARCH_DISTANCE = 100;
-
     // Adapter for the Parse query
     private ParseQueryAdapter<ArrayItem> trashQueryAdapter;
 
@@ -106,34 +98,88 @@ public class MainActivity extends Activity
     // Stores the current instantiation of the location client in this object
     private GoogleApiClient locationClient;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
+        trashListView = (ListView) findViewById(R.id.trashList);
+        hourSpinner = (Spinner) findViewById(R.id.hour_spinnner);
+        hourCode = getResources().getStringArray(R.array.hour_spinnner_code);
 
-        // 建立Google API用戶端物件
-        configGoogleApiClient();
+/*
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this, R.array.hour_spinnner_name,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
 
-        // 建立Location請求物件
-        configLocationRequest();
+        hourSpinner.setAdapter(adapter);
+*/
 
+        /*
+        hourSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                hour = Integer.valueOf(hourCode[position]);
+                parseQuery(hour);
+            }
+        });
+*/
+
+        hourSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+
+                String hr = hourCode[hourSpinner.getSelectedItemPosition()];
+                parseQuery(Integer.valueOf(hr));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        if (isNetworkConnected()) {
+            // 建立Google API用戶端物件
+            configGoogleApiClient();
+
+            // 建立Location請求物件
+            configLocationRequest();
+
+            if (!locationClient.isConnected()) {
+                locationClient.connect();
+            }
+        }
+        else{
+            new AlertDialog.Builder(MainActivity.this)
+                    .setMessage(R.string.network_error)
+                    .setPositiveButton(R.string.ok_label,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(
+                                        DialogInterface dialoginterface, int i) {
+                                    // empty
+                                }
+                            }).show();
+
+        }
         Calendar calendar = Calendar.getInstance();
         hour = calendar.get(Calendar.HOUR_OF_DAY);
 
-        //TODO compare Car Start Time (add CarStartTime column on TaipeiAll object)
-
-        //if (hour < 16)
-        //    hour = 16;
-
-        hour = 16;
+        //set hour spinner to current hour
+        if (hour <= 12)
+                hour = 13;
+        //set default value
+        hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(hour));
 
         getPref();
 
-        //parseAdapter();
-        //adView();
+        adView();
     }
 
     private void adView() {
@@ -144,7 +190,7 @@ public class MainActivity extends Activity
             //Test Mode
             adRequest = new AdRequest.Builder()
                     .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice("7710C21FF2537758BF3F80963477D68E")
+                    .addTestDevice(Application.ADMOB_TEST_DEVICE_ID)
                     .build();
         } else {
             adRequest = new AdRequest.Builder().build();
@@ -153,29 +199,31 @@ public class MainActivity extends Activity
         adView.loadAd(adRequest);
     }
 
-    private void parseQuery() {
+    private void parseQuery(final int hour) {
 
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
-        trashListView = (ListView) findViewById(R.id.trashList);
+
+        //fake location
+        if (Application.APPDEBUG) {
+            myLoc = new Location("");
+            myLoc.setLatitude(25.175579);
+            myLoc.setLongitude(121.43847);
+        }
 
         if (myLoc != null ) {
+
+            if (Application.APPDEBUG)
+                Log.d(TAG, "location = " + myLoc.toString());
+
             // Set up a customized query
             ParseQueryAdapter.QueryFactory<ArrayItem> factory =
                     new ParseQueryAdapter.QueryFactory<ArrayItem>() {
                         public ParseQuery<ArrayItem> create() {
-                            Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
-                            //Log.d(TAG, "location = " + myLoc.toString());
                             ParseQuery<ArrayItem> query = ArrayItem.getQuery();
 
-                            //String[] hours = {String.valueOf(hour) + "", String.valueOf(hour+1) + ""};
-                            //query.whereContainedIn("CarTime", Arrays.asList(hours));
-
                             query.whereContains("CarTime", String.valueOf(hour) + ":");
-                            //query.whereContains("CarTime", String.valueOf(hour+1) + ":");
 
-                            //TODO Sort by distance or car start time
-                            //query.orderByDescending("createdAt");
                             if (sorting.equals("TIME")) {
                                 query.orderByAscending("CarTime");
                             }
@@ -185,8 +233,7 @@ public class MainActivity extends Activity
                                     , distance
                             );
 
-
-                            query.setLimit(rownum);
+                            query.setLimit(20);
                             return query;
                         }
                     };
@@ -204,7 +251,7 @@ public class MainActivity extends Activity
                     TextView distanceView = (TextView) view.findViewById(R.id.distance_view);
 
                     timeView.setText(trash.getCarTime());
-                    distanceView.setText(trash.getDistance(geoPointFromLocation(currentLocation)).toString());
+                    distanceView.setText(trash.getDistance(geoPointFromLocation(myLoc)).toString());
                     addressView.setText(trash.getAddress());
 
                     return view;
@@ -214,8 +261,6 @@ public class MainActivity extends Activity
 
                 @Override
                 public void onLoading() {
-                    //To change body of implemented methods use File | Settings | File Templates.
-                    Log.w(TAG, "onLoading");
                     proDialog = new ProgressDialog(MainActivity.this);
                     proDialog.setMessage("處理中");
                     proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -230,9 +275,9 @@ public class MainActivity extends Activity
                     if (proDialog != null && proDialog.isShowing())
                         proDialog.dismiss();
 
+                    //No data
                     if (trashListView.getCount() == 0) {
                         new AlertDialog.Builder(MainActivity.this)
-                                //.setTitle(R.string.app_name)
                                 .setMessage(R.string.data_not_found)
                                 .setPositiveButton(R.string.ok_label,
                                         new DialogInterface.OnClickListener() {
@@ -272,9 +317,6 @@ public class MainActivity extends Activity
                             }).show();
         }
 
-
-
-
     }
 
     /*
@@ -311,12 +353,10 @@ public class MainActivity extends Activity
     private void getPref() {
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
-        String distancePreference = prefs.getString("distance", "5");
-        String rownumPreference = prefs.getString("rownum", "5");
+        String distancePreference = prefs.getString("distance", "3");
         String sortingPreference = prefs.getString("sorting", "DIST");
 
         distance = Integer.valueOf(distancePreference);
-        rownum = Integer.valueOf(rownumPreference);
         sorting = String.valueOf(sortingPreference);
     }
 
@@ -339,7 +379,9 @@ public class MainActivity extends Activity
     public void onStart() {
         super.onStart();
         // Connect to the location services client
-        locationClient.connect();
+        if (locationClient != null) {
+            locationClient.connect();
+        }
     }
 
     @Override
@@ -365,8 +407,10 @@ public class MainActivity extends Activity
             adView.resume();
 
         // 連線到Google API用戶端
-        if (!locationClient.isConnected()) {
-            locationClient.connect();
+        if (locationClient != null) {
+            if (!locationClient.isConnected()) {
+                locationClient.connect();
+            }
         }
     }
 
@@ -379,9 +423,7 @@ public class MainActivity extends Activity
 
 
     private void goBrowser(String toLocation) {
-
-        Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
-
+        //Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
         String from = "saddr=" + myLoc.getLatitude() + "," + myLoc.getLongitude();
         String to = "daddr=" + toLocation.toString();
         String para = "&hl=zh&dirflg=w";
@@ -391,6 +433,17 @@ public class MainActivity extends Activity
 
     }
 
+/*
+* check network state
+* */
+    private boolean isNetworkConnected(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
     /*
  * Verify that Google Play services is available before making a request.
  *
@@ -410,7 +463,7 @@ public class MainActivity extends Activity
             // Google Play services was not available for some reason
         } else {
             // Display an error dialog
-            Log.d(Application.APPTAG, "Google play services NOT  available");
+            Log.d(Application.APPTAG, "Google play services NOT available");
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
             if (dialog != null) {
                 dialog.show();
@@ -436,9 +489,9 @@ public class MainActivity extends Activity
     // 已經連線到Google Services
     @Override
     public void onConnected(Bundle bundle) {
-        if (Application.APPDEBUG) {
-            Log.d(TAG, "Connected to location services");
-        }
+        if (Application.APPDEBUG)
+            Log.d(TAG, "onConnected - Connected to location services");
+
 
         currentLocation = getLocation();
 
@@ -448,8 +501,11 @@ public class MainActivity extends Activity
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 locationClient, locationRequest, this);
 
+        if (Application.APPDEBUG)
+            Log.d(TAG, "onConnected - isConnected =" + locationClient.isConnected());
+
         //call Parse service to get data
-        parseQuery();
+        //parseQuery(hour);
     }
 
     // Google Services連線中斷
@@ -500,7 +556,7 @@ public class MainActivity extends Activity
         // Set the update interval
         locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
 
-        // Use high accuracy
+        // Use low power
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         // Set the interval ceiling to one minute
