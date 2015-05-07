@@ -548,7 +548,7 @@ public class MainActivity extends Activity
         locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
 
         // Use low power
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
 
         // Set the interval ceiling to one minute
         locationRequest.setFastestInterval(FAST_INTERVAL_CEILING_IN_MILLISECONDS);
