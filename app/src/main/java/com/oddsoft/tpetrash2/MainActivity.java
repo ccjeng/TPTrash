@@ -121,7 +121,10 @@ public class MainActivity extends Activity
                                        int arg2, long arg3) {
 
                 String hr = hourCode[hourSpinner.getSelectedItemPosition()];
-                parseQuery(Integer.valueOf(hr));
+
+                if (!hr.equals("12")) {
+                    parseQuery(Integer.valueOf(hr));
+                }
             }
 
             @Override
@@ -158,10 +161,10 @@ public class MainActivity extends Activity
         hour = calendar.get(Calendar.HOUR_OF_DAY);
 
         //set hour spinner to current hour
-        if (hour <= 12)
-                hour = 13;
+        if (hour < 12)
+                hour = 12;
         //set default value
-        hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
+        //hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
 
         getPref();
 
@@ -497,6 +500,8 @@ public class MainActivity extends Activity
 
         //call Parse service to get data
         //parseQuery(hour);
+        hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
+
     }
 
     // Google Services連線中斷

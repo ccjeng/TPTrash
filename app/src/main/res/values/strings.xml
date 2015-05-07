@@ -9,7 +9,7 @@
     <string name="loading">載入中</string>
     <string name="network_error">無法連線，請檢查手機是否正常連網</string>
     <string name="location_error">目前無法定位座標，請檢查定位服務是否開啟</string>
-    <string name="data_not_found">最近一個小時附近沒有垃圾車</string>
+    <string name="data_not_found">附近沒有垃圾車</string>
 
     <string name="yes_label">好</string>
     <string name="no_label">不要</string>
@@ -61,6 +61,7 @@
 
     <string name="hour_spinner_prompt">依垃圾車抵達時間查詢</string>
     <string-array name="hour_spinnner_name">
+        <item>請選擇</item>
         <item>下午1點</item>
         <item>下午2點</item>
         <item>下午3點</item>
@@ -75,6 +76,7 @@
         <item>晚上12點</item>
     </string-array>
     <string-array name="hour_spinnner_code">
+        <item>12</item>
         <item>13</item>
         <item>14</item>
         <item>15</item>
