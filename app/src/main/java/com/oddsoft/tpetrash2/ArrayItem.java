@@ -16,7 +16,15 @@ import java.text.DecimalFormat;
 public class ArrayItem extends ParseObject {
 
     public String getAddress() {
-        return getString("Address");
+
+        String address = getString("Address");
+
+        if (getCity() == "Taipei") {
+            return "[" + getRegion() + "] " + address.substring(6, address.length());
+        } else {
+            return "[" + getRegion() + "] " + address;
+        }
+
     }
 
     public String getCarNo() {
@@ -46,7 +54,15 @@ public class ArrayItem extends ParseObject {
     }
 
     public String getCity() {
-        return getString("city");
+
+        String city = getString("city");
+
+        if (city != null) {
+            return "NewTaipe";
+        } else {
+            return "Taipei";
+        }
+
     }
 
     public String getFood1() {

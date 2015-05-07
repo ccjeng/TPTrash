@@ -105,28 +105,14 @@ public class MainActivity extends Activity
 
         getActionBar().setDisplayHomeAsUpEnabled(false);
         trashListView = (ListView) findViewById(R.id.trashList);
-        hourSpinner = (Spinner) findViewById(R.id.hour_spinnner);
         hourCode = getResources().getStringArray(R.array.hour_spinnner_code);
 
-/*
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.hour_spinnner_name,
                 android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item);
-
+        hourSpinner = (Spinner) findViewById(R.id.hour_spinnner);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         hourSpinner.setAdapter(adapter);
-*/
-
-        /*
-        hourSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                hour = Integer.valueOf(hourCode[position]);
-                parseQuery(hour);
-            }
-        });
-*/
 
         hourSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -206,8 +192,13 @@ public class MainActivity extends Activity
         //fake location
         if (Application.APPDEBUG) {
             myLoc = new Location("");
-            myLoc.setLatitude(25.175579);
-            myLoc.setLongitude(121.43847);
+            //myLoc.setLatitude(25.175579);
+            //myLoc.setLongitude(121.43847);
+
+            //Taipei City
+            myLoc.setLatitude(25.0950492);
+            myLoc.setLongitude(121.5246077);
+
         }
 
         if (myLoc != null ) {

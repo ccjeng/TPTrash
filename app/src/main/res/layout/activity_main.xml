@@ -24,7 +24,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:textColor="#ff2460ff"
-                android:entries="@array/hour_spinnner_name"
                 android:prompt="@string/hour_spinner_prompt"/>
     </LinearLayout>
 
