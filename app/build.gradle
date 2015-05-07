@@ -7,7 +7,7 @@ android {
         applicationId 'com.oddsoft.tpetrash2'
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 7
+        versionCode 8
         versionName '3.0'
     }
     buildTypes {

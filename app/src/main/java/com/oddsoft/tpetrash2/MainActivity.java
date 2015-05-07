@@ -161,7 +161,7 @@ public class MainActivity extends Activity
         if (hour <= 12)
                 hour = 13;
         //set default value
-        hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(hour));
+        hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
 
         getPref();
 
