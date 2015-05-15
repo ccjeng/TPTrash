@@ -4,6 +4,14 @@ package com.oddsoft.tpetrash2;
  * Data model for a trash item.
  */
 
+
+/*
+* 台北市
+* 週日、三: 停收垃圾及資源回收物(廚餘)
+* 週一、五: 平面類：紙類 舊衣類 乾淨塑膠袋
+* 週二、四、六：乾淨保麗龍, 一般類（瓶罐、容器、小家電等.
+*
+* */
 import com.oddsoft.tpetrash2.utils.Time;
 import com.parse.ParseClassName;
 import com.parse.ParseGeoPoint;
@@ -149,14 +157,330 @@ public class ArrayItem extends ParseObject {
         return getString("recycling_sun");
     }
 
-    private void checkAvailable(String type) {
+    //判斷今天要不要收廚餘
+    private Boolean checkTodayAvailableFood() {
         Time t = new Time();
+        Boolean result = false;
+
         switch (t.getDayOfWeekNumber()) {
             case "1":
-
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getFood1().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
                 break;
+            case "2":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getFood2().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "3":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = false; //台北市週三不收垃圾
+                        break;
+                    case "NewTaipei":
+                        if (this.getFood3().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "4":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getFood4().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "5":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getFood5().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "6":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getFood6().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "7":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = false; //台北市週日不收垃圾
+                        break;
+                    case "NewTaipei":
+                        if (this.getFood7().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+
         }
 
+        return result;
+    }
+
+    //判斷今天要不要收資源回收
+    private Boolean checkTodayAvailableRecycling() {
+        Time t = new Time();
+        Boolean result = false;
+
+        switch (t.getDayOfWeekNumber()) {
+            case "1":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getRecycling1().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "2":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getRecycling2().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "3":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = false; //台北市週三不收垃圾
+                        break;
+                    case "NewTaipei":
+                        if (this.getRecycling3().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "4":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getRecycling4().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "5":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getRecycling5().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "6":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getRecycling6().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "7":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = false; //台北市週日不收垃圾
+                        break;
+                    case "NewTaipei":
+                        if (this.getRecycling7().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+        }
+        return result;
+    }
+
+    //判斷今天要不要收一般垃圾
+    private Boolean checkTodayAvailableGarbage() {
+        Time t = new Time();
+        Boolean result = false;
+
+        switch (t.getDayOfWeekNumber()) {
+            case "1":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getGarbage1().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "2":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getGarbage2().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "3":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = false; //台北市週三不收垃圾
+                        break;
+                    case "NewTaipei":
+                        if (this.getGarbage3().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "4":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getGarbage4().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "5":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getGarbage5().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "6":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = true;
+                        break;
+                    case "NewTaipei":
+                        if (this.getGarbage6().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+            case "7":
+                switch (this.getCity()) {
+                    case "Taipei":
+                        result = false; //台北市週日不收垃圾
+                        break;
+                    case "NewTaipei":
+                        if (this.getGarbage7().equals("Y")) {
+                            result = true;
+                        }
+                        break;
+                    default:
+                        result = false;
+                }
+                break;
+        }
+        return result;
     }
 
     public String getMemo() {
