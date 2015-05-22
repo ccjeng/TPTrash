@@ -55,7 +55,7 @@ public class MainActivity extends Activity
     private ListView trashListView;
     private Spinner hourSpinner;
     private String[] hourCode;
-
+    private String[] hourName;
     protected ProgressDialog proDialog;
 
     /*
@@ -106,6 +106,7 @@ public class MainActivity extends Activity
         getActionBar().setDisplayHomeAsUpEnabled(false);
         trashListView = (ListView) findViewById(R.id.trashList);
         hourCode = getResources().getStringArray(R.array.hour_spinnner_code);
+        hourName = getResources().getStringArray(R.array.hour_spinnner_name);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.hour_spinnner_name,
@@ -271,8 +272,12 @@ public class MainActivity extends Activity
 
                     //No data
                     if (trashListView.getCount() == 0) {
+                        String msg = hourName[Arrays.asList(hourCode).indexOf(String.valueOf(hour))]
+                                + " " + String.valueOf(distance) + "公里"
+                                + getString(R.string.data_not_found);
+
                         new AlertDialog.Builder(MainActivity.this)
-                                .setMessage(R.string.data_not_found)
+                                .setMessage(msg)
                                 .setPositiveButton(R.string.ok_label,
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(
@@ -291,8 +296,9 @@ public class MainActivity extends Activity
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     final ArrayItem item = trashQueryAdapter.getItem(position);
                     //Open Google Map
-                    goBrowser(String.valueOf(item.getLocation().getLatitude()) + "," +
-                            String.valueOf(item.getLocation().getLongitude()));
+                    goIntent(item);
+                    //goBrowser(String.valueOf(item.getLocation().getLatitude()) + "," +
+                    //        String.valueOf(item.getLocation().getLongitude()));
                 }
             });
 
@@ -427,6 +433,27 @@ public class MainActivity extends Activity
 
     }
 
+    private void goIntent(ArrayItem item) {
+        Intent intent = new Intent();
+        intent.setClass(this, InfoActivity.class);
+        Bundle bundle = new Bundle();
+
+        bundle.putString("from", myLoc.getLatitude() + "," + myLoc.getLongitude());
+        bundle.putString("to", String.valueOf(item.getLocation().getLatitude()) + "," +
+                String.valueOf(item.getLocation().getLongitude()));
+        bundle.putString("address", item.getAddress());
+        bundle.putString("carno", item.getCarNo());
+        bundle.putString("carnumber", item.getCarNumber());
+        bundle.putString("time", item.getCarTime());
+        bundle.putBoolean("garbage", item.checkTodayAvailableGarbage());
+        bundle.putBoolean("food", item.checkTodayAvailableFood());
+        bundle.putBoolean("recycling", item.checkTodayAvailableRecycling());
+        bundle.putString("memo", item.getMemo());
+
+        intent.putExtras(bundle);
+
+        startActivityForResult(intent, 0);
+    }
 /*
 * check network state
 * */

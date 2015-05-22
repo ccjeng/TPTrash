@@ -90,4 +90,7 @@
         <item>23</item>
         <item>24</item>
     </string-array>
+    <string name="title_activity_info">InfoActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

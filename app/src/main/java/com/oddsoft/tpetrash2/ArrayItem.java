@@ -36,7 +36,11 @@ public class ArrayItem extends ParseObject {
     }
 
     public String getCarNo() {
-        return getString("CarNo");
+        if (getString("CarNo") != null) {
+            return getString("CarNo");
+        } else {
+            return "";
+        }
     }
 
     public String getCarNumber() {
@@ -66,7 +70,7 @@ public class ArrayItem extends ParseObject {
         String city = getString("city");
 
         if (city != null) {
-            return "NewTaipe";
+            return "NewTaipei";
         } else {
             return "Taipei";
         }
@@ -158,7 +162,7 @@ public class ArrayItem extends ParseObject {
     }
 
     //判斷今天要不要收廚餘
-    private Boolean checkTodayAvailableFood() {
+    public Boolean checkTodayAvailableFood() {
         Time t = new Time();
         Boolean result = false;
 
@@ -268,7 +272,7 @@ public class ArrayItem extends ParseObject {
     }
 
     //判斷今天要不要收資源回收
-    private Boolean checkTodayAvailableRecycling() {
+    public Boolean checkTodayAvailableRecycling() {
         Time t = new Time();
         Boolean result = false;
 
@@ -376,7 +380,7 @@ public class ArrayItem extends ParseObject {
     }
 
     //判斷今天要不要收一般垃圾
-    private Boolean checkTodayAvailableGarbage() {
+    public Boolean checkTodayAvailableGarbage() {
         Time t = new Time();
         Boolean result = false;
 
