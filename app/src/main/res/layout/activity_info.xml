@@ -2,13 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.oddsoft.tpetrash2.InfoActivity">
+    tools:context="com.oddsoft.tpetrash2.InfoActivity"
+    android:background="@color/write">
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/time"/>
+        android:id="@+id/time" />
 
     <TextView
         android:layout_width="fill_parent"
@@ -31,32 +32,35 @@
         android:id="@+id/carnumber"
         android:layout_below="@+id/carno"/>
 
-    <TextView
-        android:layout_width="fill_parent"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/garbage"
-        android:layout_below="@+id/carnumber"/>
+        android:id="@+id/garbageImageView"
+        android:layout_below="@+id/carnumber" />
 
-    <TextView
-        android:layout_width="fill_parent"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/food"
-        android:layout_below="@+id/garbage"/>
+        android:id="@+id/foodImageView"
+        android:layout_below="@+id/garbageImageView" />
 
-    <TextView
-        android:layout_width="fill_parent"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/recycling"
-        android:layout_below="@+id/food"/>
+        android:id="@+id/recyclingImageView"
+        android:layout_below="@+id/foodImageView" />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/memo"
-        android:layout_below="@+id/recycling"/>
+        android:layout_below="@+id/recyclingImageView"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mapButton"
+        android:text="帶我去倒垃圾"
+        android:layout_below="@+id/memo"/>
 </RelativeLayout>

@@ -492,7 +492,27 @@ public class ArrayItem extends ParseObject {
     }
 
     public String getMemo() {
-        return getString("memo");
+        Time t = new Time();
+        String memo = "";
+
+        if (this.getCity().equals("Taipei")) {
+            switch (t.getDayOfWeekNumber()) {
+                case "1":
+                case "5":
+                    memo = "今天資源回收可收：平面類：紙類 舊衣類 乾淨塑膠袋";
+                case "2":
+                case "4":
+                case "6":
+                    memo = "今天資源回收可收：乾淨保麗龍, 一般類（瓶罐、容器、小家電等)";
+            }
+        }
+
+        if (this.getCity().equals("NewTaipei")) {
+            memo =  getString("memo");
+        }
+
+        return memo;
+
     }
 
     public String getRank() {

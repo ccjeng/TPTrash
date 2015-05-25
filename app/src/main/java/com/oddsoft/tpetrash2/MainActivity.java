@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -103,7 +104,7 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getActionBar().setDisplayHomeAsUpEnabled(false);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         trashListView = (ListView) findViewById(R.id.trashList);
         hourCode = getResources().getStringArray(R.array.hour_spinnner_code);
         hourName = getResources().getStringArray(R.array.hour_spinnner_name);
@@ -245,9 +246,39 @@ public class MainActivity extends Activity
                     TextView addressView = (TextView) view.findViewById(R.id.address_view);
                     TextView distanceView = (TextView) view.findViewById(R.id.distance_view);
 
+                    TextView garbageView =  (TextView) view.findViewById(R.id.garbage_view);
+                    TextView foodView =  (TextView) view.findViewById(R.id.food_view);
+                    TextView recyclingView =  (TextView) view.findViewById(R.id.recycling_view);
+
                     timeView.setText(trash.getCarTime());
                     distanceView.setText(trash.getDistance(geoPointFromLocation(myLoc)).toString());
                     addressView.setText(trash.getAddress());
+
+                    if (trash.checkTodayAvailableGarbage()) {
+                        garbageView.setText("[有收一般垃圾]");
+                        garbageView.setTextColor(getResources().getColor(R.color.green));
+
+                    } else {
+                        garbageView.setText("[不收一般垃圾]");
+                        garbageView.setTextColor(getResources().getColor(R.color.red));
+                    }
+
+                    if (trash.checkTodayAvailableFood()) {
+                        foodView.setText(" [有收廚餘]");
+                        foodView.setTextColor(getResources().getColor(R.color.green));
+                    } else {
+                        foodView.setText(" [不收廚餘]");
+                        foodView.setTextColor(getResources().getColor(R.color.red));
+                    }
+
+                    if (trash.checkTodayAvailableRecycling()) {
+                        recyclingView.setText(" [有收資源回收]");
+                        recyclingView.setTextColor(getResources().getColor(R.color.green));
+                    } else {
+                        recyclingView.setText(" [不收資源回收]");
+                        recyclingView.setTextColor(getResources().getColor(R.color.red));
+                    }
+
 
                     return view;
                 }
@@ -441,7 +472,7 @@ public class MainActivity extends Activity
         bundle.putString("from", myLoc.getLatitude() + "," + myLoc.getLongitude());
         bundle.putString("to", String.valueOf(item.getLocation().getLatitude()) + "," +
                 String.valueOf(item.getLocation().getLongitude()));
-        bundle.putString("address", item.getAddress());
+        bundle.putString("address", item.getFullAddress());
         bundle.putString("carno", item.getCarNo());
         bundle.putString("carnumber", item.getCarNumber());
         bundle.putString("time", item.getCarTime());
