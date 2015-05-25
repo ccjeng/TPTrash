@@ -35,6 +35,10 @@ public class ArrayItem extends ParseObject {
 
     }
 
+    public String getFullAddress() {
+        return  getString("Address");
+    }
+
     public String getCarNo() {
         if (getString("CarNo") != null) {
             return getString("CarNo");
