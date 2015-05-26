@@ -255,27 +255,27 @@ public class MainActivity extends Activity
                     addressView.setText(trash.getAddress());
 
                     if (trash.checkTodayAvailableGarbage()) {
-                        garbageView.setText("[有收一般垃圾]");
+                        garbageView.setText("[今天有收一般垃圾]");
                         garbageView.setTextColor(getResources().getColor(R.color.green));
 
                     } else {
-                        garbageView.setText("[不收一般垃圾]");
+                        garbageView.setText("[今天不收一般垃圾]");
                         garbageView.setTextColor(getResources().getColor(R.color.red));
                     }
 
                     if (trash.checkTodayAvailableFood()) {
-                        foodView.setText(" [有收廚餘]");
+                        foodView.setText(" [今天有收廚餘]");
                         foodView.setTextColor(getResources().getColor(R.color.green));
                     } else {
-                        foodView.setText(" [不收廚餘]");
+                        foodView.setText(" [今天不收廚餘]");
                         foodView.setTextColor(getResources().getColor(R.color.red));
                     }
 
                     if (trash.checkTodayAvailableRecycling()) {
-                        recyclingView.setText(" [有收資源回收]");
+                        recyclingView.setText(" [今天有收資源回收]");
                         recyclingView.setTextColor(getResources().getColor(R.color.green));
                     } else {
-                        recyclingView.setText(" [不收資源回收]");
+                        recyclingView.setText(" [今天不收資源回收]");
                         recyclingView.setTextColor(getResources().getColor(R.color.red));
                     }
 
