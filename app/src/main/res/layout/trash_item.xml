@@ -20,6 +20,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right" />
         </TableRow>
+    </TableLayout>
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
         <TableRow>
             <TextView
                 android:id="@+id/address_view"
