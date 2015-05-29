@@ -13,12 +13,14 @@
             <TextView
                 android:id="@+id/time_view"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textSize="18sp"/>
             <TextView
                 android:id="@+id/distance_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right" />
+                android:layout_gravity="right"
+                android:textSize="18sp"/>
         </TableRow>
     </TableLayout>
     <TableLayout
@@ -29,7 +31,7 @@
                 android:id="@+id/address_view"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
         </TableRow>
     </TableLayout>
     <TableLayout

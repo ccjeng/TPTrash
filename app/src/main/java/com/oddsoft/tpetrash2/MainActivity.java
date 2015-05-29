@@ -104,7 +104,7 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
         trashListView = (ListView) findViewById(R.id.trashList);
         hourCode = getResources().getStringArray(R.array.hour_spinnner_code);
         hourName = getResources().getStringArray(R.array.hour_spinnner_name);
