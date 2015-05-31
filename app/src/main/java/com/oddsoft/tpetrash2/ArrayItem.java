@@ -498,14 +498,17 @@ public class ArrayItem extends ParseObject {
         String memo = "";
 
         if (this.getCity().equals("Taipei")) {
+
             switch (t.getDayOfWeekNumber()) {
                 case "1":
                 case "5":
-                    memo = "今天資源回收可收：平面類：紙類 舊衣類 乾淨塑膠袋";
+                    memo = "今天資源回收有收：平面類：紙類 舊衣類 乾淨塑膠袋";
+                    break;
                 case "2":
                 case "4":
                 case "6":
-                    memo = "今天資源回收可收：乾淨保麗龍, 一般類（瓶罐、容器、小家電等)";
+                    memo = "今天資源回收有收：乾淨保麗龍, 一般類（瓶罐、容器、小家電等)";
+                    break;
             }
         }
 
