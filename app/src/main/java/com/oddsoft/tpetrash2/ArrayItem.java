@@ -22,7 +22,7 @@ import com.parse.ParseQuery;
 
 import java.text.DecimalFormat;
 
-@ParseClassName("TaipeiAll")
+@ParseClassName("TPE201506")
 public class ArrayItem extends ParseObject {
 
     public String getAddress() {
@@ -513,7 +513,11 @@ public class ArrayItem extends ParseObject {
         }
 
         if (this.getCity().equals("NewTaipei")) {
+
             memo =  getString("memo");
+            memo =  getString("memo");
+            if (memo == null)
+                memo = "";
         }
 
         return memo;
