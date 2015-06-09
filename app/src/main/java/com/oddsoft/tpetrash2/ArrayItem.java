@@ -84,87 +84,87 @@ public class ArrayItem extends ParseObject {
     }
 
     public String getFood1() {
-        return getString("foodscraps_mon");
+        return ((getString("foodscraps_mon") != null)?getString("foodscraps_mon"):"N");
     }
 
     public String getFood2() {
-        return getString("foodscraps_tue");
+        return ((getString("foodscraps_tue") != null)?getString("foodscraps_tue"):"N");
     }
 
     public String getFood3() {
-        return getString("foodscraps_wed");
+        return ((getString("foodscraps_wed") != null)?getString("foodscraps_wed"):"N");
     }
 
     public String getFood4() {
-        return getString("foodscraps_thu");
+        return ((getString("foodscraps_thu")!=null)?getString("foodscraps_thu"):"N");
     }
 
     public String getFood5() {
-        return getString("foodscraps_fri");
+        return ((getString("foodscraps_fri") != null)?getString("foodscraps_fri"):"N");
     }
 
     public String getFood6() {
-        return getString("foodscraps_sat");
+        return ((getString("foodscraps_sat") != null)?getString("foodscraps_sat"):"N");
     }
 
     public String getFood7() {
-        return getString("foodscraps_sun");
+        return ((getString("foodscraps_sun") != null)?getString("foodscraps_sun"):"N");
     }
 
     public String getGarbage1() {
-        return getString("garbage_mon");
+        return ((getString("garbage_mon") != null)?getString("garbage_mon"):"N");
     }
 
     public String getGarbage2() {
-        return getString("garbage_tue");
+        return ((getString("garbage_tue") != null)?getString("garbage_tue"):"N");
     }
 
     public String getGarbage3() {
-        return getString("garbage_wed");
+        return ((getString("garbage_wed") != null)?getString("garbage_wed"):"N");
     }
 
     public String getGarbage4() {
-        return getString("garbage_thu");
+        return ((getString("garbage_thu") != null)?getString("garbage_thu"):"N");
     }
 
     public String getGarbage5() {
-        return getString("garbage_fri");
+        return ((getString("garbage_fri") != null)?getString("garbage_fri"):"N");
     }
 
     public String getGarbage6() {
-        return getString("garbage_sat");
+        return ((getString("garbage_sat") != null)?getString("garbage_sat"):"N");
     }
 
     public String getGarbage7() {
-        return getString("garbage_sun");
+        return ((getString("garbage_sun") != null)?getString("garbage_sun"):"N");
     }
 
     public String getRecycling1() {
-        return getString("recycling_mon");
+        return ((getString("recycling_mon") != null)?getString("recycling_mon"):"N");
     }
 
     public String getRecycling2() {
-        return getString("recycling_tue");
+        return ((getString("recycling_tue") != null)?getString("recycling_tue"):"N");
     }
 
     public String getRecycling3() {
-        return getString("recycling_wed");
+        return ((getString("recycling_wed") != null)?getString("recycling_wed"):"N");
     }
 
     public String getRecycling4() {
-        return getString("recycling_thu");
+        return ((getString("recycling_thu") != null)?getString("recycling_thu"):"N");
     }
 
     public String getRecycling5() {
-        return getString("recycling_fri");
+        return ((getString("recycling_fri") != null)?getString("recycling_fri"):"N");
     }
 
     public String getRecycling6() {
-        return getString("recycling_sat");
+        return ((getString("recycling_sat") != null)?getString("recycling_sat"):"N");
     }
 
     public String getRecycling7() {
-        return getString("recycling_sun");
+        return ((getString("recycling_sun") != null)?getString("recycling_sun"):"N");
     }
 
     //判斷今天要不要收廚餘
