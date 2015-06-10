@@ -12,12 +12,12 @@ public class Time {
 
     public Time() {
         Calendar calendar = Calendar.getInstance();
-        dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     public String getDayOfWeekNumber() {
 
-        return String.valueOf(dayOfWeek);
+        return String.valueOf(dayOfWeek -1);
     }
 
 

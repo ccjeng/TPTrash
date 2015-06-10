@@ -32,30 +32,47 @@
         android:id="@+id/carnumber"
         android:layout_below="@+id/carno"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/garbageImageView"
+        android:id="@+id/blank1View"
         android:layout_below="@+id/carnumber" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/foodImageView"
-        android:layout_below="@+id/garbageImageView" />
 
-    <ImageView
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyclingImageView"
-        android:layout_below="@+id/foodImageView" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/todayView"
+        android:layout_below="@+id/blank1View" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/garbageView"
+        android:layout_below="@+id/todayView" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/foodView"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@+id/garbageView" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/recyclingView"
+        android:layout_below="@+id/foodView" />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/memo"
-        android:layout_below="@+id/recyclingImageView"/>
+        android:layout_below="@+id/recyclingView"/>
 
     <Button
         android:layout_width="fill_parent"

@@ -229,7 +229,8 @@ public class MainActivity extends Activity
                                     , distance
                             );
 
-                            query.setLimit(20);
+                            query.setLimit(100);
+
                             return query;
                         }
                     };
@@ -283,12 +284,14 @@ public class MainActivity extends Activity
                     return view;
                 }
             };
+
+            trashQueryAdapter.setPaginationEnabled(false);
             trashQueryAdapter.addOnQueryLoadListener(new ParseQueryAdapter.OnQueryLoadListener<ArrayItem>() {
 
                 @Override
                 public void onLoading() {
                     proDialog = new ProgressDialog(MainActivity.this);
-                    proDialog.setMessage("處理中");
+                    proDialog.setMessage("資料擷取中");
                     proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                     proDialog.setCancelable(false);
                     proDialog.show();

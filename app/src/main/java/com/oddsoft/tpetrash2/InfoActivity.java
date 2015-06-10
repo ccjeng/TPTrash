@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.oddsoft.tpetrash2.utils.Time;
+
 
 public class InfoActivity extends Activity {
 
@@ -35,9 +37,10 @@ public class InfoActivity extends Activity {
         TextView carNumberView = (TextView) findViewById(R.id.carnumber);
         TextView memoView = (TextView) findViewById(R.id.memo);
 
-        ImageView garbageView = (ImageView) findViewById(R.id.garbageImageView);
-        ImageView foodView = (ImageView) findViewById(R.id.foodImageView);
-        ImageView recyclingView = (ImageView) findViewById(R.id.recyclingImageView);
+        TextView todayView = (TextView) findViewById(R.id.todayView);
+        TextView garbageView = (TextView) findViewById(R.id.garbageView);
+        TextView foodView = (TextView) findViewById(R.id.foodView);
+        TextView recyclingView = (TextView) findViewById(R.id.recyclingView);
 
         Button mapButton = (Button) findViewById(R.id.mapButton);
         mapButton.setOnClickListener(new Button.OnClickListener(){
@@ -65,28 +68,39 @@ public class InfoActivity extends Activity {
         carNumberView.setText("車次：" + carnumber);
         memoView.setText("備註："+ memo);
 
+
+        Time today = new Time();
+        todayView.setText("今天是" + today.getDayOfWeekName());
+
+
         if (garbage) {
             //今天有收一般垃圾
-            garbageView.setImageResource(R.drawable.garbage_y);
+            garbageView.setText("今天有收一般垃圾");
+            garbageView.setTextColor(getResources().getColor(R.color.green));
         } else {
             //今天沒收一般垃圾"
-            garbageView.setImageResource(R.drawable.garbage_n);
+            garbageView.setText("今天不收一般垃圾");
+            garbageView.setTextColor(getResources().getColor(R.color.red));
         }
 
         if (food) {
             //今天有收廚餘
-            foodView.setImageResource(R.drawable.food_y);
+            foodView.setText("今天有收廚餘");
+            foodView.setTextColor(getResources().getColor(R.color.green));
         } else {
             //今天沒收廚餘
-            foodView.setImageResource(R.drawable.food_n);
+            foodView.setText("今天不收廚餘");
+            foodView.setTextColor(getResources().getColor(R.color.red));
         }
 
         if (recycling) {
             //今天有收資源回收
-            recyclingView.setImageResource(R.drawable.recycling_y);
+            recyclingView.setText("今天有收資源回收");
+            recyclingView.setTextColor(getResources().getColor(R.color.green));
         } else {
             //今天沒收資源回收
-            recyclingView.setImageResource(R.drawable.recycling_n);
+            recyclingView.setText("今天不收資源回收");
+            recyclingView.setTextColor(getResources().getColor(R.color.red));
         }
 
     }
