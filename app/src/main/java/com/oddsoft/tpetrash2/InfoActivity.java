@@ -158,21 +158,17 @@ public class InfoActivity extends FragmentActivity {
         map.getUiSettings().setZoomControlsEnabled(true);
 
         CameraUpdate center=
-                CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(strToLat)
-                        , Double.valueOf(strToLng)));
-        CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
+                CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(strToLat)
+                        , Double.valueOf(strToLng)), 15);
+        map.animateCamera(center);
 
-        map.moveCamera(center);
-        map.animateCamera(zoom);
 
         //Current
         MarkerOptions markerOpt = new MarkerOptions();
         markerOpt.position(new LatLng(Double.valueOf(strFromLat)
                 , Double.valueOf(strFromLng)));
         markerOpt.title("現在位置");
-        markerOpt.draggable(true);
-        markerOpt.visible(true);
-        markerOpt.icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation));
+        markerOpt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
         map.addMarker(markerOpt).showInfoWindow();
 
         //Marker
