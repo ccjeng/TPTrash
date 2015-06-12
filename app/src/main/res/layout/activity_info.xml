@@ -9,7 +9,35 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/time" />
+        android:id="@+id/todayView"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/garbageView"
+        android:layout_below="@+id/todayView" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/foodView"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@+id/garbageView" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/recyclingView"
+        android:layout_below="@+id/foodView" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/time"
+        android:layout_below="@+id/recyclingView"/>
 
     <TextView
         android:layout_width="fill_parent"
@@ -35,51 +63,17 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/blank1View"
-        android:layout_below="@+id/carnumber" />
-
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/todayView"
-        android:layout_below="@+id/blank1View" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/garbageView"
-        android:layout_below="@+id/todayView" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/foodView"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_below="@+id/garbageView" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/recyclingView"
-        android:layout_below="@+id/foodView" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/memo"
-        android:layout_below="@+id/recyclingView"/>
+        android:layout_below="@+id/carnumber"/>
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/mapButton"
         android:text="帶我去倒垃圾"
-        android:layout_below="@+id/memo"/>
+        android:layout_below="@+id/memo"
+        android:visibility="gone"/>
 
     <fragment
         android:id="@+id/map_fragment"
