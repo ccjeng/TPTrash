@@ -80,4 +80,14 @@
         android:id="@+id/mapButton"
         android:text="帶我去倒垃圾"
         android:layout_below="@+id/memo"/>
+
+    <fragment
+        android:id="@+id/map_fragment"
+        class="com.google.android.gms.maps.MapFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/mapButton"/>
+
 </RelativeLayout>

@@ -11,7 +11,6 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
-
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -197,12 +196,12 @@ public class MainActivity extends Activity
         //fake location
         if (Application.APPDEBUG) {
             myLoc = new Location("");
-            myLoc.setLatitude(25.175579);
-            myLoc.setLongitude(121.43847);
+            //myLoc.setLatitude(25.175579);
+            //myLoc.setLongitude(121.43847);
 
             //Taipei City
-            //myLoc.setLatitude(25.0950492);
-            //myLoc.setLongitude(121.5246077);
+            myLoc.setLatitude(25.0950492);
+            myLoc.setLongitude(121.5246077);
 
         }
 
@@ -456,25 +455,23 @@ public class MainActivity extends Activity
     }
 
 
-    private void goBrowser(String toLocation) {
-        //Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
-        String from = "saddr=" + myLoc.getLatitude() + "," + myLoc.getLongitude();
-        String to = "daddr=" + toLocation.toString();
-        String para = "&hl=zh&dirflg=w";
-        String url = "http://maps.google.com.tw/maps?" + from + "&" + to + para;
-        Intent ie = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        startActivity(ie);
-
-    }
-
     private void goIntent(ArrayItem item) {
         Intent intent = new Intent();
         intent.setClass(this, InfoActivity.class);
         Bundle bundle = new Bundle();
 
-        bundle.putString("from", myLoc.getLatitude() + "," + myLoc.getLongitude());
-        bundle.putString("to", String.valueOf(item.getLocation().getLatitude()) + "," +
-                String.valueOf(item.getLocation().getLongitude()));
+        bundle.putString("fromLat", String.valueOf(myLoc.getLatitude()));
+        bundle.putString("fromLng", String.valueOf(myLoc.getLongitude()));
+        bundle.putString("toLat", String.valueOf(item.getLocation().getLatitude()));
+        bundle.putString("toLng", String.valueOf(item.getLocation().getLongitude()));
+
+//        ArrayList list = new ArrayList();
+//        list.add(item);
+//        bundle.putParcelableArrayList("list", list);
+
+
+        //bundle.putString("to", String.valueOf(item.getLocation().getLatitude()) + "," +
+        //        String.valueOf(item.getLocation().getLongitude()));
         bundle.putString("address", item.getFullAddress());
         bundle.putString("carno", item.getCarNo());
         bundle.putString("carnumber", item.getCarNumber());
@@ -487,6 +484,7 @@ public class MainActivity extends Activity
         intent.putExtras(bundle);
 
         startActivityForResult(intent, 0);
+
     }
 /*
 * check network state

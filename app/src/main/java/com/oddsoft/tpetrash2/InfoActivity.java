@@ -2,22 +2,39 @@ package com.oddsoft.tpetrash2;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.support.v4.app.FragmentActivity;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.oddsoft.tpetrash2.utils.Time;
 
 
-public class InfoActivity extends Activity {
+public class InfoActivity extends FragmentActivity {
 
     private String strFrom = "";
+    private String strFromLat = "";
+    private String strFromLng = "";
+
     private String strTo = "";
+    private String strToLat = "";
+    private String strToLng = "";
+
     private String address;
     private String carno;
     private String carnumber;
@@ -26,6 +43,10 @@ public class InfoActivity extends Activity {
     private Boolean garbage;
     private Boolean food;
     private Boolean recycling;
+
+    // Map fragment
+    private GoogleMap map;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,17 +71,44 @@ public class InfoActivity extends Activity {
             }
         });
 
-        Bundle bunde = this.getIntent().getExtras();
-        strFrom = bunde.getString("from");
-        strTo = bunde.getString("to");
-        address = bunde.getString("address");
-        carno = bunde.getString("carno");
-        carnumber = bunde.getString("carnumber");
-        time = bunde.getString("time");
-        memo = bunde.getString("memo");
-        garbage = bunde.getBoolean("garbage");
-        food = bunde.getBoolean("food");
-        recycling = bunde.getBoolean("recycling");
+        Bundle bundle = this.getIntent().getExtras();
+
+        /*
+        ArrayList list = bundle.getParcelableArrayList("list");
+
+        ArrayItem item = (ArrayItem) list.get(0);
+
+        address = item.getAddress();
+        carno = item.getCarNo();
+        carnumber = item.getCarNumber();
+        time = item.getCarTime();
+        memo = item.getMemo();
+        garbage = item.checkTodayAvailableGarbage();
+        food = item.checkTodayAvailableFood();
+        recycling = item.checkTodayAvailableRecycling();
+
+
+        strTo = String.valueOf(item.getLocation().getLatitude()) + "," +
+                String.valueOf(item.getLocation().getLongitude());
+
+*/
+
+        strFromLat=bundle.getString("fromLat");
+        strFromLng=bundle.getString("fromLng");
+        strFrom = strFromLat + ","+ strFromLng;
+
+        strToLat=bundle.getString("toLat");
+        strToLng=bundle.getString("toLng");
+        strTo = strToLat + ","+ strToLng;
+
+        address = bundle.getString("address");
+        carno = bundle.getString("carno");
+        carnumber = bundle.getString("carnumber");
+        time = bundle.getString("time");
+        memo = bundle.getString("memo");
+        garbage = bundle.getBoolean("garbage");
+        food = bundle.getBoolean("food");
+        recycling = bundle.getBoolean("recycling");
 
         timeView.setText("時間：" + time);
         addressView.setText("地址：" + address);
@@ -103,6 +151,49 @@ public class InfoActivity extends Activity {
             recyclingView.setTextColor(getResources().getColor(R.color.red));
         }
 
+
+        // Set up the map fragment
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment)).getMap();
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.getUiSettings().setZoomControlsEnabled(true);
+
+        CameraUpdate center=
+                CameraUpdateFactory.newLatLng(new LatLng(Double.valueOf(strToLat)
+                        , Double.valueOf(strToLng)));
+        CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
+
+        map.moveCamera(center);
+        map.animateCamera(zoom);
+
+        //Current
+        MarkerOptions markerOpt = new MarkerOptions();
+        markerOpt.position(new LatLng(Double.valueOf(strFromLat)
+                , Double.valueOf(strFromLng)));
+        markerOpt.title("現在位置");
+        markerOpt.draggable(true);
+        markerOpt.visible(true);
+        markerOpt.icon(BitmapDescriptorFactory.fromResource(android.R.drawable.ic_menu_mylocation));
+        map.addMarker(markerOpt).showInfoWindow();
+
+        //Marker
+        MarkerOptions markerOpt2 = new MarkerOptions();
+        markerOpt2.position(new LatLng(Double.valueOf(strToLat)
+                , Double.valueOf(strToLng)));
+        markerOpt2.title(address);
+        markerOpt2.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        map.addMarker(markerOpt2).showInfoWindow();
+
+        //Draw Line
+        PolylineOptions polylineOpt = new PolylineOptions();
+        polylineOpt.add(new LatLng(Double.valueOf(strFromLat)
+                , Double.valueOf(strFromLng)));
+        polylineOpt.add(new LatLng(Double.valueOf(strToLat)
+                , Double.valueOf(strToLng)));
+
+        polylineOpt.color(Color.BLUE);
+
+        Polyline polyline = map.addPolyline(polylineOpt);
+        polyline.setWidth(10);
     }
 
     @Override
@@ -139,4 +230,37 @@ public class InfoActivity extends Activity {
         startActivity(ie);
 
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    /*
+    * Called when the Activity is restarted, even before it becomes visible.
+    */
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    /*
+    * Called when the Activity is resumed. Updates the view.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+
 }
