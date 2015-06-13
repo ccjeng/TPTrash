@@ -9,63 +9,72 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/todayView"/>
+        android:id="@+id/todayView"
+        />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/garbageView"
-        android:layout_below="@+id/todayView" />
+        android:layout_below="@+id/todayView"
+        />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/foodView"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/garbageView" />
+        android:layout_below="@+id/garbageView"
+        />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/recyclingView"
-        android:layout_below="@+id/foodView" />
+        android:layout_below="@+id/foodView"
+        />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/time"
-        android:layout_below="@+id/recyclingView"/>
+        android:layout_below="@+id/recyclingView"
+        />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/address"
-        android:layout_below="@+id/time"/>
+        android:layout_below="@+id/time"
+        />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/carno"
-        android:layout_below="@+id/address"/>
+        android:layout_below="@+id/address"
+        />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/carnumber"
-        android:layout_below="@+id/carno"/>
+        android:layout_below="@+id/carno"
+        />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/memo"
-        android:layout_below="@+id/carnumber"/>
+        android:layout_below="@+id/carnumber"
+        />
 
     <Button
         android:layout_width="fill_parent"

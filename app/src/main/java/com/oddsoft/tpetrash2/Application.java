@@ -4,7 +4,6 @@ package com.oddsoft.tpetrash2;
  * Created by andycheng on 2015/5/5.
  */
 
-import com.oddsoft.tpetrash2.utils.Time;
 import com.parse.Parse;
 import com.parse.ParseObject;
 

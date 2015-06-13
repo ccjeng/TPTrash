@@ -515,7 +515,6 @@ public class ArrayItem extends ParseObject {
         if (this.getCity().equals("NewTaipei")) {
 
             memo =  getString("memo");
-            memo =  getString("memo");
             if (memo == null)
                 memo = "";
         }
@@ -550,6 +549,7 @@ public class ArrayItem extends ParseObject {
 
         return strDistance + unit;
     }
+
     public static ParseQuery<ArrayItem> getQuery() {
         return ParseQuery.getQuery(ArrayItem.class);
     }
