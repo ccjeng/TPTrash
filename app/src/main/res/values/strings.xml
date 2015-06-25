@@ -5,6 +5,7 @@
     <string name="action_settings">設定</string>
     <string name="exit_settings">離開</string>
     <string name="refresh_settings">更新</string>
+    <string name="menu_navi">帶我去倒垃圾</string>
 
     <string name="loading">載入中</string>
     <string name="network_error">無法連線，請檢查手機是否正常連網</string>
@@ -33,23 +34,14 @@
         <item>10</item>
         <item>15</item>
     </string-array>
-    <string name="pref_rownum">資料筆數</string>
-    <string name="pref_rownum_summary">每次顯示的資料筆數</string>
-    <string-array name="pref_rownum_item">
-        <item>5</item>
-        <item>10</item>
-        <item>15</item>
-        <item>20</item>
-    </string-array>
-    <string-array name="pref_rownum_code">
-        <item>5</item>
-        <item>10</item>
-        <item>15</item>
-        <item>20</item>
+
+    <string-array name="drawer_menu">
+        <item>設定</item>
+        <item>關於</item>
     </string-array>
 
     <string name="pref_sorting">排序方式</string>
-    <string name="pref_sorting_summary">查詢結果的排序方式</string>
+    <string name="pref_sorting_summary">查詢結果的排序方式 (需重新啟動會生效)</string>
     <string-array name="pref_sorting_item">
         <item>依垃圾車抵達時間</item>
         <item>依垃圾車距離</item>
@@ -90,7 +82,24 @@
         <item>23</item>
         <item>24</item>
     </string-array>
-    <string name="title_activity_info">InfoActivity</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="license">Copyright (c) 2015 ccjeng@google.com\n
+\n
+\n原始資料來源：
+        \n台北市政府資料開放平台：台北市垃圾清運路線 \n(資料更新日期:2014-10-15)
+        \n
+        \n新北市政府資料開放平台：新北市垃圾車路線 \n(資料更新日期:未註明)
+\n
+\n
+\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+</string>
+    <string name="license_intro"></string>
+
+
 </resources>
