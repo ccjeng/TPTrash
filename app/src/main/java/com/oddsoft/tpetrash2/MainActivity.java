@@ -1,12 +1,14 @@
 package com.oddsoft.tpetrash2;
 
 import com.google.android.gms.ads.*;
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.oddsoft.tpetrash2.utils.Analytics;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
@@ -118,6 +120,10 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Analytics ga = new Analytics();
+       if (!Application.APPDEBUG)
+            ga.initTracker(this);
 
         initActionBar();
         initDrawer();
@@ -527,6 +533,9 @@ public class MainActivity extends Activity
             locationClient.disconnect();
         }
         super.onStop();
+
+        if (!Application.APPDEBUG)
+            GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     /*
@@ -539,6 +548,8 @@ public class MainActivity extends Activity
         if (locationClient != null) {
             locationClient.connect();
         }
+        if (!Application.APPDEBUG)
+            GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override

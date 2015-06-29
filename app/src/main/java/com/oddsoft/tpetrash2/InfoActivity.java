@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.support.v4.app.FragmentActivity;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Time;
 
 
@@ -49,6 +51,10 @@ public class InfoActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+
+        Analytics ga = new Analytics();
+        if (!Application.APPDEBUG)
+            ga.initTracker(this);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -232,6 +238,8 @@ public class InfoActivity extends FragmentActivity {
     @Override
     public void onStop() {
         super.onStop();
+        if (!Application.APPDEBUG)
+            GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     /*
@@ -240,6 +248,8 @@ public class InfoActivity extends FragmentActivity {
     @Override
     public void onStart() {
         super.onStart();
+        if (!Application.APPDEBUG)
+            GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override

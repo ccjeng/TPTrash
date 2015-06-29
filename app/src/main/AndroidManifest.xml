@@ -31,10 +31,12 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBd7QuT093aUpoFcayd8wE4FcSdCWAege0" />
+        <meta-data
+            android:name="com.google.android.gms.analytics.globalConfigResource"
+            android:resource="@xml/global_tracker" />
 
         <!-- The main/home activity -->
         <activity
@@ -68,6 +70,9 @@
             android:name=".AboutActivity"
             android:label="@string/app_name">
         </activity>
+        <service android:name="com.google.android.gms.analytics.AnalyticsService"
+            android:enabled="true"
+            android:exported="false"/>
     </application>
 
 </manifest>

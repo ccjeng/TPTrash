@@ -4,8 +4,13 @@ package com.oddsoft.tpetrash2;
  * Created by andycheng on 2015/5/5.
  */
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Logger;
+import com.google.android.gms.analytics.Tracker;
 import com.parse.Parse;
 import com.parse.ParseObject;
+
+import java.util.HashMap;
 
 
 public class Application extends android.app.Application {
@@ -34,4 +39,24 @@ public class Application extends android.app.Application {
 
     }
 
+
+    // The following line should be changed to include the correct property id.
+    private static final String PROPERTY_ID = "UA-19743390-13";
+    public enum TrackerName {
+        APP_TRACKER // Tracker used only in this app.
+    }
+    HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
+
+    public synchronized Tracker getTracker(TrackerName trackerId) {
+        if (!mTrackers.containsKey(trackerId)) {
+
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
+            Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(PROPERTY_ID)
+                    : analytics.newTracker(R.xml.global_tracker);
+            t.enableAdvertisingIdCollection(true);
+            mTrackers.put(trackerId, t);
+        }
+        return mTrackers.get(trackerId);
+    }
 }
