@@ -2,10 +2,15 @@
 <resources>
 
     <string name="app_name">台北倒垃圾</string>
+    <string name="about">關於</string>
+    <string name="recycle">垃圾分類小幫手</string>
     <string name="action_settings">設定</string>
     <string name="exit_settings">離開</string>
     <string name="refresh_settings">更新</string>
     <string name="menu_navi">帶我去倒垃圾</string>
+    <string name="search_label">垃圾分類</string>
+    <string name="search_hint">輸入關鍵字（例如：塑膠袋）</string>
+    <string name="search_nodata">查無資料</string>
 
     <string name="loading">載入中</string>
     <string name="network_error">無法連線，請檢查手機是否正常連網</string>
@@ -36,6 +41,7 @@
     </string-array>
 
     <string-array name="drawer_menu">
+        <item>垃圾分類小幫手</item>
         <item>設定</item>
         <item>關於</item>
     </string-array>
@@ -87,8 +93,14 @@
 \n
 \n原始資料來源：
         \n台北市政府資料開放平台：台北市垃圾清運路線 \n(資料更新日期:2014-10-15)
+        \nhttp://data.taipei/opendata/datalist/datasetMeta?oid=c2a7d447-d4ef-4730-a3e6-b36d3f5dd995
+        \n
+        \n台北市政府資料開放平台：臺北市資源回收分類方式\n(資料更新日期:2015-05-12)
+        \nhttp://data.taipei/opendata/datalist/datasetMeta?oid=74643872-ee76-4727-bd02-d73b536eaad7
         \n
         \n新北市政府資料開放平台：新北市垃圾車路線 \n(資料更新日期:未註明)
+        \nhttp://data.ntpc.gov.tw/od/detail?oid=EDC3AD26-8AE7-4916-A00B-BC6048D19BF8
+
 \n
 \n
 \n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR

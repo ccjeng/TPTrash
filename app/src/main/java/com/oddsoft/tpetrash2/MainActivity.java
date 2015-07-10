@@ -260,7 +260,8 @@ public class MainActivity extends Activity
         mLsvDrawerMenu = (ListView) findViewById(R.id.lsv_drawer_menu);
         mLlvDrawerContent = (LinearLayout) findViewById(R.id.llv_left_drawer);
 
-        int[] iconImage = { android.R.drawable.ic_menu_preferences
+        int[] iconImage = { android.R.drawable.ic_menu_delete
+                , android.R.drawable.ic_menu_preferences
                 , android.R.drawable.ic_dialog_info };
 
         List<HashMap<String,String>> lstData = new ArrayList<HashMap<String,String>>();
@@ -295,9 +296,12 @@ public class MainActivity extends Activity
 
         switch (mCurrentMenuItemPosition) {
             case 0:
-                startActivity(new Intent(this, Prefs.class));
+                startActivity(new Intent(this, RecycleActivity.class));
                 break;
             case 1:
+                startActivity(new Intent(this, Prefs.class));
+                break;
+            case 2:
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
         }
