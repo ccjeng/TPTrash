@@ -71,7 +71,7 @@ public class RecycleActivity extends Activity {
         if (!Application.APPDEBUG)
             ga.initTracker(this);
 
-        //adView();
+        adView();
 
         //Autocomplete Search Text
         ArrayAdapter<String> keywordAdapter= new ArrayAdapter<String>(this,
