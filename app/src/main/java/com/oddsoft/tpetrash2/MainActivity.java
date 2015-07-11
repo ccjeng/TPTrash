@@ -120,39 +120,41 @@ public class MainActivity extends Activity
     // Stores the current instantiation of the location client in this object
     private GoogleApiClient locationClient;
 
+    private boolean hasPushNotification = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Analytics ga = new Analytics();
-       if (!Application.APPDEBUG)
+        if (!Application.APPDEBUG)
             ga.initTracker(this);
 
         initActionBar();
         initDrawer();
         initDrawerList();
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        Log.d(Application.APPTAG, "onCreate");
+        //show push notification message
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.containsKey("alert")) {
+                hasPushNotification = true;
+                String msg = extras.getString("alert");
 
-        try {
-            if (extras!=null) {
-                String jsonData = extras.getString("com.parse.Data");
-
-                if (jsonData!=null) {
-                    Log.d(Application.APPTAG, jsonData.toString());
-
-                    JSONObject json = new JSONObject(jsonData);
-                    String pushStore = json.getString("alert").toString();
-                    if (pushStore != null) {
-                        Toast.makeText(this, pushStore, Toast.LENGTH_SHORT).show();
-                    }
+                if (!msg.equals("")) {
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setMessage(msg)
+                            .setPositiveButton(R.string.ok_label,
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialoginterface, int i) {
+                                            // empty
+                                        }
+                                    }).show();
                 }
+                //臺北市環保局表示今日將暫停收運垃圾(含廚餘及回收物)，請市民暫時將垃圾貯存於家中
             }
-        } catch (JSONException e) {
-            Log.d(Application.APPTAG, e.getMessage());
         }
 
         trashListView = (ListView) findViewById(R.id.trashList);
@@ -177,6 +179,7 @@ public class MainActivity extends Activity
                 if (!hr.equals("12")) {
                     parseQuery(Integer.valueOf(hr));
                 }
+
             }
 
             @Override
@@ -196,8 +199,7 @@ public class MainActivity extends Activity
             if (!locationClient.isConnected()) {
                 locationClient.connect();
             }
-        }
-        else{
+        } else {
             new AlertDialog.Builder(MainActivity.this)
                     .setMessage(R.string.network_error)
                     .setPositiveButton(R.string.ok_label,
@@ -214,13 +216,12 @@ public class MainActivity extends Activity
 
         //set hour spinner to current hour
         if (hour < 12)
-                hour = 12;
+            hour = 12;
         //set default value
         //hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
 
         getPref();
-
-        //adView();
+        adView();
     }
 
     private void adView() {
@@ -241,7 +242,7 @@ public class MainActivity extends Activity
     }
 
 
-    private void initActionBar(){
+    private void initActionBar() {
         //顯示 Up Button (位在 Logo 左手邊的按鈕圖示)
         getActionBar().setDisplayHomeAsUpEnabled(true);
         //打開 Up Button 的點擊功能
@@ -286,11 +287,11 @@ public class MainActivity extends Activity
         mLsvDrawerMenu = (ListView) findViewById(R.id.lsv_drawer_menu);
         mLlvDrawerContent = (LinearLayout) findViewById(R.id.llv_left_drawer);
 
-        int[] iconImage = { android.R.drawable.ic_menu_delete
+        int[] iconImage = {android.R.drawable.ic_menu_delete
                 , android.R.drawable.ic_menu_preferences
-                , android.R.drawable.ic_dialog_info };
+                , android.R.drawable.ic_dialog_info};
 
-        List<HashMap<String,String>> lstData = new ArrayList<HashMap<String,String>>();
+        List<HashMap<String, String>> lstData = new ArrayList<HashMap<String, String>>();
         for (int i = 0; i < iconImage.length; i++) {
             HashMap<String, String> mapValue = new HashMap<String, String>();
             mapValue.put("icon", Integer.toString(iconImage[i]));
@@ -367,7 +368,7 @@ public class MainActivity extends Activity
 
         }
 
-        if (myLoc != null ) {
+        if (myLoc != null) {
 
             if (Application.APPDEBUG)
                 Log.d(TAG, "location = " + myLoc.toString());
@@ -408,9 +409,9 @@ public class MainActivity extends Activity
                     TextView addressView = (TextView) view.findViewById(R.id.address_view);
                     TextView distanceView = (TextView) view.findViewById(R.id.distance_view);
 
-                    TextView garbageView =  (TextView) view.findViewById(R.id.garbage_view);
-                    TextView foodView =  (TextView) view.findViewById(R.id.food_view);
-                    TextView recyclingView =  (TextView) view.findViewById(R.id.recycling_view);
+                    TextView garbageView = (TextView) view.findViewById(R.id.garbage_view);
+                    TextView foodView = (TextView) view.findViewById(R.id.food_view);
+                    TextView recyclingView = (TextView) view.findViewById(R.id.recycling_view);
 
                     timeView.setText(trash.getCarTime());
                     distanceView.setText(trash.getDistance(geoPointFromLocation(myLoc)).toString());
@@ -497,8 +498,7 @@ public class MainActivity extends Activity
                 }
             });
 
-        }
-        else {
+        } else {
             //location error
             new AlertDialog.Builder(MainActivity.this)
                     //.setTitle(R.string.app_name)
@@ -651,10 +651,11 @@ public class MainActivity extends Activity
         startActivityForResult(intent, 0);
 
     }
-/*
-* check network state
-* */
-    private boolean isNetworkConnected(){
+
+    /*
+    * check network state
+    * */
+    private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -662,6 +663,7 @@ public class MainActivity extends Activity
         }
         return false;
     }
+
     /*
  * Verify that Google Play services is available before making a request.
  *
@@ -724,7 +726,9 @@ public class MainActivity extends Activity
 
         //call Parse service to get data
         //parseQuery(hour);
-        hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
+        if (!hasPushNotification) {
+            hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
+        }
 
     }
 

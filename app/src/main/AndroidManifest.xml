@@ -49,7 +49,7 @@
 
         <!-- replace @drawable/push_icon with your push icon identifier -->
         <meta-data android:name="com.parse.push.notification_icon"
-            android:resource="@drawable/notification"/>
+            android:resource="@drawable/icon"/>
 
         <!-- The main/home activity -->
         <activity
@@ -101,15 +101,6 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-     <!--   <receiver
-            android:name="com.parse.ParsePushBroadcastReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.parse.push.intent.RECEIVE" />
-                <action android:name="com.parse.push.intent.DELETE" />
-                <action android:name="com.parse.push.intent.OPEN" />
-            </intent-filter>
-        </receiver>-->
         <receiver
             android:name=".utils.ParseBroadcastReceiver"
             android:exported="false" >
@@ -117,6 +108,7 @@
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
                 <action android:name="com.parse.push.intent.OPEN" />
+                <action android:name="com.oddsoft.tpetrash2.UPDATE_STATUS" />
             </intent-filter>
         </receiver>
         <receiver

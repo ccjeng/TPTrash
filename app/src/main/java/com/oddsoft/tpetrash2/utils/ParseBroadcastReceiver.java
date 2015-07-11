@@ -44,18 +44,13 @@ public class ParseBroadcastReceiver extends ParsePushBroadcastReceiver {
                     notificationURI = json.getString("uri");
                 }
 
-
                 Log.d(Application.APPTAG, notificationContent);
-/*
-                final String notificationTitle = json.getString("title").toString();
-                final String notificationContent = json.getString("alert").toString();
-                final String uri = json.getString("uri");
-*/
+
                 Intent resultIntent = null;
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 
-
                 resultIntent = new Intent(context, MainActivity.class);
+                resultIntent.putExtra("alert", notificationContent);
 
                 stackBuilder.addParentStack(MainActivity.class);
 
@@ -63,19 +58,16 @@ public class ParseBroadcastReceiver extends ParsePushBroadcastReceiver {
                 PendingIntent resultPendingIntent =
                         stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
                 NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-                //Customize your notification - sample code
+                //show custom notification
                 NotificationCompat.Builder builder =
                         new NotificationCompat.Builder(context)
-                                //.setSmallIcon(R.drawable.notification)
-                                //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.notification))
+                                .setSmallIcon(R.drawable.icon)
                                 .setContentTitle(notificationTitle)
                                 .setContentText(notificationContent)
                                 .setStyle(inboxStyle)
                                 .setContentIntent(resultPendingIntent);
-
 
                 int mNotificationId = 001;
                 NotificationManager mNotifyMgr =
