@@ -40,7 +40,6 @@ public class RecycleActivity extends Activity {
     private AdView adView;
     private RecycleListAdapter adapter;
 
-
     private static final String[] KEYWORD = new String[] {
             "米","飯","麥","食物殘渣","殘渣","廚餘","食物","麵","麵條","麵包","麵粉","粉","豆","渣","豆乾"
             ,"豆腐","豆花","雞","鴨","魚","肉","內臟","肉乾","牛","豬","羊","鵝","零食","餅乾","糖果","巧克力"
@@ -71,7 +70,7 @@ public class RecycleActivity extends Activity {
         if (!Application.APPDEBUG)
             ga.initTracker(this);
 
-        adView();
+        //adView();
 
         //Autocomplete Search Text
         ArrayAdapter<String> keywordAdapter= new ArrayAdapter<String>(this,

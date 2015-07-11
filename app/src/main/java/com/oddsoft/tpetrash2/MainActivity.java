@@ -50,6 +50,10 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MainActivity extends Activity
@@ -129,6 +133,28 @@ public class MainActivity extends Activity
         initDrawer();
         initDrawerList();
 
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        Log.d(Application.APPTAG, "onCreate");
+
+        try {
+            if (extras!=null) {
+                String jsonData = extras.getString("com.parse.Data");
+
+                if (jsonData!=null) {
+                    Log.d(Application.APPTAG, jsonData.toString());
+
+                    JSONObject json = new JSONObject(jsonData);
+                    String pushStore = json.getString("alert").toString();
+                    if (pushStore != null) {
+                        Toast.makeText(this, pushStore, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            Log.d(Application.APPTAG, e.getMessage());
+        }
+
         trashListView = (ListView) findViewById(R.id.trashList);
         hourCode = getResources().getStringArray(R.array.hour_spinnner_code);
         hourName = getResources().getStringArray(R.array.hour_spinnner_name);
@@ -194,7 +220,7 @@ public class MainActivity extends Activity
 
         getPref();
 
-        adView();
+        //adView();
     }
 
     private void adView() {
