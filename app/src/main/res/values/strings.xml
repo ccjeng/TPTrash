@@ -8,11 +8,9 @@
     <string name="exit_settings">離開</string>
     <string name="refresh_settings">更新</string>
     <string name="menu_navi">帶我去倒垃圾</string>
-    <string name="search_label">垃圾分類</string>
     <string name="search_hint">輸入關鍵字（例如：塑膠袋）</string>
     <string name="search_nodata">查無資料</string>
 
-    <string name="loading">載入中</string>
     <string name="network_error">無法連線，請檢查手機是否正常連網</string>
     <string name="location_error">目前無法定位座標，請檢查定位服務是否開啟</string>
     <string name="data_not_found">附近沒有垃圾車</string>
@@ -20,7 +18,7 @@
     <string name="yes_label">好</string>
     <string name="no_label">不要</string>
 
-    <string name="ok_label">確認</string>
+    <string name="ok_label">我知道了</string>
     <string name="about_subject">關於</string>
     <string name="processing">正在取得資料..</string>
     <string name="google_play_service_missing">裝置沒有安裝Google Play服務</string>

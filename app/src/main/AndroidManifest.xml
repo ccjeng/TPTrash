@@ -47,10 +47,6 @@
             android:name="com.google.android.gms.analytics.globalConfigResource"
             android:resource="@xml/global_tracker" />
 
-        <!-- replace @drawable/push_icon with your push icon identifier -->
-        <meta-data android:name="com.parse.push.notification_icon"
-            android:resource="@drawable/icon"/>
-
         <!-- The main/home activity -->
         <activity
             android:name=".MainActivity"
@@ -99,6 +95,14 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
         <receiver

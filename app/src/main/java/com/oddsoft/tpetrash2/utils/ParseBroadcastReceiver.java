@@ -4,8 +4,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -13,6 +11,7 @@ import android.util.Log;
 import com.oddsoft.tpetrash2.Application;
 import com.oddsoft.tpetrash2.MainActivity;
 import com.oddsoft.tpetrash2.R;
+import com.parse.ParseAnalytics;
 import com.parse.ParsePushBroadcastReceiver;
 
 import org.json.JSONException;
@@ -74,8 +73,7 @@ public class ParseBroadcastReceiver extends ParsePushBroadcastReceiver {
                         (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotifyMgr.notify(mNotificationId, builder.build());
 
-
-
+                //ParseAnalytics.trackAppOpened(resultIntent);
 
             } catch (JSONException e) {
                 Log.d(Application.APPTAG, e.getMessage());

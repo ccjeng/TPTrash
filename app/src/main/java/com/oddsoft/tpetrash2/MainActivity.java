@@ -9,6 +9,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.oddsoft.tpetrash2.utils.Analytics;
+import com.parse.ParseAnalytics;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
@@ -28,16 +29,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,11 +52,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 
 public class MainActivity extends Activity
         implements LocationListener,
@@ -128,34 +125,16 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
 
         Analytics ga = new Analytics();
-        if (!Application.APPDEBUG)
+        if (!Application.APPDEBUG) {
             ga.initTracker(this);
+        }
+
+        ParseAnalytics.trackAppOpened(getIntent());
 
         initActionBar();
         initDrawer();
         initDrawerList();
-
-        //show push notification message
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            if (extras.containsKey("alert")) {
-                hasPushNotification = true;
-                String msg = extras.getString("alert");
-
-                if (!msg.equals("")) {
-                    new AlertDialog.Builder(MainActivity.this)
-                            .setMessage(msg)
-                            .setPositiveButton(R.string.ok_label,
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(
-                                                DialogInterface dialoginterface, int i) {
-                                            // empty
-                                        }
-                                    }).show();
-                }
-                //臺北市環保局表示今日將暫停收運垃圾(含廚餘及回收物)，請市民暫時將垃圾貯存於家中
-            }
-        }
+        showPushNotification();
 
         trashListView = (ListView) findViewById(R.id.trashList);
         hourCode = getResources().getStringArray(R.array.hour_spinnner_code);
@@ -453,7 +432,7 @@ public class MainActivity extends Activity
                 @Override
                 public void onLoading() {
                     proDialog = new ProgressDialog(MainActivity.this);
-                    proDialog.setMessage("資料擷取中");
+                    proDialog.setMessage(getString(R.string.processing));
                     proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                     proDialog.setCancelable(false);
                     proDialog.show();
@@ -551,6 +530,41 @@ public class MainActivity extends Activity
 
         distance = Integer.valueOf(distancePreference);
         sorting = String.valueOf(sortingPreference);
+    }
+
+
+    //show push notification message
+    private void showPushNotification() {
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.containsKey("alert")) {
+                hasPushNotification = true;
+                String msg = extras.getString("alert");
+
+                if (!msg.equals("")) {
+
+                    // Linkify the message
+                    final SpannableString msgWithLinkify = new SpannableString(msg);
+                    Linkify.addLinks(msgWithLinkify, Linkify.ALL);
+
+                    final AlertDialog d = new AlertDialog.Builder(MainActivity.this)
+                            .setMessage(msgWithLinkify)
+                            .setPositiveButton(R.string.ok_label,
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialoginterface, int i) {
+                                            // empty
+                                        }
+                                    }).show();
+                    // Make the textview clickable
+                    ((TextView)d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+
+                }
+                //臺北市環保局表示今日將暫停收運垃圾(含廚餘及回收物)，請市民暫時將垃圾貯存於家中 http://www.google.com
+            }
+        }
+
     }
 
 
