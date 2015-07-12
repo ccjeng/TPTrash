@@ -58,7 +58,7 @@ public class MainActivity extends Activity
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = Application.APPTAG;
+    private static final String TAG = Application.class.getSimpleName();
     private static int distance;
     private static int hour;
     private static String sorting;
@@ -129,7 +129,7 @@ public class MainActivity extends Activity
             ga.initTracker(this);
         }
 
-        ParseAnalytics.trackAppOpened(getIntent());
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
         initActionBar();
         initDrawer();
@@ -690,14 +690,14 @@ public class MainActivity extends Activity
         // If Google Play services is available
         if (ConnectionResult.SUCCESS == resultCode) {
             if (Application.APPDEBUG) {
-                Log.d(Application.APPTAG, "Google play services available");
+                Log.d(TAG, "Google play services available");
             }
             // Continue
             return true;
             // Google Play services was not available for some reason
         } else {
             // Display an error dialog
-            Log.d(Application.APPTAG, "Google play services NOT available");
+            Log.d(TAG, "Google play services NOT available");
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
             if (dialog != null) {
                 dialog.show();
@@ -750,7 +750,7 @@ public class MainActivity extends Activity
     // int參數是連線中斷的代號
     @Override
     public void onConnectionSuspended(int i) {
-        Log.i(Application.APPTAG, "GoogleApiClient connection has been suspend");
+        Log.i(TAG, "GoogleApiClient connection has been suspend");
     }
 
     // Google Services連線失敗
@@ -758,7 +758,7 @@ public class MainActivity extends Activity
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         int errorCode = connectionResult.getErrorCode();
-        Log.i(Application.APPTAG, "GoogleApiClient connection failed");
+        Log.i(TAG, "GoogleApiClient connection failed");
 
         // 裝置沒有安裝Google Play服務
         if (errorCode == ConnectionResult.SERVICE_MISSING) {

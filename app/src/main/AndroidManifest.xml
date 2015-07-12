@@ -80,9 +80,7 @@
         <activity
             android:name=".RecycleActivity"
             android:label="@string/recycle"></activity>
-        <activity
-            android:name=".MessageActivity"
-            android:label="@string/recycle"></activity>
+
         <service
             android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
@@ -97,14 +95,14 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
+    <!--    <receiver android:name="com.parse.ParsePushBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
                 <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
         <receiver
             android:name=".utils.ParseBroadcastReceiver"
             android:exported="false" >
@@ -112,7 +110,6 @@
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
                 <action android:name="com.parse.push.intent.OPEN" />
-                <action android:name="com.oddsoft.tpetrash2.UPDATE_STATUS" />
             </intent-filter>
         </receiver>
         <receiver

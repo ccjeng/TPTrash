@@ -1,5 +1,6 @@
 package com.oddsoft.tpetrash2.utils;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -22,62 +23,80 @@ import org.json.JSONObject;
  */
 public class ParseBroadcastReceiver extends ParsePushBroadcastReceiver {
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            try {
+    private static final String TAG= Application.class.getSimpleName();
 
-                JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+    @Override
+    protected Notification getNotification(Context context, Intent intent) {
+        super.getNotification(context, intent);
 
-                String notificationTitle = context.getString(R.string.app_name);;
-                String notificationContent ="";
-                String notificationURI ="";
+        String notificationTitle = context.getString(R.string.app_name);
+        String notificationContent = getNotificationValue(intent);
 
-                if (json.has("title")) {
-                    notificationTitle = json.getString("title").toString();
-                }
-                if (json.has("alert")) {
-                    notificationContent = json.getString("alert").toString();
-                }
+        Log.d(TAG, notificationContent);
 
-                if(json.has("uri")) {
-                    notificationURI = json.getString("uri");
-                }
+        Intent resultIntent = new Intent(context, MainActivity.class);
+        resultIntent.putExtra("alert", notificationContent);
 
-                Log.d(Application.APPTAG, notificationContent);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                Intent resultIntent = null;
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-                resultIntent = new Intent(context, MainActivity.class);
-                resultIntent.putExtra("alert", notificationContent);
+        //show custom notification
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.icon)
+                        .setContentTitle(notificationTitle)
+                        .setContentText(notificationContent)
+                        .setStyle(inboxStyle)
+                        .setContentIntent(resultPendingIntent)
+                        .setAutoCancel(true);
 
-                stackBuilder.addParentStack(MainActivity.class);
+        return builder.build();
+    }
+    @Override
+    protected void onPushOpen(Context context, Intent intent) {
+        super.onPushOpen(context, intent);
+        Log.v(TAG, "onPushOpen called");
 
-                stackBuilder.addNextIntent(resultIntent);
-                PendingIntent resultPendingIntent =
-                        stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        String notificationContent = getNotificationValue(intent);;
 
-                NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        Intent i = new Intent(context, MainActivity.class);
+        //i.putExtras(intent.getExtras());
+        i.putExtra("alert", notificationContent);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
 
-                //show custom notification
-                NotificationCompat.Builder builder =
-                        new NotificationCompat.Builder(context)
-                                .setSmallIcon(R.drawable.icon)
-                                .setContentTitle(notificationTitle)
-                                .setContentText(notificationContent)
-                                .setStyle(inboxStyle)
-                                .setContentIntent(resultPendingIntent);
+    @Override
+    protected void onPushReceive(Context context, Intent intent) {
+        Log.v(TAG, "onPushReceive called");
+        super.onPushReceive(context, intent);
+    }
 
-                int mNotificationId = 001;
-                NotificationManager mNotifyMgr =
-                        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotifyMgr.notify(mNotificationId, builder.build());
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        Log.v(TAG, "onReceive Called");
+        super.onReceive(context, intent);
+        ParseAnalytics.trackAppOpened(intent);
 
-                //ParseAnalytics.trackAppOpened(resultIntent);
+    }
 
-            } catch (JSONException e) {
-                Log.d(Application.APPTAG, e.getMessage());
-            }
 
+    private String getNotificationValue(Intent intent) {
+        String notificationContent ="";
+        try {
+            JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+            notificationContent = json.getString("alert").toString();
+
+        } catch (JSONException e) {
+            Log.d(TAG, e.getMessage());
         }
+
+        return notificationContent;
+    }
+
 }

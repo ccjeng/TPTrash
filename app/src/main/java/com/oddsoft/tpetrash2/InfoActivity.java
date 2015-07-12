@@ -27,6 +27,7 @@ import com.oddsoft.tpetrash2.utils.Time;
 
 public class InfoActivity extends FragmentActivity {
 
+    private static final String TAG = Application.class.getSimpleName();
     private String strFrom = "";
     private String strFromLat = "";
     private String strFromLng = "";
