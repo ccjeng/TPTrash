@@ -16,4 +16,24 @@ public class Analytics {
         t.setScreenName(activity.getClass().getSimpleName());
         t.send(new HitBuilders.AppViewBuilder().build());
     }
+
+    public static void trackerPage(Activity activity) {
+        Tracker t = ((Application) activity.getApplication()).getTracker(
+                Application.TrackerName.APP_TRACKER);
+        t.setScreenName(activity.getClass().getSimpleName());
+        t.send(new HitBuilders.AppViewBuilder().build());
+    }
+
+    public static void trackEvent(Activity activity
+            , String category, String action, String label, long value) {
+        Tracker t = ((Application) activity.getApplication()).getTracker(
+                Application.TrackerName.APP_TRACKER);
+        t.send(new HitBuilders.EventBuilder()
+                .setCategory(category)
+                .setAction(action)
+                .setLabel(label)
+                .setValue(value)
+                .build());
+    }
+
 }

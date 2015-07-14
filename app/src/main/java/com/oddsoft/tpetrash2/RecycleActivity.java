@@ -67,10 +67,10 @@ public class RecycleActivity extends Activity {
         recycleView = (ListView) findViewById(R.id.listRecycleInfo);
 
         Analytics ga = new Analytics();
-        if (!Application.APPDEBUG)
-            ga.initTracker(this);
-
-        //adView();
+        if (!Application.APPDEBUG) {
+            ga.trackerPage(this);
+        }
+        adView();
 
         //Autocomplete Search Text
         ArrayAdapter<String> keywordAdapter= new ArrayAdapter<String>(this,

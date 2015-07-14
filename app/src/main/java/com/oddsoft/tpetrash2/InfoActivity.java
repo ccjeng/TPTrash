@@ -54,9 +54,9 @@ public class InfoActivity extends FragmentActivity {
         setContentView(R.layout.activity_info);
 
         Analytics ga = new Analytics();
-        if (!Application.APPDEBUG)
-            ga.initTracker(this);
-
+        if (!Application.APPDEBUG) {
+            ga.trackerPage(this);
+        }
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         TextView timeView = (TextView) findViewById(R.id.time);

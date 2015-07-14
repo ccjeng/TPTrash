@@ -37,12 +37,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dcf49f31-3f98-420b-809e-f77cab431e9b" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MessageActivity.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/Analytics.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/Analytics.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/Application.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/Application.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/InfoActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/InfoActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/ParseBroadcastReceiver.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/ParseBroadcastReceiver.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/RecycleActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/RecycleActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TPTrash.iws" />
@@ -90,25 +89,21 @@
       <file leaf-file-name="Application.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/Application.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.48961425">
-              <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
+            <state vertical-scroll-proportion="0.39951575">
+              <caret line="23" column="47" selection-start-line="23" selection-start-column="47" selection-end-line="23" selection-end-column="47" />
               <folding>
-                <element signature="e#1378#1747#0" expanded="true" />
-                <element signature="e#1746#1747#0" expanded="true" />
+                <element signature="e#2048#2070#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ParseBroadcastReceiver.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/ParseBroadcastReceiver.java">
+      <file leaf-file-name="Analytics.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/Analytics.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="80" column="59" selection-start-line="80" selection-start-column="59" selection-end-line="80" selection-end-column="59" />
-              <folding>
-                <element signature="e#956#992#0" expanded="true" />
-                <element signature="method#getNotificationValue#0;class#ParseBroadcastReceiver#0" expanded="false" />
-              </folding>
+              <caret line="26" column="33" selection-start-line="26" selection-start-column="23" selection-end-line="26" selection-end-column="33" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -126,14 +121,29 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.9259257">
-              <caret line="543" column="0" selection-start-line="538" selection-start-column="8" selection-end-line="543" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="645" column="37" selection-start-line="645" selection-start-column="37" selection-end-line="645" selection-end-column="37" />
               <folding>
                 <element signature="method#geoPointFromLocation#0;class#MainActivity#0" expanded="false" />
                 <element signature="method#onCreateOptionsMenu#0;class#MainActivity#0" expanded="false" />
                 <element signature="method#onOptionsItemSelected#0;class#MainActivity#0" expanded="false" />
                 <element signature="method#getPref#0;class#MainActivity#0" expanded="false" />
-                <element signature="method#goIntent#0;class#MainActivity#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ArrayItem.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/ArrayItem.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="32" column="34" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="34" />
+              <folding>
+                <element signature="method#checkTodayAvailableFood#0;class#ArrayItem#0" expanded="false" />
+                <element signature="method#checkTodayAvailableRecycling#0;class#ArrayItem#0" expanded="false" />
+                <element signature="method#checkTodayAvailableGarbage#0;class#ArrayItem#0" expanded="false" />
+                <element signature="e#15822#15823#0" expanded="true" />
+                <element signature="e#15873#15874#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1672,7 +1682,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/drawer_item.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/xml/global_tracker.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/Analytics.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/info.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/search.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/xml/searchable.xml" />
@@ -1685,7 +1694,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_about.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/AboutActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/recycle/RecycleItem.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/RecycleActivity.java" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/NotificationUtils.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/Notification.java" />
@@ -1693,10 +1701,12 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/borismus/webintent/Webintent.java" />
         <option value="$PROJECT_DIR$/app/build/intermediates/manifests/full/debug/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/InfoActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/ParseBroadcastReceiver.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/Analytics.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/RecycleActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/InfoActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/Application.java" />
       </list>
     </option>
@@ -1763,7 +1773,22 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TPTrash" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1784,7 +1809,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -2035,20 +2059,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TPTrash" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -2349,12 +2359,12 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32223904" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32956383" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.44780636" sideWeight="0.45513865" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33282906" sideWeight="0.45513865" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32876712" sideWeight="0.63489497" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2949757" sideWeight="0.49878347" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2949757" sideWeight="0.49878347" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21961102" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21961102" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29725364" sideWeight="0.50121653" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37099496" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -2418,6 +2428,19 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="543" column="0" selection-start-line="538" selection-start-column="8" selection-end-line="543" selection-end-column="0" />
+          <folding>
+            <element signature="method#geoPointFromLocation#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#onCreateOptionsMenu#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#onOptionsItemSelected#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#getPref#0;class#MainActivity#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gradle.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2551,28 +2574,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/xml/global_tracker.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.11508951">
-          <caret line="3" column="47" selection-start-line="3" selection-start-column="47" selection-end-line="3" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/Analytics.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.72890025">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5555556">
           <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2587,13 +2592,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.104166664">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/ArrayItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.20833333">
-          <caret line="167" column="5" selection-start-line="167" selection-start-column="5" selection-end-line="167" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -2693,7 +2691,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.21489972">
           <caret line="14" column="44" selection-start-line="14" selection-start-column="12" selection-end-line="14" selection-end-column="44" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2704,9 +2701,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.8166189">
           <caret line="24" column="19" selection-start-line="8" selection-start-column="4" selection-end-line="24" selection-end-column="19" />
-          <folding>
-            <element signature="e#772#793#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2738,19 +2732,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.31746033">
           <caret line="8" column="35" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/RecycleActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.26781327">
-          <caret line="109" column="108" selection-start-line="109" selection-start-column="20" selection-end-line="109" selection-end-column="108" />
-          <folding>
-            <element signature="method#loadJSONFromAsset#0;class#RecycleActivity#0" expanded="false" />
-            <element signature="method#onStop#0;class#RecycleActivity#0" expanded="false" />
-            <element signature="method#onStart#0;class#RecycleActivity#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2765,29 +2746,52 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.171875">
           <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/ParseBroadcastReceiver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.24332345">
+          <caret line="80" column="59" selection-start-line="80" selection-start-column="59" selection-end-line="80" selection-end-column="59" />
+          <folding>
+            <element signature="method#getNotificationValue#0;class#ParseBroadcastReceiver#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/xml/global_tracker.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="47" selection-start-line="3" selection-start-column="47" selection-end-line="3" selection-end-column="47" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/InfoActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.225131">
-          <caret line="36" column="33" selection-start-line="36" selection-start-column="33" selection-end-line="36" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.69007266">
+          <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/RecycleActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.9259257">
-          <caret line="543" column="0" selection-start-line="538" selection-start-column="8" selection-end-line="543" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.78450364">
+          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
           <folding>
-            <element signature="method#geoPointFromLocation#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onCreateOptionsMenu#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onOptionsItemSelected#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#getPref#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#goIntent#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#loadJSONFromAsset#0;class#RecycleActivity#0" expanded="false" />
+            <element signature="method#onStop#0;class#RecycleActivity#0" expanded="false" />
+            <element signature="method#onStart#0;class#RecycleActivity#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/Analytics.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="26" column="33" selection-start-line="26" selection-start-column="23" selection-end-line="26" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2799,24 +2803,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/utils/ParseBroadcastReceiver.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/ArrayItem.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="80" column="59" selection-start-line="80" selection-start-column="59" selection-end-line="80" selection-end-column="59" />
+          <caret line="32" column="34" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="34" />
           <folding>
-            <element signature="e#956#992#0" expanded="true" />
-            <element signature="method#getNotificationValue#0;class#ParseBroadcastReceiver#0" expanded="false" />
+            <element signature="method#checkTodayAvailableFood#0;class#ArrayItem#0" expanded="false" />
+            <element signature="method#checkTodayAvailableRecycling#0;class#ArrayItem#0" expanded="false" />
+            <element signature="method#checkTodayAvailableGarbage#0;class#ArrayItem#0" expanded="false" />
+            <element signature="e#15822#15823#0" expanded="true" />
+            <element signature="e#15873#15874#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="645" column="37" selection-start-line="645" selection-start-column="37" selection-end-line="645" selection-end-column="37" />
+          <folding>
+            <element signature="method#geoPointFromLocation#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#onCreateOptionsMenu#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#onOptionsItemSelected#0;class#MainActivity#0" expanded="false" />
+            <element signature="method#getPref#0;class#MainActivity#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/Application.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48961425">
-          <caret line="23" column="48" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
+        <state vertical-scroll-proportion="0.39951575">
+          <caret line="23" column="47" selection-start-line="23" selection-start-column="47" selection-end-line="23" selection-end-column="47" />
           <folding>
-            <element signature="e#1378#1747#0" expanded="true" />
-            <element signature="e#1746#1747#0" expanded="true" />
+            <element signature="e#2048#2070#0" expanded="true" />
           </folding>
         </state>
       </provider>

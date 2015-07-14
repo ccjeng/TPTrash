@@ -110,6 +110,7 @@ public class MainActivity extends Activity
     private Location lastLocation;
     private Location currentLocation;
     private Location myLoc;
+    private Analytics ga;
 
     // A request to connect to Location Services
     private LocationRequest locationRequest;
@@ -124,9 +125,9 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Analytics ga = new Analytics();
+        ga = new Analytics();
         if (!Application.APPDEBUG) {
-            ga.initTracker(this);
+            ga.trackerPage(this);
         }
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
@@ -635,6 +636,11 @@ public class MainActivity extends Activity
 
 
     private void goIntent(ArrayItem item) {
+
+        if (!Application.APPDEBUG) {
+            ga.trackEvent(this, "Home", "Location", item.getRegion(), 1);
+        }
+
         Intent intent = new Intent();
         intent.setClass(this, InfoActivity.class);
         Bundle bundle = new Bundle();
