@@ -39,7 +39,7 @@ public class RecycleActivity extends Activity {
     private AutoCompleteTextView searchText;
     private AdView adView;
     private RecycleListAdapter adapter;
-
+    private Analytics ga;
     private static final String[] KEYWORD = new String[] {
             "米","飯","麥","食物殘渣","殘渣","廚餘","食物","麵","麵條","麵包","麵粉","粉","豆","渣","豆乾"
             ,"豆腐","豆花","雞","鴨","魚","肉","內臟","肉乾","牛","豬","羊","鵝","零食","餅乾","糖果","巧克力"
@@ -66,10 +66,9 @@ public class RecycleActivity extends Activity {
 
         recycleView = (ListView) findViewById(R.id.listRecycleInfo);
 
-        Analytics ga = new Analytics();
-        if (!Application.APPDEBUG) {
-            ga.trackerPage(this);
-        }
+        ga = new Analytics();
+        ga.trackerPage(this);
+
         adView();
 
         //Autocomplete Search Text
@@ -132,6 +131,8 @@ public class RecycleActivity extends Activity {
 
     private ArrayList<RecycleItem> getJsonData(CharSequence keyword) {
 
+        ga.trackEvent(this, "Recycle", "Keyword", keyword.toString(), 0);
+
         ArrayList<RecycleItem> items = new ArrayList<RecycleItem>();
         try {
             JSONObject obj = new JSONObject(loadJSONFromAsset());
@@ -178,9 +179,7 @@ public class RecycleActivity extends Activity {
     @Override
     public void onStop() {
         super.onStop();
-
-        if (!Application.APPDEBUG)
-            GoogleAnalytics.getInstance(this).reportActivityStop(this);
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     /*
@@ -189,8 +188,6 @@ public class RecycleActivity extends Activity {
     @Override
     public void onStart() {
         super.onStart();
-
-        if (!Application.APPDEBUG)
-            GoogleAnalytics.getInstance(this).reportActivityStart(this);
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 }

@@ -47,16 +47,16 @@ public class InfoActivity extends FragmentActivity {
 
     // Map fragment
     private GoogleMap map;
+    private Analytics ga;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        Analytics ga = new Analytics();
-        if (!Application.APPDEBUG) {
-            ga.trackerPage(this);
-        }
+        ga = new Analytics();
+        ga.trackerPage(this);
+
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         TextView timeView = (TextView) findViewById(R.id.time);
@@ -226,6 +226,8 @@ public class InfoActivity extends FragmentActivity {
     }
 
     private void goBrowser() {
+
+        ga.trackEvent(this, "Click", "Button", "Google Map", 0);
         //Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
         String from = "saddr=" + strFrom;
         String to = "daddr=" + strTo;
@@ -239,8 +241,7 @@ public class InfoActivity extends FragmentActivity {
     @Override
     public void onStop() {
         super.onStop();
-        if (!Application.APPDEBUG)
-            GoogleAnalytics.getInstance(this).reportActivityStop(this);
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     /*
@@ -249,8 +250,7 @@ public class InfoActivity extends FragmentActivity {
     @Override
     public void onStart() {
         super.onStart();
-        if (!Application.APPDEBUG)
-            GoogleAnalytics.getInstance(this).reportActivityStart(this);
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override

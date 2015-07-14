@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 public class Application extends android.app.Application {
     // Debugging switch 
-    public static final boolean APPDEBUG = true;
+    public static final boolean APPDEBUG = false;
 
     // Debugging tag for the application
     public static final String APPTAG = Application.class.getSimpleName();
@@ -69,7 +69,9 @@ public class Application extends android.app.Application {
 
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
             analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
-
+            if (APPDEBUG) {
+                analytics.getInstance(this).setDryRun(true);
+            }
             Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(PROPERTY_ID)
                     : analytics.newTracker(R.xml.global_tracker);
             t.enableAdvertisingIdCollection(true);

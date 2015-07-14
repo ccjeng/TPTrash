@@ -126,9 +126,8 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
 
         ga = new Analytics();
-        if (!Application.APPDEBUG) {
-            ga.trackerPage(this);
-        }
+        ga.trackerPage(this);
+
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
@@ -533,7 +532,6 @@ public class MainActivity extends Activity
         sorting = String.valueOf(sortingPreference);
     }
 
-
     //show push notification message
     private void showPushNotification() {
 
@@ -578,9 +576,7 @@ public class MainActivity extends Activity
             locationClient.disconnect();
         }
         super.onStop();
-
-        if (!Application.APPDEBUG)
-            GoogleAnalytics.getInstance(this).reportActivityStop(this);
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     /*
@@ -593,8 +589,7 @@ public class MainActivity extends Activity
         if (locationClient != null) {
             locationClient.connect();
         }
-        if (!Application.APPDEBUG)
-            GoogleAnalytics.getInstance(this).reportActivityStart(this);
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override
@@ -637,9 +632,9 @@ public class MainActivity extends Activity
 
     private void goIntent(ArrayItem item) {
 
-        if (!Application.APPDEBUG) {
-            ga.trackEvent(this, "Home", "Location", item.getRegion(), 1);
-        }
+        ga.trackEvent(this, "Location", "Region", item.getRegion(), 0);
+        ga.trackEvent(this, "Location", "Address", item.getFullAddress(), 0);
+
 
         Intent intent = new Intent();
         intent.setClass(this, InfoActivity.class);

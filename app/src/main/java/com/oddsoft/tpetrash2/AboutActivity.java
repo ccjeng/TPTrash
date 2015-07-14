@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.oddsoft.tpetrash2.utils.Analytics;
+
 public class AboutActivity extends Activity {
 
     @Override
@@ -13,6 +16,8 @@ public class AboutActivity extends Activity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Analytics ga = new Analytics();
+        ga.trackerPage(this);
     }
 
     @Override
@@ -25,6 +30,24 @@ public class AboutActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /*
+* Called when the Activity is no longer visible at all. Stop updates and disconnect.
+*/
+    @Override
+    public void onStop() {
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
+    }
+
+    /*
+    * Called when the Activity is restarted, even before it becomes visible.
+    */
+    @Override
+    public void onStart() {
+        super.onStart();
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
 }
