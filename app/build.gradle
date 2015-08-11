@@ -26,9 +26,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':volley')
     compile files('libs/jackson-core-2.2.3.jar')
     compile files('libs/Parse-1.9.3.jar')
     compile files('libs/bolts-android-1.2.0.jar')
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.google.android.gms:play-services:7.3.0'
+    compile 'com.google.code.gson:gson:2.3.1'
 }

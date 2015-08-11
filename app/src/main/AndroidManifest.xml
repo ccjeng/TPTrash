@@ -80,6 +80,10 @@
         <activity
             android:name=".RecycleActivity"
             android:label="@string/recycle"></activity>
+        <activity
+            android:name=".NewTaipeiRealtimeActivity"
+            android:label="@string/newtaipeirealtime"></activity>
+
 
         <service
             android:name="com.google.android.gms.analytics.AnalyticsService"

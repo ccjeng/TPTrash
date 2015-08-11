@@ -69,7 +69,7 @@ public class RecycleActivity extends Activity {
         ga = new Analytics();
         ga.trackerPage(this);
 
-        adView();
+        //adView();
 
         //Autocomplete Search Text
         ArrayAdapter<String> keywordAdapter= new ArrayAdapter<String>(this,
