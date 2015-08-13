@@ -155,7 +155,7 @@ public class MainActivity extends Activity
 
                 String hr = hourCode[hourSpinner.getSelectedItemPosition()];
 
-                if (!hr.equals("12")) {
+                if (!hr.equals("5")) {
                     parseQuery(Integer.valueOf(hr));
                 }
 
@@ -194,8 +194,9 @@ public class MainActivity extends Activity
         hour = calendar.get(Calendar.HOUR_OF_DAY);
 
         //set hour spinner to current hour
-        if (hour < 12)
-            hour = 12;
+        if (hour < 5) {
+            hour = 5;
+        }
         //set default value
         //hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
 
@@ -363,7 +364,13 @@ public class MainActivity extends Activity
 
                             ParseQuery<ArrayItem> query = ArrayItem.getQuery();
 
-                            query.whereContains("CarTime", String.valueOf(hour) + ":");
+                            String strHour;
+                            if (String.valueOf(hour).length()==1) {
+                                strHour = "0" + String.valueOf(hour);
+                            } else {
+                                strHour = String.valueOf(hour);
+                            }
+                            query.whereContains("CarTime", strHour + ":");
 
                             if (sorting.equals("TIME")) {
                                 query.orderByAscending("CarTime");

@@ -27,8 +27,6 @@ public class RealtimeListAdapter extends ArrayAdapter<RealtimeItem> {
         this.items = items;
     }
 
-    // static to save the reference to the outer class and to avoid access to
-    // any members of the containing class
     static class ViewHolder {
         public TextView timeView;
         public TextView locationrView;
@@ -36,13 +34,8 @@ public class RealtimeListAdapter extends ArrayAdapter<RealtimeItem> {
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // ViewHolder will buffer the assess to the individual fields of the row
-        // layout
 
         ViewHolder holder;
-        // Recycle existing view if passed as parameter
-        // This will save memory and time on Android
-        // This only works if the base layout for all classes are the same
         View rowView = convertView;
 
         if (rowView == null) {
@@ -59,7 +52,11 @@ public class RealtimeListAdapter extends ArrayAdapter<RealtimeItem> {
         }
         holder.timeView.setText(items.get(position).getCarTime());
         holder.locationrView.setText(items.get(position).getCarLocation());
-        holder.carnoView.setText(items.get(position).getCarNO());
+
+        //holder.carnoView.setText(items.get(position).getCarNO());
+        holder.carnoView.setText(Double.toString(items.get(position).getLatitude())
+                + "-"+ Double.toString(items.get(position).getLongitude()));
+
 
         return rowView;
     }

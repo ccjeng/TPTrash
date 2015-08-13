@@ -60,6 +60,13 @@
     <string name="hour_spinner_prompt">依垃圾車抵達時間查詢</string>
     <string-array name="hour_spinnner_name">
         <item>請選擇</item>
+        <item>早上6點</item>
+        <item>早上7點</item>
+        <item>早上8點</item>
+        <item>早上9點</item>
+        <item>早上10點</item>
+        <item>早上11點</item>
+        <item>中午12點</item>
         <item>下午1點</item>
         <item>下午2點</item>
         <item>下午3點</item>
@@ -74,6 +81,13 @@
         <item>晚上12點</item>
     </string-array>
     <string-array name="hour_spinnner_code">
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
         <item>12</item>
         <item>13</item>
         <item>14</item>
@@ -100,6 +114,9 @@
         \n
         \n新北市政府資料開放平台：新北市垃圾車路線 \n(資料更新日期:未註明)
         \nhttp://data.ntpc.gov.tw/od/detail?oid=EDC3AD26-8AE7-4916-A00B-BC6048D19BF8
+        \n
+        \n新北市政府資料開放平台：新北市垃圾車即時位置
+        \nhttp://data.ntpc.gov.tw/od/detail?oid=28AB4122-60E1-4065-98E5-ABCCB69AACA6
 
 \n
 \n
