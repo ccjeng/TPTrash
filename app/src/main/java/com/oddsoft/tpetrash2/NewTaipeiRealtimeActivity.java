@@ -1,11 +1,19 @@
 package com.oddsoft.tpetrash2;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -13,20 +21,70 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import com.google.android.gms.ads.*;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.oddsoft.tpetrash2.realtime.RealtimeItem;
 import com.oddsoft.tpetrash2.realtime.RealtimeListAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
+import com.parse.ParseGeoPoint;
 
 import java.util.ArrayList;
 
 /**
  * Created by andycheng on 2015/8/11.
  */
-public class NewTaipeiRealtimeActivity extends Activity {
+public class NewTaipeiRealtimeActivity extends Activity
+        implements LocationListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "NewTaipeiRealtime";
     protected ProgressDialog proDialog;
     private Analytics ga;
+
+    /*
+  * Define a request code to send to Google Play services This code is returned in
+  * Activity.onActivityResult
+  */
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+
+    /*
+     * Constants for location update parameters
+     */
+    // Milliseconds per second
+    private static final int MILLISECONDS_PER_SECOND = 1000;
+
+    // The update interval
+    private static final int UPDATE_INTERVAL_IN_SECONDS = 5;
+
+    // A fast interval ceiling
+    private static final int FAST_CEILING_IN_SECONDS = 1;
+
+    // Update interval in milliseconds
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
+            * UPDATE_INTERVAL_IN_SECONDS;
+
+    // A fast ceiling of update intervals, used when the app is visible
+    private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
+            * FAST_CEILING_IN_SECONDS;
+
+    // Fields for helping process map and location changes
+    private Location lastLocation;
+    private Location currentLocation;
+    private Location myLoc;
+
+    // A request to connect to Location Services
+    private LocationRequest locationRequest;
+
+    // Stores the current instantiation of the location client in this object
+    private GoogleApiClient locationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +94,29 @@ public class NewTaipeiRealtimeActivity extends Activity {
         ga = new Analytics();
         ga.trackerPage(this);
 
-        getData();
+        //getData();
 
+        if (isNetworkConnected()) {
+            // 建立Google API用戶端物件
+            configGoogleApiClient();
+
+            // 建立Location請求物件
+            configLocationRequest();
+
+            if (!locationClient.isConnected()) {
+                locationClient.connect();
+            }
+        } else {
+            new AlertDialog.Builder(NewTaipeiRealtimeActivity.this)
+                    .setMessage(R.string.network_error)
+                    .setPositiveButton(R.string.ok_label,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(
+                                        DialogInterface dialoginterface, int i) {
+                                    // empty
+                                }
+                            }).show();
+        }
     }
 
     private void getData() {
@@ -74,12 +153,47 @@ public class NewTaipeiRealtimeActivity extends Activity {
 
 
     private void showData(String str) {
-        RealtimeItem item = new RealtimeItem();
-        ArrayList<RealtimeItem> items = item.fromJson(str, NewTaipeiRealtimeActivity.this);
-        RealtimeListAdapter adapter = new RealtimeListAdapter(this, items);
-        ListView listView = (ListView) findViewById(R.id.listReltimeInfo);
-        listView.setAdapter(adapter);
-        adapter.addAll(items);
+        myLoc = (currentLocation == null) ? lastLocation : currentLocation;
+
+        //fake location
+        if (Application.APPDEBUG) {
+            myLoc = new Location("");
+            //myLoc.setLatitude(25.175579);
+            //myLoc.setLongitude(121.43847);
+
+            //Taipei City
+            myLoc.setLatitude(25.0950492);
+            myLoc.setLongitude(121.5246077);
+
+        }
+        if (myLoc != null) {
+            RealtimeItem item = new RealtimeItem();
+            ArrayList<RealtimeItem> items = item.fromJson(
+                    str
+                    , NewTaipeiRealtimeActivity.this
+                    , myLoc.getLatitude()
+                    , myLoc.getLongitude());
+            RealtimeListAdapter adapter = new RealtimeListAdapter(this, items);
+            ListView listView = (ListView) findViewById(R.id.listReltimeInfo);
+            listView.setAdapter(adapter);
+            adapter.addAll(items);
+
+            if (adapter.getCount() == 0) {
+                Toast.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            //location error
+            new AlertDialog.Builder(NewTaipeiRealtimeActivity.this)
+                    //.setTitle(R.string.app_name)
+                    .setMessage(R.string.location_error)
+                    .setPositiveButton(R.string.ok_label,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(
+                                        DialogInterface dialoginterface, int i) {
+                                    // empty
+                                }
+                            }).show();
+        }
     }
 
     @Override
@@ -93,4 +207,214 @@ public class NewTaipeiRealtimeActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    /*
+* Called when the Activity is no longer visible at all. Stop updates and disconnect.
+*/
+    @Override
+    public void onStop() {
+        if (locationClient.isConnected()) {
+            locationClient.disconnect();
+        }
+        super.onStop();
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
+    }
+
+    /*
+    * Called when the Activity is restarted, even before it becomes visible.
+    */
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Connect to the location services client
+        if (locationClient != null) {
+            locationClient.connect();
+        }
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //if (adView != null)
+        //    adView.pause();
+
+        // 移除位置請求服務
+        if (locationClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(locationClient, NewTaipeiRealtimeActivity.this);
+        }
+    }
+
+    /*
+    * Called when the Activity is resumed. Updates the view.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //if (adView != null)
+        //    adView.resume();
+
+        // 連線到Google API用戶端
+        if (locationClient != null) {
+            if (!locationClient.isConnected()) {
+                locationClient.connect();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        //if (adView != null)
+        //    adView.destroy();
+        super.onDestroy();
+    }
+
+    /*
+* check network state
+* */
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
+
+    /*
+* Verify that Google Play services is available before making a request.
+*
+* @return true if Google Play services is available, otherwise false
+*/
+    private boolean isGoogleServicesAvailable() {
+        // Check that Google Play services is available
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+
+        // If Google Play services is available
+        if (ConnectionResult.SUCCESS == resultCode) {
+            if (Application.APPDEBUG) {
+                Log.d(TAG, "Google play services available");
+            }
+            // Continue
+            return true;
+            // Google Play services was not available for some reason
+        } else {
+            // Display an error dialog
+            Log.d(TAG, "Google play services NOT available");
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
+            if (dialog != null) {
+                dialog.show();
+            }
+            return false;
+        }
+    }
+
+    /*
+* Get the current location
+*/
+    private Location getLocation() {
+        // If Google Play Services is available
+        if (isGoogleServicesAvailable()) {
+            // Get the current location
+            return LocationServices.FusedLocationApi.getLastLocation(locationClient);
+        } else {
+            return null;
+        }
+    }
+
+    //Google Play Service ConnectionCallbacks
+    // 已經連線到Google Services
+    @Override
+    public void onConnected(Bundle bundle) {
+        if (Application.APPDEBUG)
+            Log.d(TAG, "onConnected - Connected to location services");
+
+
+        currentLocation = getLocation();
+
+        // 已經連線到Google Services
+        // 啟動位置更新服務
+        // 位置資訊更新的時候，應用程式會自動呼叫LocationListener.onLocationChanged
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                locationClient, locationRequest, this);
+
+        if (Application.APPDEBUG)
+            Log.d(TAG, "onConnected - isConnected =" + locationClient.isConnected());
+
+        getData();
+
+    }
+
+    // Google Services連線中斷
+    // int參數是連線中斷的代號
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "GoogleApiClient connection has been suspend");
+    }
+
+    // Google Services連線失敗
+    // ConnectionResult參數是連線失敗的資訊
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        int errorCode = connectionResult.getErrorCode();
+        Log.i(TAG, "GoogleApiClient connection failed");
+
+        // 裝置沒有安裝Google Play服務
+        if (errorCode == ConnectionResult.SERVICE_MISSING) {
+            new AlertDialog.Builder(this)
+                    //.setTitle(R.string.app_name)
+                    .setMessage(R.string.google_play_service_missing)
+                    .setPositiveButton(R.string.ok_label,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(
+                                        DialogInterface dialoginterface, int i) {
+                                    // empty
+                                }
+                            }).show();
+        }
+
+    }
+
+    // 建立Google API用戶端物件
+    private synchronized void configGoogleApiClient() {
+        // Create a new location client, using the enclosing class to handle callbacks.
+        locationClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+    }
+
+    private ParseGeoPoint geoPointFromLocation(Location loc) {
+        return new ParseGeoPoint(loc.getLatitude(), loc.getLongitude());
+    }
+
+    private void configLocationRequest() {
+        // Create a new global location parameters object
+        locationRequest = LocationRequest.create();
+
+        // Set the update interval
+        locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+
+        // Use low power
+        locationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+
+        // Set the interval ceiling to one minute
+        locationRequest.setFastestInterval(FAST_INTERVAL_CEILING_IN_MILLISECONDS);
+    }
+
+    // 位置改變
+    // Location參數是目前的位置
+    @Override
+    public void onLocationChanged(Location location) {
+        currentLocation = location;
+        if (lastLocation != null
+                && geoPointFromLocation(location)
+                .distanceInKilometersTo(geoPointFromLocation(lastLocation)) < 0.01) {
+            // If the location hasn't changed by more than 10 meters, ignore it.
+            return;
+        }
+        lastLocation = location;
+    }
+
 }

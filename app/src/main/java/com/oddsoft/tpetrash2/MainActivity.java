@@ -52,6 +52,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity
         implements LocationListener,
@@ -462,6 +463,8 @@ public class MainActivity extends Activity
                                 + " " + String.valueOf(distance) + "公里"
                                 + getString(R.string.data_not_found);
 
+                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
+                        /*
                         new AlertDialog.Builder(MainActivity.this)
                                 .setMessage(msg)
                                 .setPositiveButton(R.string.ok_label,
@@ -470,7 +473,7 @@ public class MainActivity extends Activity
                                                     DialogInterface dialoginterface, int i) {
                                                 // empty
                                             }
-                                        }).show();
+                                        }).show();*/
                     }
                 }
             });
@@ -481,10 +484,8 @@ public class MainActivity extends Activity
             trashListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     final ArrayItem item = trashQueryAdapter.getItem(position);
-                    //Open Google Map
+                    //Open Detail Page
                     goIntent(item);
-                    //goBrowser(String.valueOf(item.getLocation().getLatitude()) + "," +
-                    //        String.valueOf(item.getLocation().getLongitude()));
                 }
             });
 

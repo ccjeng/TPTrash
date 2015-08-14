@@ -4,7 +4,7 @@
     <string name="app_name">台北倒垃圾</string>
     <string name="about">關於</string>
     <string name="recycle">垃圾分類小幫手</string>
-    <string name="newtaipeirealtime">新北市垃圾車即時資訊</string>
+    <string name="newtaipeirealtime">新北垃圾動態資訊</string>
     <string name="action_settings">設定</string>
     <string name="exit_settings">離開</string>
     <string name="refresh_settings">更新</string>
@@ -41,7 +41,7 @@
 
     <string-array name="drawer_menu">
         <item>垃圾分類小幫手</item>
-        <item>新北市垃圾車即時資訊</item>
+        <item>新北垃圾動態資訊</item>
         <item>設定</item>
         <item>關於</item>
     </string-array>

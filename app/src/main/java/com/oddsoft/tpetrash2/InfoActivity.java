@@ -123,6 +123,12 @@ public class InfoActivity extends FragmentActivity {
         carNumberView.setText("車次：" + carnumber);
         memoView.setText("備註："+ memo);
 
+        if (carnumber == null) {
+            carNumberView.setVisibility(View.GONE);
+        }
+        if (memo == null) {
+            memoView.setVisibility(View.GONE);
+        }
 
         Time today = new Time();
         todayView.setText("今天是" + today.getDayOfWeekName());

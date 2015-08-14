@@ -54,8 +54,8 @@ public class RealtimeListAdapter extends ArrayAdapter<RealtimeItem> {
         holder.locationrView.setText(items.get(position).getCarLocation());
 
         //holder.carnoView.setText(items.get(position).getCarNO());
-        holder.carnoView.setText(Double.toString(items.get(position).getLatitude())
-                + "-"+ Double.toString(items.get(position).getLongitude()));
+        holder.carnoView.setText(items.get(position).getDistanceText()
+        );
 
 
         return rowView;
