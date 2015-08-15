@@ -30,7 +30,7 @@ public class RealtimeListAdapter extends ArrayAdapter<RealtimeItem> {
     static class ViewHolder {
         public TextView timeView;
         public TextView locationrView;
-        public TextView carnoView;
+        public TextView distanceView;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -42,20 +42,16 @@ public class RealtimeListAdapter extends ArrayAdapter<RealtimeItem> {
             LayoutInflater inflater = context.getLayoutInflater();
             rowView = inflater.inflate(R.layout.listitem_realtime, null, true);
             holder = new ViewHolder();
-            //holder.imageView = (ImageView) rowView.findViewById(R.id.icon);
             holder.timeView = (TextView) rowView.findViewById(R.id.tvCarTime);
             holder.locationrView = (TextView) rowView.findViewById(R.id.tvLocation);
-            holder.carnoView = (TextView) rowView.findViewById(R.id.tvCarNO);
+            holder.distanceView = (TextView) rowView.findViewById(R.id.tvDistance);
             rowView.setTag(holder);
         } else {
             holder = (ViewHolder) rowView.getTag();
         }
         holder.timeView.setText(items.get(position).getCarTime());
         holder.locationrView.setText(items.get(position).getCarLocation());
-
-        //holder.carnoView.setText(items.get(position).getCarNO());
-        holder.carnoView.setText(items.get(position).getDistanceText()
-        );
+        holder.distanceView.setText(Double.toString(items.get(position).getDistance()));
 
 
         return rowView;

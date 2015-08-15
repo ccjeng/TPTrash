@@ -13,6 +13,8 @@ import com.google.gson.JsonParser;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -70,7 +72,7 @@ public class RealtimeItem {
 
            //Log.d(TAG, location + "--" + geocoder.toString());
 
-           Log.d(TAG, Double.toString(current_latitude) + "-"+ Double.toString(currnet_longitude));
+           //Log.d(TAG, Double.toString(current_latitude) + "-"+ Double.toString(currnet_longitude));
            List<Address> addressList  = geocoder.getFromLocationName(location,1);
 
            this.setLatitude(addressList.get(0).getLatitude());
@@ -151,7 +153,6 @@ public class RealtimeItem {
                 );
 
                 items.add(item);
-
             }
         }
 
@@ -174,7 +175,7 @@ public class RealtimeItem {
             result = String.valueOf((int) distance) + "公尺";
         }
         else {
-            result = new DecimalFormat("#.00").format(distance / 1000) + "公里";
+            result = new DecimalFormat("#").format(distance / 1000) + "公里";
         }
 
         if (latitude==0) {
@@ -183,4 +184,5 @@ public class RealtimeItem {
 
         return result;
     }
+
 }

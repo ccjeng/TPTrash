@@ -36,6 +36,8 @@ import com.oddsoft.tpetrash2.utils.Analytics;
 import com.parse.ParseGeoPoint;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by andycheng on 2015/8/11.
@@ -90,6 +92,8 @@ public class NewTaipeiRealtimeActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newtaipeirealtime);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         ga = new Analytics();
         ga.trackerPage(this);
@@ -176,7 +180,20 @@ public class NewTaipeiRealtimeActivity extends Activity
             RealtimeListAdapter adapter = new RealtimeListAdapter(this, items);
             ListView listView = (ListView) findViewById(R.id.listReltimeInfo);
             listView.setAdapter(adapter);
-            adapter.addAll(items);
+            //adapter.addAll(items);
+
+            //Descending Order
+            //Collections.sort(items, IntegerDescComparator);
+
+            Collections.sort(items, new Comparator<RealtimeItem>() {
+
+                @Override
+                public int compare(RealtimeItem o1,
+                                   RealtimeItem o2) {
+                    return Double.compare(o1.getDistance(), o2.getDistance()); // error
+                    //return o1.getDistance() < o2.getDistance() ? -1 : 1 ;
+                }
+            });
 
             if (adapter.getCount() == 0) {
                 Toast.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Toast.LENGTH_LONG).show();
@@ -195,6 +212,21 @@ public class NewTaipeiRealtimeActivity extends Activity
                             }).show();
         }
     }
+
+
+    //Comparator for Descending Order
+    public static Comparator<RealtimeItem> IntegerDescComparator = new Comparator<RealtimeItem>() {
+
+        public int compare(RealtimeItem app1, RealtimeItem app2) {
+
+            Double intName1 = app1.getDistance();
+            Double intName2 = app2.getDistance();
+
+            Log.d(TAG, Double.toString(intName1) + "-"  + Double.toString(intName2) );
+            return Double.compare(intName2, intName1);
+            //return intName2.compareTo(intName1);
+        }
+    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
