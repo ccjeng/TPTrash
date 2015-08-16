@@ -44,6 +44,7 @@ public class InfoActivity extends FragmentActivity {
     private Boolean garbage;
     private Boolean food;
     private Boolean recycling;
+    private Boolean realtime;
 
     // Map fragment
     private GoogleMap map;
@@ -116,6 +117,7 @@ public class InfoActivity extends FragmentActivity {
         garbage = bundle.getBoolean("garbage");
         food = bundle.getBoolean("food");
         recycling = bundle.getBoolean("recycling");
+        realtime = bundle.getBoolean("realtime");
 
         timeView.setText("時間：" + time);
         addressView.setText("地址：" + address);
@@ -123,12 +125,15 @@ public class InfoActivity extends FragmentActivity {
         carNumberView.setText("車次：" + carnumber);
         memoView.setText("備註："+ memo);
 
-        if (carnumber == null) {
+        if (realtime) {
+            //新北市垃圾車即時資訊 隱藏這些欄位
             carNumberView.setVisibility(View.GONE);
-        }
-        if (memo == null) {
             memoView.setVisibility(View.GONE);
+            garbageView.setVisibility(View.GONE);
+            foodView.setVisibility(View.GONE);
+            recyclingView.setVisibility(View.GONE);
         }
+
 
         Time today = new Time();
         todayView.setText("今天是" + today.getDayOfWeekName());

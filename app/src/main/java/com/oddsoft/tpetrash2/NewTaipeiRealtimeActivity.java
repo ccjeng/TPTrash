@@ -6,12 +6,16 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,6 +34,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.oddsoft.tpetrash2.realtime.JsonService;
 import com.oddsoft.tpetrash2.realtime.RealtimeItem;
 import com.oddsoft.tpetrash2.realtime.RealtimeListAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
@@ -50,6 +55,7 @@ public class NewTaipeiRealtimeActivity extends Activity
     private static final String TAG = "NewTaipeiRealtime";
     protected ProgressDialog proDialog;
     private Analytics ga;
+    private AdView adView;
 
     /*
   * Define a request code to send to Google Play services This code is returned in
@@ -88,6 +94,8 @@ public class NewTaipeiRealtimeActivity extends Activity
     // Stores the current instantiation of the location client in this object
     private GoogleApiClient locationClient;
 
+    private RealtimeListAdapter listAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +129,8 @@ public class NewTaipeiRealtimeActivity extends Activity
                                 }
                             }).show();
         }
+
+        adView();
     }
 
     private void getData() {
@@ -139,13 +149,11 @@ public class NewTaipeiRealtimeActivity extends Activity
                     public void onResponse(String response) {
                         showData(response);
                         proDialog.dismiss();
-                        //Log.d(TAG, response.toString());
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 proDialog.dismiss();
-
                 Log.d(TAG, error.toString());
             }
 
@@ -171,33 +179,37 @@ public class NewTaipeiRealtimeActivity extends Activity
 
         }
         if (myLoc != null) {
-            RealtimeItem item = new RealtimeItem();
-            ArrayList<RealtimeItem> items = item.fromJson(
-                    str
-                    , NewTaipeiRealtimeActivity.this
+
+            JsonService jsonsrv = new JsonService(NewTaipeiRealtimeActivity.this
                     , myLoc.getLatitude()
                     , myLoc.getLongitude());
-            RealtimeListAdapter adapter = new RealtimeListAdapter(this, items);
+            ArrayList<RealtimeItem> items = jsonsrv.fromJson(str);
+            listAdapter = new RealtimeListAdapter(this, items);
             ListView listView = (ListView) findViewById(R.id.listReltimeInfo);
-            listView.setAdapter(adapter);
+            listView.setAdapter(listAdapter);
             //adapter.addAll(items);
 
-            //Descending Order
-            //Collections.sort(items, IntegerDescComparator);
-
-            Collections.sort(items, new Comparator<RealtimeItem>() {
-
-                @Override
-                public int compare(RealtimeItem o1,
-                                   RealtimeItem o2) {
-                    return Double.compare(o1.getDistance(), o2.getDistance()); // error
-                    //return o1.getDistance() < o2.getDistance() ? -1 : 1 ;
+            // Set up the handler for an item's selection
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    final RealtimeItem item = listAdapter.getItem(position);
+                    //Open Detail Page
+                    goIntent(item);
                 }
             });
-
-            if (adapter.getCount() == 0) {
+            if (listAdapter.getCount() == 0) {
                 Toast.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Toast.LENGTH_LONG).show();
+            }else {
+                //Descending Order
+                Collections.sort(items, new Comparator<RealtimeItem>() {
+                    @Override
+                    public int compare(RealtimeItem o1,
+                                       RealtimeItem o2) {
+                        return Double.compare(o1.getDistance(), o2.getDistance()); // error
+                    }
+                });
             }
+
         } else {
             //location error
             new AlertDialog.Builder(NewTaipeiRealtimeActivity.this)
@@ -214,19 +226,12 @@ public class NewTaipeiRealtimeActivity extends Activity
     }
 
 
-    //Comparator for Descending Order
-    public static Comparator<RealtimeItem> IntegerDescComparator = new Comparator<RealtimeItem>() {
-
-        public int compare(RealtimeItem app1, RealtimeItem app2) {
-
-            Double intName1 = app1.getDistance();
-            Double intName2 = app2.getDistance();
-
-            Log.d(TAG, Double.toString(intName1) + "-"  + Double.toString(intName2) );
-            return Double.compare(intName2, intName1);
-            //return intName2.compareTo(intName1);
-        }
-    };
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.realtime, menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -234,6 +239,9 @@ public class NewTaipeiRealtimeActivity extends Activity
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.menu_refresh:
+                getData();
                 return true;
         }
 
@@ -268,8 +276,8 @@ public class NewTaipeiRealtimeActivity extends Activity
     @Override
     protected void onPause() {
         super.onPause();
-        //if (adView != null)
-        //    adView.pause();
+        if (adView != null)
+            adView.pause();
 
         // 移除位置請求服務
         if (locationClient.isConnected()) {
@@ -283,8 +291,8 @@ public class NewTaipeiRealtimeActivity extends Activity
     @Override
     protected void onResume() {
         super.onResume();
-        //if (adView != null)
-        //    adView.resume();
+        if (adView != null)
+            adView.resume();
 
         // 連線到Google API用戶端
         if (locationClient != null) {
@@ -296,9 +304,55 @@ public class NewTaipeiRealtimeActivity extends Activity
 
     @Override
     protected void onDestroy() {
-        //if (adView != null)
-        //    adView.destroy();
+        if (adView != null)
+            adView.destroy();
         super.onDestroy();
+    }
+
+    private void adView() {
+        adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest;
+
+        if (Application.APPDEBUG) {
+            //Test Mode
+            adRequest = new AdRequest.Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .addTestDevice(Application.ADMOB_TEST_DEVICE_ID)
+                    .build();
+        } else {
+            adRequest = new AdRequest.Builder().build();
+
+        }
+        adView.loadAd(adRequest);
+    }
+
+    private void goIntent(RealtimeItem item) {
+
+        //ga.trackEvent(this, "Location", "Region", item.getRegion(), 0);
+        //ga.trackEvent(this, "Location", "Address", item.getFullAddress(), 0);
+
+
+        Intent intent = new Intent();
+        intent.setClass(this, InfoActivity.class);
+        Bundle bundle = new Bundle();
+
+        bundle.putBoolean("realtime", true);
+        bundle.putString("fromLat", String.valueOf(myLoc.getLatitude()));
+        bundle.putString("fromLng", String.valueOf(myLoc.getLongitude()));
+        bundle.putString("toLat", String.valueOf(item.getLatitude()));
+        bundle.putString("toLng", String.valueOf(item.getLongitude()));
+
+        bundle.putString("address", item.getCarLocation());
+        bundle.putString("carno", item.getCarNO());
+        bundle.putString("carnumber", "");
+        bundle.putString("time", item.getCarTime());
+
+        intent.putExtras(bundle);
+
+        if (item.getDistance() != 999999999) {
+            startActivityForResult(intent, 0);
+        }
+
     }
 
     /*

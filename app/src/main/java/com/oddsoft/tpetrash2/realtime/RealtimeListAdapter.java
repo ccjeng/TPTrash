@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-
 import com.oddsoft.tpetrash2.R;
 
 import java.util.ArrayList;
@@ -51,8 +50,7 @@ public class RealtimeListAdapter extends ArrayAdapter<RealtimeItem> {
         }
         holder.timeView.setText(items.get(position).getCarTime());
         holder.locationrView.setText(items.get(position).getCarLocation());
-        holder.distanceView.setText(Double.toString(items.get(position).getDistance()));
-
+        holder.distanceView.setText(items.get(position).getDistanceText());
 
         return rowView;
     }

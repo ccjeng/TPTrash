@@ -6,7 +6,7 @@
             android:id="@+id/menu_navi"
             android:orderInCategory="100"
             android:showAsAction="always"
-            android:icon="@android:drawable/ic_menu_compass"
+            android:icon="@drawable/navi"
             android:title="@string/menu_navi"/>
 
 </menu>

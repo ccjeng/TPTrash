@@ -268,10 +268,10 @@ public class MainActivity extends Activity
         mLsvDrawerMenu = (ListView) findViewById(R.id.lsv_drawer_menu);
         mLlvDrawerContent = (LinearLayout) findViewById(R.id.llv_left_drawer);
 
-        int[] iconImage = {android.R.drawable.ic_menu_delete
-                , android.R.drawable.ic_menu_info_details
-                , android.R.drawable.ic_menu_preferences
-                , android.R.drawable.ic_dialog_info};
+        int[] iconImage = {R.drawable.recycle
+                , R.drawable.truck
+                , R.drawable.setting
+                , R.drawable.about};
 
         List<HashMap<String, String>> lstData = new ArrayList<HashMap<String, String>>();
         for (int i = 0; i < iconImage.length; i++) {
@@ -652,6 +652,7 @@ public class MainActivity extends Activity
         intent.setClass(this, InfoActivity.class);
         Bundle bundle = new Bundle();
 
+        bundle.putBoolean("realtime", false);
         bundle.putString("fromLat", String.valueOf(myLoc.getLatitude()));
         bundle.putString("fromLng", String.valueOf(myLoc.getLongitude()));
         bundle.putString("toLat", String.valueOf(item.getLocation().getLatitude()));
