@@ -39,11 +39,13 @@ public class JsonService {
         JsonParser jsonParser = new JsonParser();
         JsonElement el = jsonParser.parse(str);
         ArrayList<RealtimeItem> items = new ArrayList<RealtimeItem>();
-
+        int i = 0;
         JsonArray jsonArray = null;
         if(el.isJsonArray()) {
             jsonArray = el.getAsJsonArray();
             Iterator it = jsonArray.iterator();
+
+
             while(it.hasNext()) {
                 JsonObject o = (JsonObject) it.next();
 
@@ -55,11 +57,15 @@ public class JsonService {
                 );
 
                 items.add(item);
+                i++;
 
                 try {
                     geocoder = new Geocoder(context, new Locale("zh", "TW"));
 
-                    List<Address> addressList  = geocoder.getFromLocationName(o.get("location").getAsString(),1);
+                    String address = o.get("location").getAsString().replace("(基地台定位)","").replace("附近","");
+
+                    //Log.d(TAG, address);
+                    List<Address> addressList  = geocoder.getFromLocationName(address,1);
 
                     item.setLatitude(addressList.get(0).getLatitude());
                     item.setLongitude(addressList.get(0).getLongitude());
@@ -71,7 +77,7 @@ public class JsonService {
                 }
             }
         }
-
+        Log.d(TAG, "row #" + i);
         return items;
     }
 

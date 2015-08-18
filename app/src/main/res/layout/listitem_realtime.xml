@@ -29,7 +29,8 @@
                 android:id="@+id/tvLocation"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:layout_marginBottom="@dimen/spacing_medium"/>
         </TableRow>
     </TableLayout>
 

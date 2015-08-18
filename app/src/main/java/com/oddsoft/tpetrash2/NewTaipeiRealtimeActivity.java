@@ -138,7 +138,7 @@ public class NewTaipeiRealtimeActivity extends Activity
         String url = "http://data.ntpc.gov.tw/od/data/api/28AB4122-60E1-4065-98E5-ABCCB69AACA6?$format=json";
 
         proDialog = new ProgressDialog(this);
-        proDialog.setMessage(getString(R.string.processing));
+        proDialog.setMessage(getString(R.string.processing)+" (因為來源資料要再做地理資訊的計算，若資料量多，會比較耗時，不便之處請見諒)");
         proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         proDialog.setCancelable(false);
         proDialog.show();
