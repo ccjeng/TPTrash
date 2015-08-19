@@ -118,6 +118,11 @@ public class NewTaipeiRealtimeActivity extends Activity
             if (!locationClient.isConnected()) {
                 locationClient.connect();
             }
+
+            //get current location from global veriable
+            currentLocation = Application.getCurrentLocation();
+            getData();
+
         } else {
             new AlertDialog.Builder(NewTaipeiRealtimeActivity.this)
                     .setMessage(R.string.network_error)
@@ -168,6 +173,7 @@ public class NewTaipeiRealtimeActivity extends Activity
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
         //fake location
+        /*
         if (Application.APPDEBUG) {
             myLoc = new Location("");
             //myLoc.setLatitude(25.175579);
@@ -177,7 +183,7 @@ public class NewTaipeiRealtimeActivity extends Activity
             myLoc.setLatitude(25.0950492);
             myLoc.setLongitude(121.5246077);
 
-        }
+        }*/
         if (myLoc != null) {
 
             JsonService jsonsrv = new JsonService(NewTaipeiRealtimeActivity.this
@@ -185,7 +191,7 @@ public class NewTaipeiRealtimeActivity extends Activity
                     , myLoc.getLongitude());
             ArrayList<RealtimeItem> items = jsonsrv.fromJson(str);
             listAdapter = new RealtimeListAdapter(this, items);
-            ListView listView = (ListView) findViewById(R.id.listReltimeInfo);
+            ListView listView = (ListView) findViewById(R.id.listRealtimeInfo);
             listView.setAdapter(listAdapter);
             //adapter.addAll(items);
 
@@ -427,7 +433,7 @@ public class NewTaipeiRealtimeActivity extends Activity
         if (Application.APPDEBUG)
             Log.d(TAG, "onConnected - isConnected =" + locationClient.isConnected());
 
-        getData();
+        //getData();
 
     }
 

@@ -6,15 +6,15 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
     <ListView
-            android:id="@+id/listReltimeInfo"
+            android:id="@+id/listRealtimeInfo"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
        <com.google.android.gms.ads.AdView
            android:id="@+id/adView"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_alignParentBottom="true"
+           android:layout_below="@+id/listRealtimeInfo"
            app:adSize="SMART_BANNER"
            app:adUnitId="ca-app-pub-6914084100751028/1776974015" />
 </RelativeLayout>

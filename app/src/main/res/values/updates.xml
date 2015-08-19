@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string-array name="updates">
+    	<item>3.2.5\n
+    	    -新增新北市垃圾車即時資訊\n
+			-新北市可查詢中午以前的垃圾車班次
+    	</item>
+</string-array>
+</resources>

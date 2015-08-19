@@ -4,6 +4,7 @@ package com.oddsoft.tpetrash2;
  * Created by andycheng on 2015/5/5.
  */
 
+import android.location.Location;
 import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -78,5 +79,14 @@ public class Application extends android.app.Application {
             mTrackers.put(trackerId, t);
         }
         return mTrackers.get(trackerId);
+    }
+
+    //Global variable for current location
+    private static Location mLocation;
+    public static Location getCurrentLocation(){
+        return mLocation;
+    }
+    public static void setCurrentLocation(Location l){
+        mLocation = l;
     }
 }

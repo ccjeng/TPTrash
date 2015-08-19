@@ -115,11 +115,11 @@
         \n新北市政府資料開放平台：新北市垃圾車路線 \n(資料更新日期:未註明)
         \nhttp://data.ntpc.gov.tw/od/detail?oid=EDC3AD26-8AE7-4916-A00B-BC6048D19BF8
         \n
-        \n新北市政府資料開放平台：新北市垃圾車即時位置
+        \n新北市政府資料開放平台：新北市垃圾車即時位置 \n(資料每3分鐘更新一次)
         \nhttp://data.ntpc.gov.tw/od/detail?oid=28AB4122-60E1-4065-98E5-ABCCB69AACA6
 
 \n
-\n圖示: Noun Project https://thenounproject.com/
+\n圖示: Noun Project https://thenounproject.com
 \n
 \n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -131,5 +131,8 @@ THE SOFTWARE.
 </string>
     <string name="license_intro"></string>
 
-
+    <string name="changelog_title">更新記錄</string>
+    <string name="welcome_title">歡迎</string>
+    <string name="welcome_message">歡迎使用台北倒垃圾
+    </string>
 </resources>

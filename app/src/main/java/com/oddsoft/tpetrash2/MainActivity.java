@@ -9,6 +9,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.oddsoft.tpetrash2.utils.Analytics;
+import com.oddsoft.tpetrash2.utils.Utils;
 import com.parse.ParseAnalytics;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
@@ -121,6 +122,9 @@ public class MainActivity extends Activity
 
     private boolean hasPushNotification = false;
 
+    private static final int DIALOG_WELCOME = 1;
+    private static final int DIALOG_UPDATE = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +172,13 @@ public class MainActivity extends Activity
 
             }
         });
+
+        /*if (Utils.isNewInstallation(this)) {
+            this.showDialog(DIALOG_WELCOME);
+        } else */
+        if (Utils.newVersionInstalled(this)) {
+            this.showDialog(DIALOG_UPDATE);
+        }
 
         if (isNetworkConnected()) {
             // 建立Google API用戶端物件
@@ -354,6 +365,9 @@ public class MainActivity extends Activity
         }
 
         if (myLoc != null) {
+
+            //set current location to global veriable
+            Application.setCurrentLocation(myLoc);
 
             if (Application.APPDEBUG)
                 Log.d(TAG, "location = " + myLoc.toString());
@@ -827,6 +841,33 @@ public class MainActivity extends Activity
             return;
         }
         lastLocation = location;
+    }
+
+    protected final Dialog onCreateDialog(final int id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(android.R.drawable.ic_dialog_info);
+        builder.setCancelable(true);
+        builder.setPositiveButton(android.R.string.ok, null);
+
+        final Context context = this;
+
+        switch (id) {
+            case DIALOG_WELCOME:
+                builder.setTitle(getResources().getString(R.string.welcome_title));
+                builder.setMessage(getResources().getString(R.string.welcome_message));
+                break;
+            case DIALOG_UPDATE:
+                builder.setTitle(getString(R.string.changelog_title));
+                final String[] changes = getResources().getStringArray(R.array.updates);
+                final StringBuilder buf = new StringBuilder();
+                for (int i = 0; i < changes.length; i++) {
+                    buf.append("\n\n");
+                    buf.append(changes[i]);
+                }
+                builder.setMessage(buf.toString().trim());
+                break;
+        }
+        return builder.create();
     }
 
 }
