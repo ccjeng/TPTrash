@@ -334,8 +334,7 @@ public class NewTaipeiRealtimeActivity extends Activity
 
     private void goIntent(RealtimeItem item) {
 
-        //ga.trackEvent(this, "Location", "Region", item.getRegion(), 0);
-        //ga.trackEvent(this, "Location", "Address", item.getFullAddress(), 0);
+        ga.trackEvent(this, "Location", "RealTimeLocation", item.getCarLocation(), 0);
 
 
         Intent intent = new Intent();

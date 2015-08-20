@@ -77,7 +77,7 @@ public class JsonService {
                 }
             }
         }
-        Log.d(TAG, "row #" + i);
+        //Log.d(TAG, "row #" + i);
         return items;
     }
 
