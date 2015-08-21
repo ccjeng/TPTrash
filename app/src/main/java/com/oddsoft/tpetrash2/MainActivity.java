@@ -355,12 +355,12 @@ public class MainActivity extends Activity
         //fake location
         if (Application.APPDEBUG) {
             myLoc = new Location("");
-            //myLoc.setLatitude(25.175579);
-            //myLoc.setLongitude(121.43847);
+            myLoc.setLatitude(24.8979347);
+            myLoc.setLongitude(121.5393508);
 
             //Taipei City
-            myLoc.setLatitude(25.0950492);
-            myLoc.setLongitude(121.5246077);
+            //myLoc.setLatitude(25.0950492);
+            //myLoc.setLongitude(121.5246077);
 
         }
 
