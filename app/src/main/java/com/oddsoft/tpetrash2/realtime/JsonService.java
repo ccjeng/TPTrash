@@ -67,12 +67,24 @@ public class JsonService {
                     //Log.d(TAG, address);
                     List<Address> addressList  = geocoder.getFromLocationName(address,1);
 
+                    double lat = 0;
+                    lat = addressList.get(0).getLatitude();
                     item.setLatitude(addressList.get(0).getLatitude());
                     item.setLongitude(addressList.get(0).getLongitude());
-                    item.setDistance(getDistanceMeter(item.getLatitude(), item.getLongitude(), current_latitude, currnet_longitude));
-                    item.setDistanceText(item.getDistance());
+
+
+                    if (lat != 0) {
+                        item.setDistance(getDistanceMeter(item.getLatitude(), item.getLongitude(), current_latitude, currnet_longitude));
+                        item.setDistanceText(item.getDistance());
+                    } else {
+                        item.setDistance(999999999);
+                        item.setDistanceText(999999999);
+                    }
+
 
                 } catch (Exception e) {
+                    item.setDistance(999999999);
+                    item.setDistanceText(999999999);
                     Log.d(TAG, e.toString());
                 }
             }

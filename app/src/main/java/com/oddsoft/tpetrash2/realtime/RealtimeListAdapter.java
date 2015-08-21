@@ -48,9 +48,14 @@ public class RealtimeListAdapter extends ArrayAdapter<RealtimeItem> {
         } else {
             holder = (ViewHolder) rowView.getTag();
         }
+
+        //String txt = items.get(position).getLatitude() +" - " + items.get(position).getDistance() + " - " + items.get(position).getDistanceText();
         holder.timeView.setText(items.get(position).getCarTime());
         holder.locationrView.setText(items.get(position).getCarLocation());
         holder.distanceView.setText(items.get(position).getDistanceText());
+        //holder.distanceView.setText(txt);
+
+
 
         return rowView;
     }

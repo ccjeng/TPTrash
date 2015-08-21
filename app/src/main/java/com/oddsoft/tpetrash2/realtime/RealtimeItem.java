@@ -61,10 +61,10 @@ public class RealtimeItem {
         DecimalFormat df = new DecimalFormat("#");
         distance = Double.parseDouble(df.format(v));
 
-        if (latitude!=0) {}
-        else {
-            distance = 999999999;
-        }
+        //if (latitude!=0) {}
+        //else {
+        //    distance = 999999999;
+        //}
     }
 
     public double getDistance() {
@@ -76,6 +76,9 @@ public class RealtimeItem {
 
     public void setDistanceText(double v) {
         distanceText = distanceText(v);
+        if (distance == 999999999) {
+            distanceText = "無法定位";
+        }
     }
 
     public String getDistanceText() {
