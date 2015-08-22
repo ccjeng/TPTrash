@@ -2,8 +2,11 @@ package com.oddsoft.tpetrash2;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +26,10 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Time;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 
 public class InfoActivity extends FragmentActivity {
@@ -134,6 +141,27 @@ public class InfoActivity extends FragmentActivity {
             recyclingView.setVisibility(View.GONE);
         }
 
+        //reset title
+        Geocoder geocoder = new Geocoder(this, new Locale("zh", "TW"));
+        String current_location = "現在位置:";
+        try {
+            List<Address> addressList = geocoder.getFromLocation(Double.valueOf(strFromLat)
+                    , Double.valueOf(strFromLng), 1);
+
+            if (addressList == null) {
+                current_location = getString(R.string.app_name);
+            } else {
+                current_location = current_location + addressList.get(0).getAdminArea() + "" + addressList.get(0).getLocality();
+            }
+
+        } catch (IOException e) {
+
+            Log.d(TAG, e.toString());
+
+            current_location = getString(R.string.app_name);
+        }
+
+        getActionBar().setTitle(current_location);
 
         Time today = new Time();
         todayView.setText("今天是" + today.getDayOfWeekName());
