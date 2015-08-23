@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>3.2.6\n
-    	    -修正新北市垃圾車即時資訊排序的問題\n
+    	<item>3.2.7\n
+    	    -[新北市垃圾車即時資訊]可以下拉更新\n
+			-[地圖模式]增加現在位置
     	</item>
 </string-array>
 </resources>

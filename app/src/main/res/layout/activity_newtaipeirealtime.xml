@@ -5,22 +5,29 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <ListView
-            android:id="@+id/listRealtimeInfo"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/footerLayout"/>
 
-    <RelativeLayout android:id="@+id/footerLayout"
-        android:layout_alignParentBottom="true"
+    <com.yalantis.phoenix.PullToRefreshView
+        android:id="@+id/pull_to_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:adSize="SMART_BANNER"
-            app:adUnitId="ca-app-pub-6914084100751028/1776974015" />
-    </RelativeLayout>
+        android:layout_height="match_parent">
+
+        <ListView
+                android:id="@+id/listRealtimeInfo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/footerLayout"/>
+    </com.yalantis.phoenix.PullToRefreshView>
+
+        <RelativeLayout android:id="@+id/footerLayout"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:adSize="SMART_BANNER"
+                app:adUnitId="ca-app-pub-6914084100751028/1776974015" />
+        </RelativeLayout>
 
 </RelativeLayout>

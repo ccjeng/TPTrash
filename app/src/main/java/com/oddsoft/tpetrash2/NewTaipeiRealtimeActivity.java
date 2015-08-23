@@ -39,10 +39,12 @@ import com.oddsoft.tpetrash2.realtime.RealtimeItem;
 import com.oddsoft.tpetrash2.realtime.RealtimeListAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.parse.ParseGeoPoint;
+import com.yalantis.phoenix.PullToRefreshView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
 
 /**
  * Created by andycheng on 2015/8/11.
@@ -56,6 +58,7 @@ public class NewTaipeiRealtimeActivity extends Activity
     protected ProgressDialog proDialog;
     private Analytics ga;
     private AdView adView;
+    private PullToRefreshView mPullToRefreshView;
 
     /*
   * Define a request code to send to Google Play services This code is returned in
@@ -95,6 +98,8 @@ public class NewTaipeiRealtimeActivity extends Activity
     private GoogleApiClient locationClient;
 
     private RealtimeListAdapter listAdapter;
+
+    public static final int REFRESH_DELAY = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +141,21 @@ public class NewTaipeiRealtimeActivity extends Activity
         }
 
         adView();
+
+
+        mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
+        mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPullToRefreshView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getData();
+                        mPullToRefreshView.setRefreshing(false);
+                    }
+                }, REFRESH_DELAY);
+            }
+        });
     }
 
     private void getData() {
@@ -173,7 +193,7 @@ public class NewTaipeiRealtimeActivity extends Activity
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
         //fake location
-        /*
+
         if (Application.APPDEBUG) {
             myLoc = new Location("");
             //myLoc.setLatitude(25.175579);
@@ -183,7 +203,8 @@ public class NewTaipeiRealtimeActivity extends Activity
             myLoc.setLatitude(25.0950492);
             myLoc.setLongitude(121.5246077);
 
-        }*/
+        }
+
         if (myLoc != null) {
 
             JsonService jsonsrv = new JsonService(NewTaipeiRealtimeActivity.this
@@ -246,9 +267,9 @@ public class NewTaipeiRealtimeActivity extends Activity
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.menu_refresh:
-                getData();
-                return true;
+           // case R.id.menu_refresh:
+           //     getData();
+           //     return true;
         }
 
         return super.onOptionsItemSelected(item);
