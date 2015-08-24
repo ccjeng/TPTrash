@@ -27,7 +27,7 @@
                 android:textSize="18dp" />
 
             <Spinner
-                android:id="@+id/hour_spinnner"
+                android:id="@+id/hour_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"

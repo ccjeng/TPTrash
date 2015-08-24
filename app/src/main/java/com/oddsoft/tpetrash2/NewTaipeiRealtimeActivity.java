@@ -11,6 +11,8 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,11 +27,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import com.google.android.gms.ads.*;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -39,11 +41,13 @@ import com.oddsoft.tpetrash2.realtime.RealtimeItem;
 import com.oddsoft.tpetrash2.realtime.RealtimeListAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.parse.ParseGeoPoint;
-import com.yalantis.phoenix.PullToRefreshView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 /**
@@ -52,13 +56,21 @@ import java.util.Comparator;
 public class NewTaipeiRealtimeActivity extends Activity
         implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "NewTaipeiRealtime";
     protected ProgressDialog proDialog;
+
+    @Bind(R.id.listRealtimeInfo)
+    ListView listView;
+
+    @Bind(R.id.pull_to_refresh)
+    SwipeRefreshLayout mSwipeLayout;
+
     private Analytics ga;
     private AdView adView;
-    private PullToRefreshView mPullToRefreshView;
+    public static final int REFRESH_DELAY = 1000;
 
     /*
   * Define a request code to send to Google Play services This code is returned in
@@ -99,12 +111,12 @@ public class NewTaipeiRealtimeActivity extends Activity
 
     private RealtimeListAdapter listAdapter;
 
-    public static final int REFRESH_DELAY = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newtaipeirealtime);
+        ButterKnife.bind(this);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -142,20 +154,12 @@ public class NewTaipeiRealtimeActivity extends Activity
 
         adView();
 
+        mSwipeLayout.setOnRefreshListener(this);
+        mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light, android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
-        mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
-        mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPullToRefreshView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getData();
-                        mPullToRefreshView.setRefreshing(false);
-                    }
-                }, REFRESH_DELAY);
-            }
-        });
+
     }
 
     private void getData() {
@@ -163,7 +167,7 @@ public class NewTaipeiRealtimeActivity extends Activity
         String url = "http://data.ntpc.gov.tw/od/data/api/28AB4122-60E1-4065-98E5-ABCCB69AACA6?$format=json";
 
         proDialog = new ProgressDialog(this);
-        proDialog.setMessage(getString(R.string.processing)+" (因為來源資料要再做地理資訊的計算，若資料量多，會比較耗時，不便之處請見諒)");
+        proDialog.setMessage(getString(R.string.processing) + " (因為來源資料要再做地理資訊的計算，若資料量多，會比較耗時，不便之處請見諒)");
         proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         proDialog.setCancelable(false);
         proDialog.show();
@@ -212,9 +216,7 @@ public class NewTaipeiRealtimeActivity extends Activity
                     , myLoc.getLongitude());
             ArrayList<RealtimeItem> items = jsonsrv.fromJson(str);
             listAdapter = new RealtimeListAdapter(this, items);
-            ListView listView = (ListView) findViewById(R.id.listRealtimeInfo);
             listView.setAdapter(listAdapter);
-            //adapter.addAll(items);
 
             // Set up the handler for an item's selection
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -226,7 +228,7 @@ public class NewTaipeiRealtimeActivity extends Activity
             });
             if (listAdapter.getCount() == 0) {
                 Toast.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Toast.LENGTH_LONG).show();
-            }else {
+            } else {
                 //Descending Order
                 Collections.sort(items, new Comparator<RealtimeItem>() {
                     @Override
@@ -252,6 +254,20 @@ public class NewTaipeiRealtimeActivity extends Activity
         }
     }
 
+    /*
+        SwipeRefreshLayout
+     */
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getData();
+                mSwipeLayout.setRefreshing(false);
+            }
+        }, REFRESH_DELAY);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -267,9 +283,9 @@ public class NewTaipeiRealtimeActivity extends Activity
             case android.R.id.home:
                 finish();
                 return true;
-           // case R.id.menu_refresh:
-           //     getData();
-           //     return true;
+            // case R.id.menu_refresh:
+            //     getData();
+            //     return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -528,5 +544,6 @@ public class NewTaipeiRealtimeActivity extends Activity
         }
         lastLocation = location;
     }
+
 
 }

@@ -44,6 +44,7 @@
         <item>新北市即時資訊</item>
         <item>設定</item>
         <item>關於</item>
+        <item>建議與評價</item>
     </string-array>
 
     <string name="pref_sorting">排序方式</string>
@@ -119,8 +120,7 @@
         \nhttp://data.ntpc.gov.tw/od/detail?oid=28AB4122-60E1-4065-98E5-ABCCB69AACA6
 \n
 \n函式庫
-        \nGoogle GSon https://github.com/google/gson/blob/master/LICENSE
-        \nPhoenix Pull-to-Refresh https://github.com/Yalantis/Phoenix/blob/master/LICENSE\n
+        \nGoogle GSon https://github.com/google/gson/blob/master/LICENSE\n
 \n圖示
         \nNoun Project https://thenounproject.com
 \n

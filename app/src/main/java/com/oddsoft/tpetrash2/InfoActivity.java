@@ -6,13 +6,12 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.maps.CameraUpdate;
@@ -31,10 +30,38 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 public class InfoActivity extends FragmentActivity {
 
     private static final String TAG = Application.class.getSimpleName();
+
+    @Bind(R.id.todayView)
+    TextView todayView;
+
+    @Bind(R.id.garbageView)
+    TextView garbageView;
+
+    @Bind(R.id.foodView)
+    TextView foodView;
+
+    @Bind(R.id.recyclingView)
+    TextView recyclingView;
+
+    @Bind(R.id.time)
+    TextView timeView;
+
+    @Bind(R.id.address)
+    TextView addressView;
+
+    @Bind(R.id.carnumber)
+    TextView carNumberView;
+
+    @Bind(R.id.memo)
+    TextView memoView;
+
     private String strFrom = "";
     private String strFromLat = "";
     private String strFromLng = "";
@@ -44,7 +71,7 @@ public class InfoActivity extends FragmentActivity {
     private String strToLng = "";
 
     private String address;
-    //private String carno;
+    private String carno;
     private String carnumber;
     private String time;
     private String memo;
@@ -61,22 +88,12 @@ public class InfoActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+        ButterKnife.bind(this);
 
         ga = new Analytics();
         ga.trackerPage(this);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        TextView timeView = (TextView) findViewById(R.id.time);
-        TextView addressView = (TextView) findViewById(R.id.address);
-        //TextView carNoView = (TextView) findViewById(R.id.carno);
-        TextView carNumberView = (TextView) findViewById(R.id.carnumber);
-        TextView memoView = (TextView) findViewById(R.id.memo);
-
-        TextView todayView = (TextView) findViewById(R.id.todayView);
-        TextView garbageView = (TextView) findViewById(R.id.garbageView);
-        TextView foodView = (TextView) findViewById(R.id.foodView);
-        TextView recyclingView = (TextView) findViewById(R.id.recyclingView);
 
         Bundle bundle = this.getIntent().getExtras();
 
@@ -100,13 +117,13 @@ public class InfoActivity extends FragmentActivity {
 
 */
 
-        strFromLat=bundle.getString("fromLat");
-        strFromLng=bundle.getString("fromLng");
-        strFrom = strFromLat + ","+ strFromLng;
+        strFromLat = bundle.getString("fromLat");
+        strFromLng = bundle.getString("fromLng");
+        strFrom = strFromLat + "," + strFromLng;
 
-        strToLat=bundle.getString("toLat");
-        strToLng=bundle.getString("toLng");
-        strTo = strToLat + ","+ strToLng;
+        strToLat = bundle.getString("toLat");
+        strToLng = bundle.getString("toLng");
+        strTo = strToLat + "," + strToLng;
 
         address = bundle.getString("address");
         //carno = bundle.getString("carno");
@@ -122,7 +139,7 @@ public class InfoActivity extends FragmentActivity {
         addressView.setText("地址：" + address);
         //carNoView.setText("車號：" + carno);
         carNumberView.setText("車次：" + carnumber);
-        memoView.setText("備註："+ memo);
+        memoView.setText("備註：" + memo);
 
         if (realtime) {
             //新北市垃圾車即時資訊 隱藏這些欄位
@@ -195,7 +212,7 @@ public class InfoActivity extends FragmentActivity {
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.getUiSettings().setZoomControlsEnabled(true);
 
-        CameraUpdate center=
+        CameraUpdate center =
                 CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(strToLat)
                         , Double.valueOf(strToLng)), 15);
         map.animateCamera(center);

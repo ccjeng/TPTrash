@@ -2,8 +2,10 @@
 <resources>
 <string-array name="updates">
     	<item>3.2.7\n
+			-更新新版垃圾車班表\n
+			-不顯示未執勤的垃圾車班表\n
     	    -[新北市垃圾車即時資訊]可以下拉更新\n
-			-[地圖模式]增加現在位置
+			-[地圖模式]增加現在位置\n
     	</item>
 </string-array>
 </resources>

@@ -1,26 +1,5 @@
 package com.oddsoft.tpetrash2;
 
-import com.google.android.gms.ads.*;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.oddsoft.tpetrash2.utils.Analytics;
-import com.oddsoft.tpetrash2.utils.Utils;
-import com.parse.ParseAnalytics;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -33,11 +12,12 @@ import android.content.res.Configuration;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -55,6 +35,31 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.oddsoft.tpetrash2.utils.Analytics;
+import com.oddsoft.tpetrash2.utils.Utils;
+import com.parse.ParseAnalytics;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class MainActivity extends Activity
         implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
@@ -64,17 +69,28 @@ public class MainActivity extends Activity
     private static int distance;
     private static int hour;
     private static String sorting;
+
+    @Bind(R.id.hour_spinner)
+    Spinner hourSpinner;
+
+    @Bind(R.id.trashList)
+    ListView trashListView;
+
+    @Bind(R.id.lsv_drawer_menu)
+    ListView mLsvDrawerMenu;
+
+    @Bind(R.id.llv_left_drawer)
+    LinearLayout mLlvDrawerContent;
+
+    @Bind(R.id.drw_layout)
+    DrawerLayout mDrawerLayout;
+
     private AdView adView;
-    private ListView trashListView;
-    private Spinner hourSpinner;
     private String[] hourCode;
     private String[] hourName;
     protected ProgressDialog proDialog;
 
-    private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private LinearLayout mLlvDrawerContent;
-    private ListView mLsvDrawerMenu;
 
     // 記錄被選擇的選單指標用
     private int mCurrentMenuItemPosition = -1;
@@ -129,6 +145,7 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         ga = new Analytics();
         ga.trackerPage(this);
@@ -141,14 +158,13 @@ public class MainActivity extends Activity
         initDrawerList();
         showPushNotification();
 
-        trashListView = (ListView) findViewById(R.id.trashList);
         hourCode = getResources().getStringArray(R.array.hour_spinnner_code);
         hourName = getResources().getStringArray(R.array.hour_spinnner_name);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.hour_spinnner_name,
                 android.R.layout.simple_spinner_item);
-        hourSpinner = (Spinner) findViewById(R.id.hour_spinnner);
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         hourSpinner.setAdapter(adapter);
 
@@ -275,14 +291,11 @@ public class MainActivity extends Activity
 
         String[] drawer_menu = this.getResources().getStringArray(R.array.drawer_menu);
 
-        // 定義新宣告的兩個物件：選項清單的 ListView 以及 Drawer內容的 LinearLayou
-        mLsvDrawerMenu = (ListView) findViewById(R.id.lsv_drawer_menu);
-        mLlvDrawerContent = (LinearLayout) findViewById(R.id.llv_left_drawer);
-
         int[] iconImage = {R.drawable.recycle
                 , R.drawable.truck
                 , R.drawable.setting
-                , R.drawable.about};
+                , R.drawable.about
+                , R.drawable.like};
 
         List<HashMap<String, String>> lstData = new ArrayList<HashMap<String, String>>();
         for (int i = 0; i < iconImage.length; i++) {
@@ -326,6 +339,10 @@ public class MainActivity extends Activity
                 break;
             case 3:
                 startActivity(new Intent(this, AboutActivity.class));
+                break;
+            case 4:
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=com.oddsoft.tpetrash2")));
                 break;
         }
 
@@ -378,7 +395,7 @@ public class MainActivity extends Activity
                         public ParseQuery<ArrayItem> create() {
 
                             String strHour;
-                            if (String.valueOf(hour).length()==1) {
+                            if (String.valueOf(hour).length() == 1) {
                                 strHour = "0" + String.valueOf(hour);
                             } else {
                                 strHour = String.valueOf(hour);
@@ -391,7 +408,7 @@ public class MainActivity extends Activity
                             //query.whereEqualTo("recycling_mon", "N");
 */
                             String wkFood = Utils.getWeekFoodTag();
-                            String wkGarbage= Utils.getWeekGarbageTag();
+                            String wkGarbage = Utils.getWeekGarbageTag();
                             String wkRecycling = Utils.getWeekRecyclingTag();
 
                             if (Application.APPDEBUG) {
@@ -615,7 +632,7 @@ public class MainActivity extends Activity
                                         }
                                     }).show();
                     // Make the textview clickable
-                    ((TextView)d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+                    ((TextView) d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 
                 }
                 //臺北市環保局表示今日將暫停收運垃圾(含廚餘及回收物)，請市民暫時將垃圾貯存於家中 http://www.google.com

@@ -47,6 +47,7 @@ public class JsonService {
 
 
             while(it.hasNext()) {
+
                 JsonObject o = (JsonObject) it.next();
 
                 RealtimeItem item = new RealtimeItem(
