@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -44,6 +45,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.oddsoft.tpetrash2.drawer.DrawerItem;
+import com.oddsoft.tpetrash2.drawer.DrawerItemAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Utils;
 import com.parse.ParseAnalytics;
@@ -258,7 +263,7 @@ public class MainActivity extends Activity
     }
 
     private void initDrawer() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drw_layout);
+        //mDrawerLayout = (DrawerLayout) findViewById(R.id.drw_layout);
         // 設定 Drawer 的影子
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
@@ -291,25 +296,35 @@ public class MainActivity extends Activity
 
         String[] drawer_menu = this.getResources().getStringArray(R.array.drawer_menu);
 
-        int[] iconImage = {R.drawable.recycle
-                , R.drawable.truck
-                , R.drawable.setting
-                , R.drawable.about
-                , R.drawable.like};
+        DrawerItem[] drawerItem = new DrawerItem[5];
 
-        List<HashMap<String, String>> lstData = new ArrayList<HashMap<String, String>>();
-        for (int i = 0; i < iconImage.length; i++) {
-            HashMap<String, String> mapValue = new HashMap<String, String>();
-            mapValue.put("icon", Integer.toString(iconImage[i]));
-            mapValue.put("title", drawer_menu[i]);
-            lstData.add(mapValue);
-        }
+        drawerItem[0] = new DrawerItem(new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_recycle)
+                .color(Color.BLACK)
+                .sizeDp(24),
+                drawer_menu[0]);
+        drawerItem[1] = new DrawerItem(new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_truck)
+                .color(Color.BLACK)
+                .sizeDp(24),
+                drawer_menu[1]);
+        drawerItem[2] = new DrawerItem(new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_cog)
+                .color(Color.BLACK)
+                .sizeDp(24),
+                drawer_menu[2]);
+        drawerItem[3] = new DrawerItem(new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_info_circle)
+                .color(Color.BLACK)
+                .sizeDp(24),
+                drawer_menu[3]);
+        drawerItem[4] = new DrawerItem(new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_thumbs_up)
+                .color(Color.BLACK)
+                .sizeDp(24),
+                drawer_menu[4]);
 
-
-        SimpleAdapter adapter = new SimpleAdapter(this, lstData
-                , R.layout.drawer_item
-                , new String[]{"icon", "title"}
-                , new int[]{R.id.rowIcon, R.id.rowText});
+        DrawerItemAdapter adapter = new DrawerItemAdapter(this, R.layout.drawer_item, drawerItem);
         mLsvDrawerMenu.setAdapter(adapter);
 
         // 當清單選項的子物件被點擊時要做的動作

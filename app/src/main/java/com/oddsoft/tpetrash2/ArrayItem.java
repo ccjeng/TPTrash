@@ -28,7 +28,7 @@ public class ArrayItem extends ParseObject {
 
         String address = getString("address");
 
-        if (getCity() == "Taipei") {
+        if (this.getCity().equals("Taipei")) {
             return "[" + getRegion() + "] " + address.substring(6, address.length());
         } else {
             return "[" + getRegion() + "] " + address;

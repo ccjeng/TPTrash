@@ -126,7 +126,6 @@ public class InfoActivity extends FragmentActivity {
         strTo = strToLat + "," + strToLng;
 
         address = bundle.getString("address");
-        //carno = bundle.getString("carno");
         carnumber = bundle.getString("carnumber");
         time = bundle.getString("time");
         memo = bundle.getString("memo");
@@ -137,13 +136,11 @@ public class InfoActivity extends FragmentActivity {
 
         timeView.setText("時間：" + time);
         addressView.setText("地址：" + address);
-        //carNoView.setText("車號：" + carno);
         carNumberView.setText("車次：" + carnumber);
         memoView.setText("備註：" + memo);
 
         if (realtime) {
             //新北市垃圾車即時資訊 隱藏這些欄位
-            //carNumberView.setVisibility(View.GONE);
             memoView.setVisibility(View.GONE);
             garbageView.setVisibility(View.GONE);
             foodView.setVisibility(View.GONE);
