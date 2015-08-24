@@ -99,7 +99,7 @@ public class NewTaipeiRealtimeActivity extends Activity
 
     private RealtimeListAdapter listAdapter;
 
-    public static final int REFRESH_DELAY = 2000;
+    public static final int REFRESH_DELAY = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
