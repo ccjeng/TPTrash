@@ -369,8 +369,8 @@ public class NewTaipeiRealtimeActivity extends Activity
         bundle.putString("toLng", String.valueOf(item.getLongitude()));
 
         bundle.putString("address", item.getCarLocation());
-        bundle.putString("carno", item.getCarNO());
-        bundle.putString("carnumber", "");
+        //bundle.putString("carno", item.getCarNO());
+        bundle.putString("carnumber", item.getCarNO());
         bundle.putString("time", item.getCarTime());
 
         intent.putExtras(bundle);

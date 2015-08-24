@@ -84,4 +84,95 @@ public class Utils {
         }
         editor.commit();
     }
+
+
+    public static String getWeekFoodTag(){
+        String tag = "";
+
+        switch (Time.getDayOfWeekNumber()) {
+            case "1":
+                tag = "foodscraps_mon";
+                break;
+            case "2":
+                tag = "foodscraps_tue";
+                break;
+            case "3":
+                tag = "foodscraps_wed";
+                break;
+            case "4":
+                tag = "foodscraps_thu";
+                break;
+            case "5":
+                tag = "foodscraps_fri";
+                break;
+            case "6":
+                tag = "foodscraps_sat";
+                break;
+            case "0":
+                tag = "foodscraps_sun";
+                break;
+        }
+
+        return tag;
+    }
+
+    public static String getWeekGarbageTag(){
+        String tag = "";
+
+        switch (Time.getDayOfWeekNumber()) {
+            case "1":
+                tag = "garbage_mon";
+                break;
+            case "2":
+                tag = "garbage_tue";
+                break;
+            case "3":
+                tag = "garbage_wed";
+                break;
+            case "4":
+                tag = "garbage_thu";
+                break;
+            case "5":
+                tag = "garbage_fri";
+                break;
+            case "6":
+                tag = "garbage_sat";
+                break;
+            case "0":
+                tag = "garbage_sun";
+                break;
+        }
+
+        return tag;
+    }
+
+    public static String getWeekRecyclingTag(){
+        String tag = "";
+
+        switch (Time.getDayOfWeekNumber()) {
+            case "1":
+                tag = "recycling_mon";
+                break;
+            case "2":
+                tag = "recycling_tue";
+                break;
+            case "3":
+                tag = "recycling_wed";
+                break;
+            case "4":
+                tag = "recycling_thu";
+                break;
+            case "5":
+                tag = "recycling_fri";
+                break;
+            case "6":
+                tag = "recycling_sat";
+                break;
+            case "0":
+                tag = "recycling_sun";
+                break;
+        }
+
+        return tag;
+    }
 }

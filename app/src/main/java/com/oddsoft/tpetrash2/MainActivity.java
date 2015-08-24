@@ -355,12 +355,12 @@ public class MainActivity extends Activity
         //fake location
         if (Application.APPDEBUG) {
             myLoc = new Location("");
-            myLoc.setLatitude(24.8979347);
-            myLoc.setLongitude(121.5393508);
+            //myLoc.setLatitude(24.8979347);
+            //myLoc.setLongitude(121.5393508);
 
             //Taipei City
-            //myLoc.setLatitude(25.0950492);
-            //myLoc.setLongitude(121.5246077);
+            myLoc.setLatitude(25.0950492);
+            myLoc.setLongitude(121.5246077);
 
         }
 
@@ -377,28 +377,60 @@ public class MainActivity extends Activity
                     new ParseQueryAdapter.QueryFactory<ArrayItem>() {
                         public ParseQuery<ArrayItem> create() {
 
-                            ParseQuery<ArrayItem> query = ArrayItem.getQuery();
-
                             String strHour;
                             if (String.valueOf(hour).length()==1) {
                                 strHour = "0" + String.valueOf(hour);
                             } else {
                                 strHour = String.valueOf(hour);
                             }
-                            query.whereContains("CarTime", strHour + ":");
+/*
+                            ParseQuery<ArrayItem> query = ArrayItem.getQuery();
+                            query.whereContains("time", strHour + ":");
+                            //query.whereEqualTo("foodscraps_mon", "N");
+                            //query.whereEqualTo("garbage_mon", "N");
+                            //query.whereEqualTo("recycling_mon", "N");
+*/
+                            String wkFood = Utils.getWeekFoodTag();
+                            String wkGarbage= Utils.getWeekGarbageTag();
+                            String wkRecycling = Utils.getWeekRecyclingTag();
 
-                            if (sorting.equals("TIME")) {
-                                query.orderByAscending("CarTime");
+                            if (Application.APPDEBUG) {
+                                Log.d(TAG, "wkFood = " + wkFood);
+                                Log.d(TAG, "wkGarbage = " + wkGarbage);
+                                Log.d(TAG, "wkRecycling = " + wkRecycling);
                             }
 
-                            query.whereWithinKilometers("location"
+                            ParseQuery<ArrayItem> foodscrap = ArrayItem.getQuery();
+                            foodscrap.whereContains("time", strHour + ":");
+                            foodscrap.whereEqualTo(wkFood, "Y");
+
+                            ParseQuery<ArrayItem> garbage = ArrayItem.getQuery();
+                            garbage.whereContains("time", strHour + ":");
+                            garbage.whereEqualTo(wkGarbage, "Y");
+
+                            ParseQuery<ArrayItem> recycling = ArrayItem.getQuery();
+                            recycling.whereContains("time", strHour + ":");
+                            recycling.whereEqualTo(wkRecycling, "Y");
+
+                            List<ParseQuery<ArrayItem>> queries = new ArrayList<ParseQuery<ArrayItem>>();
+                            queries.add(foodscrap);
+                            queries.add(garbage);
+                            queries.add(recycling);
+
+                            ParseQuery finalQuery = ParseQuery.or(queries);
+
+                            if (sorting.equals("TIME")) {
+                                finalQuery.orderByAscending("time");
+                            }
+
+                            finalQuery.whereWithinKilometers("location"
                                     , geoPointFromLocation(myLoc)
                                     , distance
                             );
 
-                            query.setLimit(100);
+                            finalQuery.setLimit(100);
 
-                            return query;
+                            return finalQuery;
                         }
                     };
 
@@ -637,6 +669,8 @@ public class MainActivity extends Activity
     @Override
     protected void onResume() {
         super.onResume();
+
+        getPref();
         if (adView != null)
             adView.resume();
 
@@ -680,7 +714,7 @@ public class MainActivity extends Activity
         //bundle.putString("to", String.valueOf(item.getLocation().getLatitude()) + "," +
         //        String.valueOf(item.getLocation().getLongitude()));
         bundle.putString("address", item.getFullAddress());
-        bundle.putString("carno", item.getCarNo());
+        //bundle.putString("carno", item.getCarNo());
         bundle.putString("carnumber", item.getCarNumber());
         bundle.putString("time", item.getCarTime());
         bundle.putBoolean("garbage", item.checkTodayAvailableGarbage());

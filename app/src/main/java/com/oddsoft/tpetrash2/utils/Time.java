@@ -8,20 +8,23 @@ import java.util.Calendar;
 public class Time {
 
     private Calendar calendar;
-    private int dayOfWeek;
+    private static int dayOfWeek;
 
     public Time() {
-        Calendar calendar = Calendar.getInstance();
-        dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
     }
 
-    public String getDayOfWeekNumber() {
+    public static String getDayOfWeekNumber() {
+        Calendar calendar = Calendar.getInstance();
+        dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
         return String.valueOf(dayOfWeek -1);
     }
 
 
-    public String getDayOfWeekName() {
+    public static  String getDayOfWeekName() {
+        Calendar calendar = Calendar.getInstance();
+        dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
         String dayOfWeekName = "";
         switch(dayOfWeek){

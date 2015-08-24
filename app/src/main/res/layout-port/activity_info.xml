@@ -56,16 +56,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/carno"
-        android:layout_below="@+id/address"
-        />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/carnumber"
-        android:layout_below="@+id/carno"
+        android:layout_below="@+id/address"
         />
 
     <TextView
@@ -76,14 +68,6 @@
         android:layout_below="@+id/carnumber"
         />
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/mapButton"
-        android:text="帶我去倒垃圾"
-        android:layout_below="@+id/memo"
-        android:visibility="gone"/>
-
     <fragment
         android:id="@+id/map_fragment"
         class="com.google.android.gms.maps.MapFragment"
@@ -91,6 +75,6 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:layout_marginTop="16dp"
-        android:layout_below="@+id/mapButton"/>
+        android:layout_below="@+id/memo"/>
 
 </RelativeLayout>

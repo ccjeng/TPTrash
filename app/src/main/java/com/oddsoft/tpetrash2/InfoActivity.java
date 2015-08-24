@@ -44,7 +44,7 @@ public class InfoActivity extends FragmentActivity {
     private String strToLng = "";
 
     private String address;
-    private String carno;
+    //private String carno;
     private String carnumber;
     private String time;
     private String memo;
@@ -69,7 +69,7 @@ public class InfoActivity extends FragmentActivity {
 
         TextView timeView = (TextView) findViewById(R.id.time);
         TextView addressView = (TextView) findViewById(R.id.address);
-        TextView carNoView = (TextView) findViewById(R.id.carno);
+        //TextView carNoView = (TextView) findViewById(R.id.carno);
         TextView carNumberView = (TextView) findViewById(R.id.carnumber);
         TextView memoView = (TextView) findViewById(R.id.memo);
 
@@ -77,14 +77,6 @@ public class InfoActivity extends FragmentActivity {
         TextView garbageView = (TextView) findViewById(R.id.garbageView);
         TextView foodView = (TextView) findViewById(R.id.foodView);
         TextView recyclingView = (TextView) findViewById(R.id.recyclingView);
-
-        Button mapButton = (Button) findViewById(R.id.mapButton);
-        mapButton.setOnClickListener(new Button.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                goBrowser();
-            }
-        });
 
         Bundle bundle = this.getIntent().getExtras();
 
@@ -117,7 +109,7 @@ public class InfoActivity extends FragmentActivity {
         strTo = strToLat + ","+ strToLng;
 
         address = bundle.getString("address");
-        carno = bundle.getString("carno");
+        //carno = bundle.getString("carno");
         carnumber = bundle.getString("carnumber");
         time = bundle.getString("time");
         memo = bundle.getString("memo");
@@ -128,13 +120,13 @@ public class InfoActivity extends FragmentActivity {
 
         timeView.setText("時間：" + time);
         addressView.setText("地址：" + address);
-        carNoView.setText("車號：" + carno);
+        //carNoView.setText("車號：" + carno);
         carNumberView.setText("車次：" + carnumber);
         memoView.setText("備註："+ memo);
 
         if (realtime) {
             //新北市垃圾車即時資訊 隱藏這些欄位
-            carNumberView.setVisibility(View.GONE);
+            //carNumberView.setVisibility(View.GONE);
             memoView.setVisibility(View.GONE);
             garbageView.setVisibility(View.GONE);
             foodView.setVisibility(View.GONE);
