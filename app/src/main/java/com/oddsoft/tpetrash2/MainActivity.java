@@ -300,27 +300,27 @@ public class MainActivity extends Activity
 
         drawerItem[0] = new DrawerItem(new IconicsDrawable(this)
                 .icon(FontAwesome.Icon.faw_recycle)
-                .color(Color.BLACK)
+                .color(Color.GRAY)
                 .sizeDp(24),
                 drawer_menu[0]);
         drawerItem[1] = new DrawerItem(new IconicsDrawable(this)
                 .icon(FontAwesome.Icon.faw_truck)
-                .color(Color.BLACK)
+                .color(Color.GRAY)
                 .sizeDp(24),
                 drawer_menu[1]);
         drawerItem[2] = new DrawerItem(new IconicsDrawable(this)
                 .icon(FontAwesome.Icon.faw_cog)
-                .color(Color.BLACK)
+                .color(Color.GRAY)
                 .sizeDp(24),
                 drawer_menu[2]);
         drawerItem[3] = new DrawerItem(new IconicsDrawable(this)
                 .icon(FontAwesome.Icon.faw_info_circle)
-                .color(Color.BLACK)
+                .color(Color.GRAY)
                 .sizeDp(24),
                 drawer_menu[3]);
         drawerItem[4] = new DrawerItem(new IconicsDrawable(this)
                 .icon(FontAwesome.Icon.faw_thumbs_up)
-                .color(Color.BLACK)
+                .color(Color.GRAY)
                 .sizeDp(24),
                 drawer_menu[4]);
 
