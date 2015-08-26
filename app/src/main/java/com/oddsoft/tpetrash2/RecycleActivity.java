@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
  * Created by andycheng on 2015/7/10.
@@ -105,7 +108,9 @@ public class RecycleActivity extends Activity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (adapter.getCount() == 0 && !searchText.getText().toString().trim().equals(""))
-                    Toast.makeText(RecycleActivity.this, R.string.search_nodata, Toast.LENGTH_SHORT).show();
+                    Crouton.makeText(RecycleActivity.this, R.string.search_nodata, Style.CONFIRM,
+                            (ViewGroup)findViewById(R.id.croutonview)).show();
+
             }
         });
 
@@ -171,5 +176,11 @@ public class RecycleActivity extends Activity {
     public void onStart() {
         super.onStart();
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        Crouton.cancelAllCroutons();
+        super.onDestroy();
     }
 }

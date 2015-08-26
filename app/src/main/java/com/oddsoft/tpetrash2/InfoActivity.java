@@ -23,6 +23,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Time;
 
@@ -94,7 +96,6 @@ public class InfoActivity extends FragmentActivity {
         ga.trackerPage(this);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
         Bundle bundle = this.getIntent().getExtras();
 
         /*
@@ -248,6 +249,11 @@ public class InfoActivity extends FragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.info, menu);
+
+        MenuItem menuItem1 = menu.findItem(R.id.menu_navi);
+        menuItem1.setIcon(new IconicsDrawable(this, CommunityMaterial.Icon.cmd_navigation).actionBarSize().color(Color.WHITE));
+
+
         return true;
     }
 

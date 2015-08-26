@@ -31,10 +31,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -59,11 +57,12 @@ import com.parse.ParseQueryAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MainActivity extends Activity
         implements LocationListener,
@@ -194,9 +193,9 @@ public class MainActivity extends Activity
             }
         });
 
-        /*if (Utils.isNewInstallation(this)) {
+        if (Utils.isNewInstallation(this)) {
             this.showDialog(DIALOG_WELCOME);
-        } else */
+        } else
         if (Utils.newVersionInstalled(this)) {
             this.showDialog(DIALOG_UPDATE);
         }
@@ -212,16 +211,7 @@ public class MainActivity extends Activity
                 locationClient.connect();
             }
         } else {
-            new AlertDialog.Builder(MainActivity.this)
-                    .setMessage(R.string.network_error)
-                    .setPositiveButton(R.string.ok_label,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(
-                                        DialogInterface dialoginterface, int i) {
-                                    // empty
-                                }
-                            }).show();
-
+            Crouton.makeText(MainActivity.this, R.string.network_error, Style.ALERT).show();
         }
         Calendar calendar = Calendar.getInstance();
         hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -541,17 +531,11 @@ public class MainActivity extends Activity
                                 + " " + String.valueOf(distance) + "公里"
                                 + getString(R.string.data_not_found);
 
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
-                        /*
-                        new AlertDialog.Builder(MainActivity.this)
-                                .setMessage(msg)
-                                .setPositiveButton(R.string.ok_label,
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(
-                                                    DialogInterface dialoginterface, int i) {
-                                                // empty
-                                            }
-                                        }).show();*/
+                        //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
+                        Crouton.makeText(MainActivity.this, msg, Style.CONFIRM,
+                                (ViewGroup)findViewById(R.id.croutonview)).show();
+
+
                     }
                 }
             });
@@ -569,16 +553,7 @@ public class MainActivity extends Activity
 
         } else {
             //location error
-            new AlertDialog.Builder(MainActivity.this)
-                    //.setTitle(R.string.app_name)
-                    .setMessage(R.string.location_error)
-                    .setPositiveButton(R.string.ok_label,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(
-                                        DialogInterface dialoginterface, int i) {
-                                    // empty
-                                }
-                            }).show();
+            Crouton.makeText(MainActivity.this, R.string.location_error, Style.ALERT).show();
         }
 
     }
@@ -650,7 +625,6 @@ public class MainActivity extends Activity
                     ((TextView) d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 
                 }
-                //臺北市環保局表示今日將暫停收運垃圾(含廚餘及回收物)，請市民暫時將垃圾貯存於家中 http://www.google.com
             }
         }
 
@@ -718,6 +692,7 @@ public class MainActivity extends Activity
     protected void onDestroy() {
         if (adView != null)
             adView.destroy();
+        Crouton.cancelAllCroutons();
         super.onDestroy();
     }
 
@@ -856,16 +831,7 @@ public class MainActivity extends Activity
 
         // 裝置沒有安裝Google Play服務
         if (errorCode == ConnectionResult.SERVICE_MISSING) {
-            new AlertDialog.Builder(this)
-                    //.setTitle(R.string.app_name)
-                    .setMessage(R.string.google_play_service_missing)
-                    .setPositiveButton(R.string.ok_label,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(
-                                        DialogInterface dialoginterface, int i) {
-                                    // empty
-                                }
-                            }).show();
+            Crouton.makeText(MainActivity.this, R.string.google_play_service_missing, Style.ALERT).show();
         }
 
     }
@@ -911,8 +877,14 @@ public class MainActivity extends Activity
 
     protected final Dialog onCreateDialog(final int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setIcon(android.R.drawable.ic_dialog_info);
-        builder.setCancelable(true);
+        //builder.setIcon(android.R.drawable.ic_dialog_info);
+
+        builder.setIcon(new IconicsDrawable(this)
+                        .icon(FontAwesome.Icon.faw_info_circle)
+                        .color(Color.GRAY)
+                        .sizeDp(24));
+
+                builder.setCancelable(true);
         builder.setPositiveButton(android.R.string.ok, null);
 
         final Context context = this;

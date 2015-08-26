@@ -121,7 +121,8 @@
 \n
 \n函式庫
         \nGoogle GSon https://github.com/google/gson/blob/master/LICENSE
-        \nAndroid Iconics https://github.com/mikepenz/Android-Iconics/blob/develop/LICENSE\n
+        \nAndroid Iconics https://github.com/mikepenz/Android-Iconics/blob/develop/LICENSE
+        \nCrouton https://github.com/keyboardsurfer/Crouton/blob/master/LICENSE\n
 \n圖示
         \nNoun Project https://thenounproject.com
 \n
@@ -136,7 +137,11 @@ THE SOFTWARE.
     <string name="license_intro"></string>
 
     <string name="changelog_title">更新記錄</string>
-    <string name="welcome_title">歡迎</string>
-    <string name="welcome_message">歡迎使用台北倒垃圾
+    <string name="welcome_title">歡迎使用台北倒垃圾</string>
+    <string name="welcome_message">
+        資料來源:台北市和新北市政府開放資料\n\n
+        -班表資訊:約兩個月更新一次\n
+        -新北即時資訊:每三分鐘更新一次\n
+        -手機推播:不定期推播到手機
     </string>
 </resources>

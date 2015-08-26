@@ -47,6 +47,12 @@
                 android:id="@+id/trashList"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/croutonview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="bottom" />
         </LinearLayout>
 
         <LinearLayout
@@ -57,7 +63,6 @@
             android:layout_centerHorizontal="true"
             android:gravity="bottom"
             android:orientation="horizontal">
-
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
                 android:layout_width="wrap_content"

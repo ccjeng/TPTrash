@@ -1,11 +1,9 @@
 package com.oddsoft.tpetrash2;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -19,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -48,6 +45,8 @@ import java.util.Comparator;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 /**
@@ -141,15 +140,7 @@ public class NewTaipeiRealtimeActivity extends Activity
             getData();
 
         } else {
-            new AlertDialog.Builder(NewTaipeiRealtimeActivity.this)
-                    .setMessage(R.string.network_error)
-                    .setPositiveButton(R.string.ok_label,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(
-                                        DialogInterface dialoginterface, int i) {
-                                    // empty
-                                }
-                            }).show();
+            Crouton.makeText(NewTaipeiRealtimeActivity.this, R.string.network_error, Style.ALERT).show();
         }
 
         adView();
@@ -227,7 +218,8 @@ public class NewTaipeiRealtimeActivity extends Activity
                 }
             });
             if (listAdapter.getCount() == 0) {
-                Toast.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Toast.LENGTH_LONG).show();
+                //Toast.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Toast.LENGTH_LONG).show();
+                Crouton.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Style.CONFIRM).show();
             } else {
                 //Descending Order
                 Collections.sort(items, new Comparator<RealtimeItem>() {
@@ -241,16 +233,7 @@ public class NewTaipeiRealtimeActivity extends Activity
 
         } else {
             //location error
-            new AlertDialog.Builder(NewTaipeiRealtimeActivity.this)
-                    //.setTitle(R.string.app_name)
-                    .setMessage(R.string.location_error)
-                    .setPositiveButton(R.string.ok_label,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(
-                                        DialogInterface dialoginterface, int i) {
-                                    // empty
-                                }
-                            }).show();
+            Crouton.makeText(NewTaipeiRealtimeActivity.this, R.string.location_error, Style.ALERT).show();
         }
     }
 
@@ -349,6 +332,7 @@ public class NewTaipeiRealtimeActivity extends Activity
     protected void onDestroy() {
         if (adView != null)
             adView.destroy();
+        Crouton.cancelAllCroutons();
         super.onDestroy();
     }
 
@@ -489,16 +473,7 @@ public class NewTaipeiRealtimeActivity extends Activity
 
         // 裝置沒有安裝Google Play服務
         if (errorCode == ConnectionResult.SERVICE_MISSING) {
-            new AlertDialog.Builder(this)
-                    //.setTitle(R.string.app_name)
-                    .setMessage(R.string.google_play_service_missing)
-                    .setPositiveButton(R.string.ok_label,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(
-                                        DialogInterface dialoginterface, int i) {
-                                    // empty
-                                }
-                            }).show();
+            Crouton.makeText(NewTaipeiRealtimeActivity.this, R.string.google_play_service_missing, Style.ALERT).show();
         }
 
     }
