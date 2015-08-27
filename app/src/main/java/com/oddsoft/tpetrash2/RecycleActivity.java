@@ -1,7 +1,9 @@
 package com.oddsoft.tpetrash2;
 
-import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -9,11 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.recycle.RecycleItem;
 import com.oddsoft.tpetrash2.recycle.RecycleListAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
@@ -34,13 +35,16 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 /**
  * Created by andycheng on 2015/7/10.
  */
-public class RecycleActivity extends Activity {
+public class RecycleActivity extends ActionBarActivity {
 
     @Bind(R.id.searchText)
     AutoCompleteTextView searchText;
 
     @Bind(R.id.listRecycleInfo)
     ListView recycleView;
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     private RecycleListAdapter adapter;
     private Analytics ga;
@@ -68,7 +72,17 @@ public class RecycleActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycle);
         ButterKnife.bind(this);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        toolbar.setNavigationIcon(new IconicsDrawable(this)
+                .icon(CommunityMaterial.Icon.cmd_keyboard_backspace)
+                .color(Color.WHITE)
+                .actionBarSize());
 
         ga = new Analytics();
         ga.trackerPage(this);

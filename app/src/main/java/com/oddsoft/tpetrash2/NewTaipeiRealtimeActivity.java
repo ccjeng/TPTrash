@@ -5,12 +5,15 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +36,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.realtime.JsonService;
 import com.oddsoft.tpetrash2.realtime.RealtimeItem;
 import com.oddsoft.tpetrash2.realtime.RealtimeListAdapter;
@@ -52,7 +57,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 /**
  * Created by andycheng on 2015/8/11.
  */
-public class NewTaipeiRealtimeActivity extends Activity
+public class NewTaipeiRealtimeActivity extends ActionBarActivity
         implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -66,6 +71,9 @@ public class NewTaipeiRealtimeActivity extends Activity
 
     @Bind(R.id.pull_to_refresh)
     SwipeRefreshLayout mSwipeLayout;
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     private Analytics ga;
     private AdView adView;
@@ -117,7 +125,17 @@ public class NewTaipeiRealtimeActivity extends Activity
         setContentView(R.layout.activity_newtaipeirealtime);
         ButterKnife.bind(this);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        toolbar.setNavigationIcon(new IconicsDrawable(this)
+                .icon(CommunityMaterial.Icon.cmd_keyboard_backspace)
+                .color(Color.WHITE)
+                .actionBarSize());
+
 
         ga = new Analytics();
         ga.trackerPage(this);

@@ -5,11 +5,20 @@
     tools:context="com.oddsoft.tpetrash2.InfoActivity"
     android:background="@color/write">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        />
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/todayView"
+        android:layout_below="@+id/toolbar"
         />
 
     <TextView

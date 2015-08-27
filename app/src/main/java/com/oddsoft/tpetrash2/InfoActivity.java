@@ -7,6 +7,8 @@ import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +38,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class InfoActivity extends FragmentActivity {
+public class InfoActivity extends ActionBarActivity /*FragmentActivity*/ {
 
     private static final String TAG = Application.class.getSimpleName();
 
@@ -63,6 +65,9 @@ public class InfoActivity extends FragmentActivity {
 
     @Bind(R.id.memo)
     TextView memoView;
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     private String strFrom = "";
     private String strFromLat = "";
@@ -95,7 +100,21 @@ public class InfoActivity extends FragmentActivity {
         ga = new Analytics();
         ga.trackerPage(this);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        toolbar.setNavigationIcon(new IconicsDrawable(this)
+                .icon(CommunityMaterial.Icon.cmd_keyboard_backspace)
+                .color(Color.WHITE)
+                .actionBarSize());
+
+        // Menu item click 的監聽事件一樣要設定在 setSupportActionBar 才有作用
+        toolbar.setOnMenuItemClickListener(onMenuItemClick);
+
+
         Bundle bundle = this.getIntent().getExtras();
 
         /*
@@ -168,7 +187,7 @@ public class InfoActivity extends FragmentActivity {
             current_location = getString(R.string.app_name);
         }
 
-        getActionBar().setTitle(current_location);
+        //getSupportActionBar().setTitle(current_location);
 
         Time today = new Time();
         todayView.setText("今天是" + today.getDayOfWeekName());
@@ -245,6 +264,24 @@ public class InfoActivity extends FragmentActivity {
         polyline.setWidth(10);
     }
 
+    private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+
+            switch (menuItem.getItemId()) {
+                case android.R.id.home:
+                    finish();
+                    break;
+                case R.id.menu_navi:
+                    goBrowser();
+                    break;
+
+            }
+
+            return true;
+        }
+    };
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -263,6 +300,11 @@ public class InfoActivity extends FragmentActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+
+        /*
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -270,7 +312,7 @@ public class InfoActivity extends FragmentActivity {
             case R.id.menu_navi:
                 goBrowser();
                 return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
 

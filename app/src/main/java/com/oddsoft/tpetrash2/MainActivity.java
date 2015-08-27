@@ -19,6 +19,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -43,6 +46,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.drawer.DrawerItem;
@@ -64,7 +68,7 @@ import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class MainActivity extends Activity
+public class MainActivity extends ActionBarActivity
         implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -95,6 +99,11 @@ public class MainActivity extends Activity
     protected ProgressDialog proDialog;
 
     private ActionBarDrawerToggle mDrawerToggle;
+
+    private ActionBar actionbar;
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     // 記錄被選擇的選單指標用
     private int mCurrentMenuItemPosition = -1;
@@ -246,10 +255,13 @@ public class MainActivity extends Activity
 
 
     private void initActionBar() {
-        //顯示 Up Button (位在 Logo 左手邊的按鈕圖示)
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        //打開 Up Button 的點擊功能
-        getActionBar().setHomeButtonEnabled(true);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(new IconicsDrawable(this)
+                .icon(CommunityMaterial.Icon.cmd_menu)
+                .color(Color.WHITE)
+                .actionBarSize());
+
+        actionbar = getSupportActionBar();
     }
 
     private void initDrawer() {
@@ -268,14 +280,14 @@ public class MainActivity extends Activity
             @Override
             public void onDrawerOpened(View drawerView) {
                 // 將 Title 設定為自定義的文字
-                getActionBar().setTitle(R.string.app_name);
+                actionbar.setTitle(R.string.app_name);
             }
 
             //被關上後要做的事情
             @Override
             public void onDrawerClosed(View drawerView) {
                 // 將 Title 設定回 APP 的名稱
-                getActionBar().setTitle(R.string.app_name);
+                actionbar.setTitle(R.string.app_name);
             }
         };
 
@@ -527,8 +539,7 @@ public class MainActivity extends Activity
 
                     //No data
                     if (trashListView.getCount() == 0) {
-                        String msg = hourName[Arrays.asList(hourCode).indexOf(String.valueOf(hour))]
-                                + " " + String.valueOf(distance) + "公里"
+                        String msg = String.valueOf(distance) + "公里"
                                 + getString(R.string.data_not_found);
 
                         //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
