@@ -1,6 +1,5 @@
 package com.oddsoft.tpetrash2;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -74,6 +75,9 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+
+    @Bind(R.id.progressBarCircularIndeterminate)
+    ProgressBarCircularIndeterminate pbLoading;
 
     private Analytics ga;
     private AdView adView;
@@ -140,7 +144,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         ga = new Analytics();
         ga.trackerPage(this);
 
-        //getData();
 
         if (isNetworkConnected()) {
             // 建立Google API用戶端物件
@@ -158,7 +161,8 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
             getData();
 
         } else {
-            Crouton.makeText(NewTaipeiRealtimeActivity.this, R.string.network_error, Style.ALERT).show();
+            Crouton.makeText(NewTaipeiRealtimeActivity.this, R.string.network_error, Style.ALERT,
+                    (ViewGroup)findViewById(R.id.croutonview)).show();
         }
 
         adView();
@@ -172,6 +176,9 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     }
 
     private void getData() {
+
+        pbLoading.setVisibility(View.VISIBLE);
+
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://data.ntpc.gov.tw/od/data/api/28AB4122-60E1-4065-98E5-ABCCB69AACA6?$format=json";
 
@@ -187,11 +194,13 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
                     public void onResponse(String response) {
                         showData(response);
                         proDialog.dismiss();
+                        pbLoading.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 proDialog.dismiss();
+                pbLoading.setVisibility(View.GONE);
                 Log.d(TAG, error.toString());
             }
 
@@ -237,7 +246,8 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
             });
             if (listAdapter.getCount() == 0) {
                 //Toast.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Toast.LENGTH_LONG).show();
-                Crouton.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Style.CONFIRM).show();
+                Crouton.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Style.CONFIRM,
+                        (ViewGroup)findViewById(R.id.croutonview)).show();
             } else {
                 //Descending Order
                 Collections.sort(items, new Comparator<RealtimeItem>() {
@@ -251,7 +261,8 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
 
         } else {
             //location error
-            Crouton.makeText(NewTaipeiRealtimeActivity.this, R.string.location_error, Style.ALERT).show();
+            Crouton.makeText(NewTaipeiRealtimeActivity.this, R.string.location_error, Style.ALERT,
+                    (ViewGroup)findViewById(R.id.croutonview)).show();
         }
     }
 
@@ -297,8 +308,10 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
 */
     @Override
     public void onStop() {
-        if (locationClient.isConnected()) {
-            locationClient.disconnect();
+        if (locationClient != null) {
+            if (locationClient.isConnected()) {
+                locationClient.disconnect();
+            }
         }
         super.onStop();
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
@@ -324,8 +337,10 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
             adView.pause();
 
         // 移除位置請求服務
-        if (locationClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(locationClient, NewTaipeiRealtimeActivity.this);
+        if (locationClient!=null) {
+            if (locationClient.isConnected()) {
+                LocationServices.FusedLocationApi.removeLocationUpdates(locationClient, NewTaipeiRealtimeActivity.this);
+            }
         }
     }
 
@@ -491,7 +506,8 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
 
         // 裝置沒有安裝Google Play服務
         if (errorCode == ConnectionResult.SERVICE_MISSING) {
-            Crouton.makeText(NewTaipeiRealtimeActivity.this, R.string.google_play_service_missing, Style.ALERT).show();
+            Crouton.makeText(NewTaipeiRealtimeActivity.this, R.string.google_play_service_missing, Style.ALERT,
+                    (ViewGroup)findViewById(R.id.croutonview)).show();
         }
 
     }

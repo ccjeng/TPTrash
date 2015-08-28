@@ -187,7 +187,7 @@ public class InfoActivity extends ActionBarActivity /*FragmentActivity*/ {
             current_location = getString(R.string.app_name);
         }
 
-        //getSupportActionBar().setTitle(current_location);
+        getSupportActionBar().setTitle(current_location);
 
         Time today = new Time();
         todayView.setText("今天是" + today.getDayOfWeekName());

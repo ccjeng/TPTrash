@@ -1,9 +1,7 @@
 package com.oddsoft.tpetrash2;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,6 +35,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -96,14 +95,15 @@ public class MainActivity extends ActionBarActivity
     private AdView adView;
     private String[] hourCode;
     private String[] hourName;
-    protected ProgressDialog proDialog;
 
     private ActionBarDrawerToggle mDrawerToggle;
-
     private ActionBar actionbar;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+
+    @Bind(R.id.progressBarCircularIndeterminate)
+    ProgressBarCircularIndeterminate pbLoading;
 
     // 記錄被選擇的選單指標用
     private int mCurrentMenuItemPosition = -1;
@@ -149,7 +149,7 @@ public class MainActivity extends ActionBarActivity
     // Stores the current instantiation of the location client in this object
     private GoogleApiClient locationClient;
 
-    private boolean hasPushNotification = false;
+    private boolean stopAutoSelection = false;
 
     private static final int DIALOG_WELCOME = 1;
     private static final int DIALOG_UPDATE = 2;
@@ -203,9 +203,11 @@ public class MainActivity extends ActionBarActivity
         });
 
         if (Utils.isNewInstallation(this)) {
+            stopAutoSelection = true;
             this.showDialog(DIALOG_WELCOME);
         } else
         if (Utils.newVersionInstalled(this)) {
+            stopAutoSelection = true;
             this.showDialog(DIALOG_UPDATE);
         }
 
@@ -220,7 +222,8 @@ public class MainActivity extends ActionBarActivity
                 locationClient.connect();
             }
         } else {
-            Crouton.makeText(MainActivity.this, R.string.network_error, Style.ALERT).show();
+            Crouton.makeText(MainActivity.this, R.string.network_error, Style.ALERT,
+                    (ViewGroup)findViewById(R.id.croutonview)).show();
         }
         Calendar calendar = Calendar.getInstance();
         hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -391,7 +394,8 @@ public class MainActivity extends ActionBarActivity
             myLoc = new Location("");
             //myLoc.setLatitude(24.8979347);
             //myLoc.setLongitude(121.5393508);
-
+            //myLoc.setLatitude(25.0249034);
+            //myLoc.setLongitude(121.560214);
             //Taipei City
             myLoc.setLatitude(25.0950492);
             myLoc.setLongitude(121.5246077);
@@ -523,19 +527,13 @@ public class MainActivity extends ActionBarActivity
 
                 @Override
                 public void onLoading() {
-                    proDialog = new ProgressDialog(MainActivity.this);
-                    proDialog.setMessage(getString(R.string.processing));
-                    proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    proDialog.setCancelable(false);
-                    proDialog.show();
+                    pbLoading.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onLoaded(List<ArrayItem> objects, Exception e) {
-                    //To change body of implemented methods use File | Settings | File Templates.
 
-                    if (proDialog != null && proDialog.isShowing())
-                        proDialog.dismiss();
+                    pbLoading.setVisibility(View.GONE);
 
                     //No data
                     if (trashListView.getCount() == 0) {
@@ -564,7 +562,8 @@ public class MainActivity extends ActionBarActivity
 
         } else {
             //location error
-            Crouton.makeText(MainActivity.this, R.string.location_error, Style.ALERT).show();
+            Crouton.makeText(MainActivity.this, R.string.location_error, Style.ALERT,
+                    (ViewGroup)findViewById(R.id.croutonview)).show();
         }
 
     }
@@ -614,7 +613,7 @@ public class MainActivity extends ActionBarActivity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             if (extras.containsKey("alert")) {
-                hasPushNotification = true;
+                stopAutoSelection = true;
                 String msg = extras.getString("alert");
 
                 if (!msg.equals("")) {
@@ -647,8 +646,10 @@ public class MainActivity extends ActionBarActivity
     */
     @Override
     public void onStop() {
-        if (locationClient.isConnected()) {
-            locationClient.disconnect();
+        if (locationClient != null) {
+            if (locationClient.isConnected()) {
+                locationClient.disconnect();
+            }
         }
         super.onStop();
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
@@ -674,9 +675,11 @@ public class MainActivity extends ActionBarActivity
             adView.pause();
 
         // 移除位置請求服務
-        if (locationClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(
-                    locationClient, this);
+        if (locationClient != null) {
+            if (locationClient.isConnected()) {
+                LocationServices.FusedLocationApi.removeLocationUpdates(
+                        locationClient, this);
+            }
         }
     }
 
@@ -820,7 +823,7 @@ public class MainActivity extends ActionBarActivity
 
         //call Parse service to get data
         //parseQuery(hour);
-        if (!hasPushNotification) {
+        if (!stopAutoSelection) {
             hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
         }
 

@@ -119,12 +119,12 @@
         \n新北市政府資料開放平台：新北市垃圾車即時位置 \n(資料每3分鐘更新一次)
         \nhttp://data.ntpc.gov.tw/od/detail?oid=28AB4122-60E1-4065-98E5-ABCCB69AACA6
 \n
-\n函式庫
+\n函式庫版權
         \nGoogle GSon https://github.com/google/gson/blob/master/LICENSE
         \nAndroid Iconics https://github.com/mikepenz/Android-Iconics/blob/develop/LICENSE
-        \nCrouton https://github.com/keyboardsurfer/Crouton/blob/master/LICENSE\n
-\n圖示
-        \nNoun Project https://thenounproject.com
+        \nCrouton https://github.com/keyboardsurfer/Crouton/blob/master/LICENSE
+        \nMaterialDesignLibrary https://github.com/navasmdc/MaterialDesignLibrary/blob/master/LICENSE\n
+
 \n
 \n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,

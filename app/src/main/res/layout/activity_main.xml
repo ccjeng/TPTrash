@@ -19,11 +19,13 @@
             android:layout_width="match_parent"
             android:layout_alignParentTop="true"
             />
+
         <LinearLayout
             android:id="@+id/spinner_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_below="@id/toolbar">
 
             <TextView
                 android:layout_width="match_parent"
@@ -42,6 +44,14 @@
                 android:textColor="#ff2460ff" />
         </LinearLayout>
 
+        <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+            android:layout_centerInParent="true"
+            android:id="@+id/progressBarCircularIndeterminate"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:visibility="gone"
+            android:background="#1E88E5" />
+
         <LinearLayout
             android:id="@+id/home_layout"
             android:layout_width="fill_parent"
@@ -54,12 +64,13 @@
                 android:id="@+id/trashList"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
+
             <LinearLayout
                 android:id="@+id/croutonview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="bottom" />
+                android:layout_gravity="top"/>
         </LinearLayout>
 
         <LinearLayout
