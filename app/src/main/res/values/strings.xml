@@ -58,7 +58,7 @@
         <item>DIST</item>
     </string-array>
 
-    <string name="hour_spinner_prompt">依垃圾車抵達時間查詢</string>
+    <string name="hour_spinner_prompt">依抵達時間查詢</string>
     <string-array name="hour_spinnner_name">
         <item>請選擇</item>
         <item>早上6點</item>

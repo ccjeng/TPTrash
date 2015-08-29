@@ -21,6 +21,7 @@ public class Prefs extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.settings);
 		mActionBar.setTitle(getTitle());
+		mActionBar.setTitleTextColor(Color.WHITE);
 
 	}
 
