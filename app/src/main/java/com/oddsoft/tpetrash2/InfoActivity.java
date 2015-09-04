@@ -231,7 +231,7 @@ public class InfoActivity extends ActionBarActivity /*FragmentActivity*/ {
 
         CameraUpdate center =
                 CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(strToLat)
-                        , Double.valueOf(strToLng)), 15);
+                        , Double.valueOf(strToLng)), 17);
         map.animateCamera(center);
 
 
