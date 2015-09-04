@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>3.3.1\n
-			-全新介面
-			-更新新版垃圾車班表\n
-			-不顯示未執勤的垃圾車班表\n
-    	    -[新北市即時資訊]可下拉更新\n
-			-[地圖模式]增加現在位置\n
+    	<item>3.3.2\n
+			修正介面
     	</item>
 </string-array>
 </resources>

@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 23
     buildToolsVersion "21.1.2"
     defaultConfig {
         applicationId 'com.oddsoft.tpetrash2'
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 25
-        versionName '3.3.1.0829150025'
+        versionCode 26
+        versionName '3.3.2.0904150026'
     }
     buildTypes {
         release {
@@ -30,16 +30,19 @@ dependencies {
     compile files('libs/jackson-core-2.2.3.jar')
     compile files('libs/Parse-1.9.3.jar')
     compile files('libs/bolts-android-1.2.0.jar')
-    compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.google.android.gms:play-services:7.3.0'
+    compile 'com.android.support:appcompat-v7:23'
+    compile 'com.google.android.gms:play-services:7.8.0'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.mikepenz:iconics-core:1.7.3@aar'
     compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
     compile 'com.mikepenz:community-material-typeface:1.1.70.3@aar'
-    compile 'com.github.navasmdc:MaterialDesign:1.5@aar'
+    compile 'com.pnikosis:materialish-progress:1.5'
     compile('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
         // exclusion is not necessary, but generally a good idea.
         exclude group: 'com.google.android', module: 'support-v4'
+    }
+    compile('com.mikepenz:aboutlibraries:5.2.1@aar') {
+        transitive = true
     }
 }

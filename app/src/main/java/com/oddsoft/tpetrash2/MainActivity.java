@@ -35,7 +35,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -45,6 +44,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -56,6 +57,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -102,8 +104,8 @@ public class MainActivity extends ActionBarActivity
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.progressBarCircularIndeterminate)
-    ProgressBarCircularIndeterminate pbLoading;
+    @Bind(R.id.progress_wheel)
+    ProgressWheel progressWheel;
 
     // 記錄被選擇的選單指標用
     private int mCurrentMenuItemPosition = -1;
@@ -358,7 +360,17 @@ public class MainActivity extends ActionBarActivity
                 startActivity(new Intent(this, Prefs.class));
                 break;
             case 3:
-                startActivity(new Intent(this, AboutActivity.class));
+                //startActivity(new Intent(this, AboutActivity.class));
+                new LibsBuilder()
+                        //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
+                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                        .withAboutIconShown(true)
+                        .withAboutVersionShown(true)
+                        .withAboutAppName(getString(R.string.app_name))
+                        .withActivityTitle(getString(R.string.about))
+                        .withAboutDescription(getString(R.string.license))
+                                //start the activity
+                        .start(this);
                 break;
             case 4:
                 startActivity(new Intent(Intent.ACTION_VIEW,
@@ -527,13 +539,13 @@ public class MainActivity extends ActionBarActivity
 
                 @Override
                 public void onLoading() {
-                    pbLoading.setVisibility(View.VISIBLE);
+                    progressWheel.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onLoaded(List<ArrayItem> objects, Exception e) {
 
-                    pbLoading.setVisibility(View.GONE);
+                    progressWheel.setVisibility(View.GONE);
 
                     //No data
                     if (trashListView.getCount() == 0) {

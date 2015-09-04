@@ -27,7 +27,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -44,6 +43,7 @@ import com.oddsoft.tpetrash2.realtime.RealtimeItem;
 import com.oddsoft.tpetrash2.realtime.RealtimeListAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.parse.ParseGeoPoint;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,8 +76,8 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.progressBarCircularIndeterminate)
-    ProgressBarCircularIndeterminate pbLoading;
+    //@Bind(R.id.progress_wheel)
+    //ProgressWheel progressWheel;
 
     private Analytics ga;
     private AdView adView;
@@ -177,7 +177,7 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
 
     private void getData() {
 
-        pbLoading.setVisibility(View.VISIBLE);
+        //pbLoading.setVisibility(View.VISIBLE);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://data.ntpc.gov.tw/od/data/api/28AB4122-60E1-4065-98E5-ABCCB69AACA6?$format=json";
@@ -194,13 +194,13 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
                     public void onResponse(String response) {
                         showData(response);
                         proDialog.dismiss();
-                        pbLoading.setVisibility(View.GONE);
+                        //progressWheel.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 proDialog.dismiss();
-                pbLoading.setVisibility(View.GONE);
+                //progressWheel.setVisibility(View.GONE);
                 Log.d(TAG, error.toString());
             }
 
@@ -245,7 +245,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
                 }
             });
             if (listAdapter.getCount() == 0) {
-                //Toast.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Toast.LENGTH_LONG).show();
                 Crouton.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Style.CONFIRM,
                         (ViewGroup)findViewById(R.id.croutonview)).show();
             } else {
