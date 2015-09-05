@@ -478,7 +478,7 @@ public class MainActivity extends ActionBarActivity
                                     , distance
                             );
 
-                            finalQuery.setLimit(100);
+                            finalQuery.setLimit(50);
 
                             return finalQuery;
                         }
@@ -505,27 +505,27 @@ public class MainActivity extends ActionBarActivity
                     addressView.setText(trash.getAddress());
 
                     if (trash.checkTodayAvailableGarbage()) {
-                        garbageView.setText("[今天有收一般垃圾]");
+                        garbageView.setText("[收一般垃圾]");
                         garbageView.setTextColor(getResources().getColor(R.color.green));
 
                     } else {
-                        garbageView.setText("[今天不收一般垃圾]");
+                        garbageView.setText("[不收一般垃圾]");
                         garbageView.setTextColor(getResources().getColor(R.color.red));
                     }
 
                     if (trash.checkTodayAvailableFood()) {
-                        foodView.setText(" [今天有收廚餘]");
+                        foodView.setText(" [收廚餘]");
                         foodView.setTextColor(getResources().getColor(R.color.green));
                     } else {
-                        foodView.setText(" [今天不收廚餘]");
+                        foodView.setText(" [不收廚餘]");
                         foodView.setTextColor(getResources().getColor(R.color.red));
                     }
 
                     if (trash.checkTodayAvailableRecycling()) {
-                        recyclingView.setText(" [今天有收資源回收]");
+                        recyclingView.setText(" [收資源回收]");
                         recyclingView.setTextColor(getResources().getColor(R.color.green));
                     } else {
-                        recyclingView.setText(" [今天不收資源回收]");
+                        recyclingView.setText(" [不收資源回收]");
                         recyclingView.setTextColor(getResources().getColor(R.color.red));
                     }
 

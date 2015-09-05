@@ -6,7 +6,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,11 +22,11 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.utils.Analytics;
+import com.oddsoft.tpetrash2.utils.MapUtils;
 import com.oddsoft.tpetrash2.utils.Time;
 
 import java.io.IOException;
@@ -38,7 +37,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class InfoActivity extends ActionBarActivity /*FragmentActivity*/ {
+public class InfoActivity extends ActionBarActivity {
 
     private static final String TAG = Application.class.getSimpleName();
 
@@ -100,12 +99,9 @@ public class InfoActivity extends ActionBarActivity /*FragmentActivity*/ {
         ga = new Analytics();
         ga.trackerPage(this);
 
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         toolbar.setNavigationIcon(new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_keyboard_backspace)
                 .color(Color.WHITE)
@@ -116,26 +112,6 @@ public class InfoActivity extends ActionBarActivity /*FragmentActivity*/ {
 
 
         Bundle bundle = this.getIntent().getExtras();
-
-        /*
-        ArrayList list = bundle.getParcelableArrayList("list");
-
-        ArrayItem item = (ArrayItem) list.get(0);
-
-        address = item.getAddress();
-        carno = item.getCarNo();
-        carnumber = item.getCarNumber();
-        time = item.getCarTime();
-        memo = item.getMemo();
-        garbage = item.checkTodayAvailableGarbage();
-        food = item.checkTodayAvailableFood();
-        recycling = item.checkTodayAvailableRecycling();
-
-
-        strTo = String.valueOf(item.getLocation().getLatitude()) + "," +
-                String.valueOf(item.getLocation().getLongitude());
-
-*/
 
         strFromLat = bundle.getString("fromLat");
         strFromLng = bundle.getString("fromLng");
@@ -240,7 +216,7 @@ public class InfoActivity extends ActionBarActivity /*FragmentActivity*/ {
         markerOpt.position(new LatLng(Double.valueOf(strFromLat)
                 , Double.valueOf(strFromLng)));
         markerOpt.title("現在位置");
-        markerOpt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+        markerOpt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         map.addMarker(markerOpt).showInfoWindow();
 
         //Marker
@@ -248,20 +224,22 @@ public class InfoActivity extends ActionBarActivity /*FragmentActivity*/ {
         markerOpt2.position(new LatLng(Double.valueOf(strToLat)
                 , Double.valueOf(strToLng)));
         markerOpt2.title(address);
-        markerOpt2.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        //markerOpt2.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        markerOpt2.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
+
         map.addMarker(markerOpt2).showInfoWindow();
 
         //Draw Line
         PolylineOptions polylineOpt = new PolylineOptions();
-        polylineOpt.add(new LatLng(Double.valueOf(strFromLat)
-                , Double.valueOf(strFromLng)));
-        polylineOpt.add(new LatLng(Double.valueOf(strToLat)
-                , Double.valueOf(strToLng)));
 
-        polylineOpt.color(Color.BLUE);
+        LatLng from = new LatLng(Double.valueOf(strFromLat), Double.valueOf(strFromLng));
+        LatLng to = new LatLng(Double.valueOf(strToLat), Double.valueOf(strToLng));
 
-        Polyline polyline = map.addPolyline(polylineOpt);
-        polyline.setWidth(10);
+        polylineOpt.add(from, to).color(Color.BLUE).width(5);
+
+        map.addPolyline(polylineOpt);
+
+        MapUtils.DrawArrowHead(map, from, to);
     }
 
     private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
