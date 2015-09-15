@@ -28,7 +28,7 @@ public class Application extends android.app.Application {
     public static final String APPTAG = Application.class.getSimpleName();
 
     //Admob
-    public static final String ADMOB_TEST_DEVICE_ID = "7710C21FF2537758BF3F80963477D68E";
+    public static final String ADMOB_TEST_DEVICE_ID = "DF9E888CAA233DE54A7FD15B3B1A1522";
     //Parse
     private static final String PARSE_APPLICATION_ID = "nxkxfDhpFQBXOReTPFIPhGIaYowmT5uuscj3w3Kb";
     private static final String PARSE_CLIENT_KEY = "oo7CwnSrT3XCjVHuN3r1JBw7rvJzjmYZCRCX9e2U";

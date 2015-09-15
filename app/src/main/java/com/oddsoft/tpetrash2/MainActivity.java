@@ -119,22 +119,12 @@ public class MainActivity extends ActionBarActivity
     /*
      * Constants for location update parameters
      */
-    // Milliseconds per second
-    private static final int MILLISECONDS_PER_SECOND = 1000;
-
-    // The update interval
-    private static final int UPDATE_INTERVAL_IN_SECONDS = 5;
-
-    // A fast interval ceiling
-    private static final int FAST_CEILING_IN_SECONDS = 1;
 
     // Update interval in milliseconds
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
-            * UPDATE_INTERVAL_IN_SECONDS;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
 
     // A fast ceiling of update intervals, used when the app is visible
-    private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
-            * FAST_CEILING_IN_SECONDS;
+    private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = 1000;
 
     // Adapter for the Parse query
     private ParseQueryAdapter<ArrayItem> trashQueryAdapter;
@@ -402,6 +392,7 @@ public class MainActivity extends ActionBarActivity
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
         //fake location
+        /*
         if (Application.APPDEBUG) {
             myLoc = new Location("");
             //myLoc.setLatitude(24.8979347);
@@ -412,7 +403,7 @@ public class MainActivity extends ActionBarActivity
             myLoc.setLatitude(25.0950492);
             myLoc.setLongitude(121.5246077);
 
-        }
+        }*/
 
         if (myLoc != null) {
 

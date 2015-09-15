@@ -92,22 +92,11 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     /*
      * Constants for location update parameters
      */
-    // Milliseconds per second
-    private static final int MILLISECONDS_PER_SECOND = 1000;
-
-    // The update interval
-    private static final int UPDATE_INTERVAL_IN_SECONDS = 5;
-
-    // A fast interval ceiling
-    private static final int FAST_CEILING_IN_SECONDS = 1;
-
     // Update interval in milliseconds
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
-            * UPDATE_INTERVAL_IN_SECONDS;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
 
     // A fast ceiling of update intervals, used when the app is visible
-    private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
-            * FAST_CEILING_IN_SECONDS;
+    private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = 1000;
 
     // Fields for helping process map and location changes
     private Location lastLocation;

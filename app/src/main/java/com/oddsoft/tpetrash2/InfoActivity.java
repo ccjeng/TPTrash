@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,6 +16,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,11 +28,11 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.utils.Analytics;
-import com.oddsoft.tpetrash2.utils.MapUtils;
 import com.oddsoft.tpetrash2.utils.Time;
 
 import java.io.IOException;
@@ -37,9 +43,21 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class InfoActivity extends ActionBarActivity {
+public class InfoActivity extends ActionBarActivity
+        implements LocationListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = Application.class.getSimpleName();
+
+    private LocationRequest locationRequest;
+    private GoogleApiClient locationClient;
+
+    // Update interval
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
+    // A fast interval ceiling
+    private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = 1000;
+
 
     @Bind(R.id.todayView)
     TextView todayView;
@@ -90,6 +108,8 @@ public class InfoActivity extends ActionBarActivity {
     private GoogleMap map;
     private Analytics ga;
 
+    private Polyline line;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +130,11 @@ public class InfoActivity extends ActionBarActivity {
         // Menu item click 的監聽事件一樣要設定在 setSupportActionBar 才有作用
         toolbar.setOnMenuItemClickListener(onMenuItemClick);
 
+        configGoogleApiClient();
+        configLocationRequest();
+        if (!locationClient.isConnected()) {
+            locationClient.connect();
+        }
 
         Bundle bundle = this.getIntent().getExtras();
 
@@ -212,20 +237,20 @@ public class InfoActivity extends ActionBarActivity {
 
 
         //Current
-        MarkerOptions markerOpt = new MarkerOptions();
+       /* MarkerOptions markerOpt = new MarkerOptions();
         markerOpt.position(new LatLng(Double.valueOf(strFromLat)
                 , Double.valueOf(strFromLng)));
         markerOpt.title("現在位置");
         markerOpt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-        map.addMarker(markerOpt).showInfoWindow();
+        map.addMarker(markerOpt).showInfoWindow();*/
+        map.setMyLocationEnabled(true);
 
         //Marker
         MarkerOptions markerOpt2 = new MarkerOptions();
         markerOpt2.position(new LatLng(Double.valueOf(strToLat)
                 , Double.valueOf(strToLng)));
         markerOpt2.title(address);
-        //markerOpt2.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-        markerOpt2.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
+        markerOpt2.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
 
         map.addMarker(markerOpt2).showInfoWindow();
 
@@ -237,9 +262,9 @@ public class InfoActivity extends ActionBarActivity {
 
         polylineOpt.add(from, to).color(Color.BLUE).width(5);
 
-        map.addPolyline(polylineOpt);
+        line = map.addPolyline(polylineOpt);
 
-        MapUtils.DrawArrowHead(map, from, to);
+        //MapUtils.DrawArrowHead(map, from, to);
     }
 
     private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
@@ -282,16 +307,6 @@ public class InfoActivity extends ActionBarActivity {
             finish();
         }
 
-        /*
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.menu_navi:
-                goBrowser();
-                return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
 
     }
@@ -311,6 +326,11 @@ public class InfoActivity extends ActionBarActivity {
 
     @Override
     public void onStop() {
+        if (locationClient != null) {
+            if (locationClient.isConnected()) {
+                locationClient.disconnect();
+            }
+        }
         super.onStop();
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
@@ -321,12 +341,21 @@ public class InfoActivity extends ActionBarActivity {
     @Override
     public void onStart() {
         super.onStart();
+        if (locationClient != null) {
+            locationClient.connect();
+        }
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        if (locationClient != null) {
+            if (locationClient.isConnected()) {
+                LocationServices.FusedLocationApi.removeLocationUpdates(
+                        locationClient, this);
+            }
+        }
     }
 
     /*
@@ -335,6 +364,11 @@ public class InfoActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (locationClient != null) {
+            if (!locationClient.isConnected()) {
+                locationClient.connect();
+            }
+        }
     }
 
     @Override
@@ -342,5 +376,64 @@ public class InfoActivity extends ActionBarActivity {
         super.onDestroy();
     }
 
+    // 建立Google API用戶端物件
+    private synchronized void configGoogleApiClient() {
+        // Create a new location client, using the enclosing class to handle callbacks.
+        locationClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+    }
 
+    private void configLocationRequest() {
+        // Create a new global location parameters object
+        locationRequest = LocationRequest.create();
+
+        // Set the update interval
+        locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+
+        // Use low power
+        locationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+
+        // Set the interval ceiling to one minute
+        locationRequest.setFastestInterval(FAST_INTERVAL_CEILING_IN_MILLISECONDS);
+    }
+
+    @Override
+    public void onLocationChanged(Location l2) {
+
+        strFromLat = Double.toString(l2.getLatitude());
+        strFromLng = Double.toString(l2.getLongitude());
+        strFrom = strFromLat + "," + strFromLng;
+
+        line.remove();
+
+        PolylineOptions polylineOpt = new PolylineOptions();
+
+        LatLng from = new LatLng(l2.getLatitude(), l2.getLongitude());
+        LatLng to = new LatLng(Double.valueOf(strToLat), Double.valueOf(strToLng));
+
+        polylineOpt.add(from, to).color(Color.BLUE).width(5);
+
+        line = map.addPolyline(polylineOpt);
+
+        //Log.d(TAG, "onLocationChanged");
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.i(TAG, "GoogleApiClient connection has been connected");
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                locationClient, locationRequest, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "GoogleApiClient connection has been suspend");
+    }
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.i(TAG, "GoogleApiClient connection failed");
+    }
 }

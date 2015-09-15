@@ -7,8 +7,8 @@ android {
         applicationId 'com.oddsoft.tpetrash2'
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 26
-        versionName '3.3.2.090515'
+        versionCode 27
+        versionName '3.3.3.091815TT'
     }
     buildTypes {
         release {
@@ -45,4 +45,6 @@ dependencies {
     compile('com.mikepenz:aboutlibraries:5.2.1@aar') {
         transitive = true
     }
+    compile files('libs/admob-adapter-1.0.0-1505261651-830485e.jar')
+    compile files('libs/vpadn-sdk-obf431-82605102-1506291043-d57fd2a.jar')
 }
