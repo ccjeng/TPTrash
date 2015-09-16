@@ -22,13 +22,17 @@ import java.util.HashMap;
 
 public class Application extends android.app.Application {
     // Debugging switch 
-    public static final boolean APPDEBUG = true;
+    public static final boolean APPDEBUG = false;
 
     // Debugging tag for the application
     public static final String APPTAG = Application.class.getSimpleName();
 
     //Admob
     public static final String ADMOB_TEST_DEVICE_ID = "DF9E888CAA233DE54A7FD15B3B1A1522";
+    public static final String ADMOB_UNIT_ID = "ca-app-pub-6914084100751028/1776974015";
+    //Vpon
+    public static final String VPON_UNIT_ID = "8a8081824fb5a83f014fc9a9ba071724";
+
     //Parse
     private static final String PARSE_APPLICATION_ID = "nxkxfDhpFQBXOReTPFIPhGIaYowmT5uuscj3w3Kb";
     private static final String PARSE_CLIENT_KEY = "oo7CwnSrT3XCjVHuN3r1JBw7rvJzjmYZCRCX9e2U";

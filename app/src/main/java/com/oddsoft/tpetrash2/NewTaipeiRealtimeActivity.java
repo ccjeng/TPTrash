@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.common.ConnectionResult;
@@ -44,6 +46,9 @@ import com.oddsoft.tpetrash2.realtime.RealtimeListAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.parse.ParseGeoPoint;
 import com.pnikosis.materialishprogress.ProgressWheel;
+import com.vpadn.ads.VpadnAdRequest;
+import com.vpadn.ads.VpadnAdSize;
+import com.vpadn.ads.VpadnBanner;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,6 +87,7 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     private Analytics ga;
     private AdView adView;
     public static final int REFRESH_DELAY = 1000;
+    //private VpadnBanner vponBanner = null;
 
     /*
   * Define a request code to send to Google Play services This code is returned in
@@ -204,7 +210,7 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
         //fake location
-
+/*
         if (Application.APPDEBUG) {
             myLoc = new Location("");
             //myLoc.setLatitude(25.175579);
@@ -215,7 +221,7 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
             myLoc.setLongitude(121.5246077);
 
         }
-
+*/
         if (myLoc != null) {
 
             JsonService jsonsrv = new JsonService(NewTaipeiRealtimeActivity.this
@@ -283,9 +289,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
             case android.R.id.home:
                 finish();
                 return true;
-            // case R.id.menu_refresh:
-            //     getData();
-            //     return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -353,12 +356,24 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     protected void onDestroy() {
         if (adView != null)
             adView.destroy();
+
+        //if (vponBanner != null) {
+        //    vponBanner.destroy();
+        //    vponBanner = null;
+        //}
+
         Crouton.cancelAllCroutons();
         super.onDestroy();
     }
 
     private void adView() {
-        adView = (AdView) findViewById(R.id.adView);
+        RelativeLayout adBannerLayout = (RelativeLayout) findViewById(R.id.footerLayout);
+
+        adView = new AdView(this);
+        adView.setAdUnitId(Application.ADMOB_UNIT_ID);
+        adView.setAdSize(AdSize.SMART_BANNER);
+        adBannerLayout.addView(adView);
+
         AdRequest adRequest;
 
         if (Application.APPDEBUG) {
@@ -368,10 +383,21 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
                     .addTestDevice(Application.ADMOB_TEST_DEVICE_ID)
                     .build();
         } else {
+
             adRequest = new AdRequest.Builder().build();
 
         }
         adView.loadAd(adRequest);
+/*
+        //create VpadnBanner instance
+        vponBanner = new VpadnBanner(this, Application.VPON_UNIT_ID, VpadnAdSize.SMART_BANNER, "TW");
+        VpadnAdRequest adRequest = new VpadnAdRequest();
+        //設定可以auto refresh去要banner
+        adRequest.setEnableAutoRefresh(true);
+        //開始取得banner
+        vponBanner.loadAd(adRequest);
+        //將banner放到您要放置廣告的layout上
+        adBannerLayout.addView(vponBanner);*/
     }
 
     private void goIntent(RealtimeItem item) {

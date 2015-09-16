@@ -36,6 +36,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.common.ConnectionResult;
@@ -58,6 +59,9 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import com.pnikosis.materialishprogress.ProgressWheel;
+import com.vpadn.ads.VpadnAdRequest;
+import com.vpadn.ads.VpadnAdSize;
+import com.vpadn.ads.VpadnBanner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -146,6 +150,8 @@ public class MainActivity extends ActionBarActivity
     private static final int DIALOG_WELCOME = 1;
     private static final int DIALOG_UPDATE = 2;
 
+    //private VpadnBanner vponBanner = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -232,8 +238,16 @@ public class MainActivity extends ActionBarActivity
     }
 
     private void adView() {
-        adView = (AdView) findViewById(R.id.adView);
+
+        LinearLayout adBannerLayout = (LinearLayout) findViewById(R.id.footerLayout);
+
+        adView = new AdView(this);
+        adView.setAdUnitId(Application.ADMOB_UNIT_ID);
+        adView.setAdSize(AdSize.SMART_BANNER);
+        adBannerLayout.addView(adView);
+
         AdRequest adRequest;
+
 
         if (Application.APPDEBUG) {
             //Test Mode
@@ -242,10 +256,24 @@ public class MainActivity extends ActionBarActivity
                     .addTestDevice(Application.ADMOB_TEST_DEVICE_ID)
                     .build();
         } else {
+
             adRequest = new AdRequest.Builder().build();
 
         }
         adView.loadAd(adRequest);
+
+/*
+        //create VpadnBanner instance
+        vponBanner = new VpadnBanner(this, Application.VPON_UNIT_ID, VpadnAdSize.SMART_BANNER, "TW");
+        VpadnAdRequest adRequest = new VpadnAdRequest();
+        //設定可以auto refresh去要banner
+        adRequest.setEnableAutoRefresh(true);
+        //開始取得banner
+        vponBanner.loadAd(adRequest);
+        //將banner放到您要放置廣告的layout上
+        adBannerLayout.addView(vponBanner);
+        */
+
     }
 
 
@@ -709,6 +737,12 @@ public class MainActivity extends ActionBarActivity
     protected void onDestroy() {
         if (adView != null)
             adView.destroy();
+
+        /*
+        if (vponBanner != null) {
+            vponBanner.destroy();
+            vponBanner = null;
+        }*/
         Crouton.cancelAllCroutons();
         super.onDestroy();
     }
