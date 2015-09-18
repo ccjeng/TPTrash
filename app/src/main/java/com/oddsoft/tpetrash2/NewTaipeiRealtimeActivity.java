@@ -209,6 +209,7 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     private void showData(String str) {
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
+
         //fake location
 /*
         if (Application.APPDEBUG) {
@@ -228,6 +229,8 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
                     , myLoc.getLatitude()
                     , myLoc.getLongitude());
             ArrayList<RealtimeItem> items = jsonsrv.fromJson(str);
+
+            
             listAdapter = new RealtimeListAdapter(this, items);
             listView.setAdapter(listAdapter);
 

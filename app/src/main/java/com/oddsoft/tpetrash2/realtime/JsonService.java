@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -51,7 +52,7 @@ public class JsonService {
                 JsonObject o = (JsonObject) it.next();
 
                 RealtimeItem item = new RealtimeItem(
-                          o.get("lineid").getAsString()
+                        o.get("lineid").getAsString()
                         , o.get("car").getAsString()
                         , o.get("time").getAsString()
                         , o.get("location").getAsString()
@@ -63,11 +64,10 @@ public class JsonService {
                 try {
                     geocoder = new Geocoder(context, new Locale("zh", "TW"));
 
-                    String address = o.get("location").getAsString().replace("(基地台定位)","").replace("附近","");
-
+                    String address = o.get("location").getAsString().replace("(基地台定位)","").replace("附近", "");
+                    List<Address> addressList  = geocoder.getFromLocationName(address, 1);
                     //Log.d(TAG, address);
 
-                    List<Address> addressList  = geocoder.getFromLocationName(address,1);
 
                     double lat = 0;
 
