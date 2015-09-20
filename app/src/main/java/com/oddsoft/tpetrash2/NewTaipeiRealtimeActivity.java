@@ -1,15 +1,16 @@
 package com.oddsoft.tpetrash2;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,13 +22,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -40,19 +36,14 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.oddsoft.tpetrash2.realtime.JsonService;
-import com.oddsoft.tpetrash2.realtime.RealtimeItem;
-import com.oddsoft.tpetrash2.realtime.RealtimeListAdapter;
+import com.oddsoft.tpetrash2.realtime.RealtimeOItem;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
+import com.parse.ParseQueryAdapter;
 import com.pnikosis.materialishprogress.ProgressWheel;
-import com.vpadn.ads.VpadnAdRequest;
-import com.vpadn.ads.VpadnAdSize;
-import com.vpadn.ads.VpadnBanner;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -70,7 +61,9 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "NewTaipeiRealtime";
-    protected ProgressDialog proDialog;
+    private static int distance;
+    private static String sorting;
+
 
     @Bind(R.id.listRealtimeInfo)
     ListView listView;
@@ -81,8 +74,8 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
-    //@Bind(R.id.progress_wheel)
-    //ProgressWheel progressWheel;
+    @Bind(R.id.progress_wheel)
+    ProgressWheel progressWheel;
 
     private Analytics ga;
     private AdView adView;
@@ -115,8 +108,7 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     // Stores the current instantiation of the location client in this object
     private GoogleApiClient locationClient;
 
-    private RealtimeListAdapter listAdapter;
-
+    private ParseQueryAdapter<RealtimeOItem> listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,12 +116,10 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         setContentView(R.layout.activity_newtaipeirealtime);
         ButterKnife.bind(this);
 
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         toolbar.setNavigationIcon(new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_keyboard_backspace)
                 .color(Color.WHITE)
@@ -160,6 +150,7 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
                     (ViewGroup)findViewById(R.id.croutonview)).show();
         }
 
+        getPref();
         adView();
 
         mSwipeLayout.setOnRefreshListener(this);
@@ -171,42 +162,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     }
 
     private void getData() {
-
-        //pbLoading.setVisibility(View.VISIBLE);
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://data.ntpc.gov.tw/od/data/api/28AB4122-60E1-4065-98E5-ABCCB69AACA6?$format=json";
-
-        proDialog = new ProgressDialog(this);
-        proDialog.setMessage(getString(R.string.processing) + " (因為來源資料要再做地理資訊的計算，若資料量多，會比較耗時，不便之處請見諒)");
-        proDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        proDialog.setCancelable(false);
-        proDialog.show();
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        showData(response);
-                        proDialog.dismiss();
-                        //progressWheel.setVisibility(View.GONE);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                proDialog.dismiss();
-                //progressWheel.setVisibility(View.GONE);
-                Log.d(TAG, error.toString());
-            }
-
-        });
-
-        queue.add(stringRequest);
-
-    }
-
-
-    private void showData(String str) {
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
 
@@ -225,36 +180,81 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
 */
         if (myLoc != null) {
 
-            JsonService jsonsrv = new JsonService(NewTaipeiRealtimeActivity.this
-                    , myLoc.getLatitude()
-                    , myLoc.getLongitude());
-            ArrayList<RealtimeItem> items = jsonsrv.fromJson(str);
+            if (Application.APPDEBUG)
+                Log.d(TAG, "location = " + myLoc.toString());
 
-            
-            listAdapter = new RealtimeListAdapter(this, items);
+            ParseQueryAdapter.QueryFactory<RealtimeOItem> factory =
+                    new ParseQueryAdapter.QueryFactory<RealtimeOItem>() {
+                        public ParseQuery<RealtimeOItem> create() {
+
+                            ParseQuery<RealtimeOItem> query = RealtimeOItem.getQuery();
+
+                            query.whereWithinKilometers("location"
+                                    , geoPointFromLocation(myLoc)
+                                    , 100 //distance
+                            );
+
+                            query.setLimit(50);
+
+                            return query;
+                        }
+                    };
+
+            // Set up the query adapter
+            listAdapter = new ParseQueryAdapter<RealtimeOItem>(this, factory) {
+                @Override
+                public View getItemView(RealtimeOItem trash, View view, ViewGroup parent) {
+                    if (view == null) {
+                        view = View.inflate(getContext(), R.layout.listitem_realtime, null);
+                    }
+
+                    TextView timeView = (TextView) view.findViewById(R.id.tvCarTime);
+                    TextView addressView = (TextView) view.findViewById(R.id.tvLocation);
+                    TextView distanceView = (TextView) view.findViewById(R.id.tvDistance);
+
+                    timeView.setText(trash.getCarTime());
+                    distanceView.setText(trash.getDistance(geoPointFromLocation(myLoc)).toString());
+                    addressView.setText(trash.getAddress());
+
+                    return view;
+                }
+            };
+
+            listAdapter.setPaginationEnabled(false);
+            listAdapter.addOnQueryLoadListener(new ParseQueryAdapter.OnQueryLoadListener<RealtimeOItem>() {
+
+                @Override
+                public void onLoading() {
+                    progressWheel.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onLoaded(List<RealtimeOItem> objects, Exception e) {
+                    progressWheel.setVisibility(View.GONE);
+                    //No data
+                    if (listView.getCount() == 0) {
+                        String msg = String.valueOf(distance) + "公里"
+                                + getString(R.string.data_not_found);
+
+                        Crouton.makeText(NewTaipeiRealtimeActivity.this, msg, Style.CONFIRM,
+                                (ViewGroup)findViewById(R.id.croutonview)).show();
+
+                    }
+                }
+            });
+
             listView.setAdapter(listAdapter);
 
             // Set up the handler for an item's selection
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    final RealtimeItem item = listAdapter.getItem(position);
+                    final RealtimeOItem item = listAdapter.getItem(position);
                     //Open Detail Page
                     goIntent(item);
                 }
             });
-            if (listAdapter.getCount() == 0) {
-                Crouton.makeText(NewTaipeiRealtimeActivity.this, "沒有資料", Style.CONFIRM,
-                        (ViewGroup)findViewById(R.id.croutonview)).show();
-            } else {
-                //Descending Order
-                Collections.sort(items, new Comparator<RealtimeItem>() {
-                    @Override
-                    public int compare(RealtimeItem o1,
-                                       RealtimeItem o2) {
-                        return Double.compare(o1.getDistance(), o2.getDistance()); // error
-                    }
-                });
-            }
+
+
 
         } else {
             //location error
@@ -344,6 +344,8 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        getPref();
         if (adView != null)
             adView.resume();
 
@@ -359,11 +361,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     protected void onDestroy() {
         if (adView != null)
             adView.destroy();
-
-        //if (vponBanner != null) {
-        //    vponBanner.destroy();
-        //    vponBanner = null;
-        //}
 
         Crouton.cancelAllCroutons();
         super.onDestroy();
@@ -391,21 +388,12 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
 
         }
         adView.loadAd(adRequest);
-/*
-        //create VpadnBanner instance
-        vponBanner = new VpadnBanner(this, Application.VPON_UNIT_ID, VpadnAdSize.SMART_BANNER, "TW");
-        VpadnAdRequest adRequest = new VpadnAdRequest();
-        //設定可以auto refresh去要banner
-        adRequest.setEnableAutoRefresh(true);
-        //開始取得banner
-        vponBanner.loadAd(adRequest);
-        //將banner放到您要放置廣告的layout上
-        adBannerLayout.addView(vponBanner);*/
+
     }
 
-    private void goIntent(RealtimeItem item) {
+    private void goIntent(RealtimeOItem item) {
 
-        ga.trackEvent(this, "Location", "RealTimeLocation", item.getCarLocation(), 0);
+        ga.trackEvent(this, "Location", "RealTimeLocation", item.getAddress(), 0);
 
 
         Intent intent = new Intent();
@@ -415,19 +403,19 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         bundle.putBoolean("realtime", true);
         bundle.putString("fromLat", String.valueOf(myLoc.getLatitude()));
         bundle.putString("fromLng", String.valueOf(myLoc.getLongitude()));
-        bundle.putString("toLat", String.valueOf(item.getLatitude()));
-        bundle.putString("toLng", String.valueOf(item.getLongitude()));
+        bundle.putString("toLat", String.valueOf(item.getLocation().getLatitude()));
+        bundle.putString("toLng", String.valueOf(item.getLocation().getLongitude()));
 
-        bundle.putString("address", item.getCarLocation());
+        bundle.putString("address", item.getAddress());
         //bundle.putString("carno", item.getCarNO());
-        bundle.putString("carnumber", item.getCarNO());
+        bundle.putString("carnumber", item.getCarNo());
         bundle.putString("time", item.getCarTime());
 
         intent.putExtras(bundle);
 
-        if (item.getDistance() != 999999999) {
+        //if (item.getDistance() != 999999999) {
             startActivityForResult(intent, 0);
-        }
+        //}
 
     }
 
@@ -571,5 +559,14 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         lastLocation = location;
     }
 
+    private void getPref() {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(getBaseContext());
+        String distancePreference = prefs.getString("distance", "3");
+        String sortingPreference = prefs.getString("sorting", "DIST");
+
+        distance = Integer.valueOf(distancePreference);
+        sorting = String.valueOf(sortingPreference);
+    }
 
 }

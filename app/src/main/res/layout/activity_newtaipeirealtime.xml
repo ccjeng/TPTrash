@@ -14,7 +14,7 @@
         android:layout_alignParentTop="true"
         />
 
-<!--    <com.pnikosis.materialishprogress.ProgressWheel
+    <com.pnikosis.materialishprogress.ProgressWheel
         android:id="@+id/progress_wheel"
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -22,7 +22,7 @@
         android:layout_centerVertical="true"
         wheel:matProg_barColor="@color/color_progress"
         wheel:matProg_progressIndeterminate="true"
-        android:visibility="gone"/>-->
+        android:visibility="gone"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/pull_to_refresh"

@@ -59,9 +59,6 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import com.pnikosis.materialishprogress.ProgressWheel;
-import com.vpadn.ads.VpadnAdRequest;
-import com.vpadn.ads.VpadnAdSize;
-import com.vpadn.ads.VpadnBanner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -452,13 +449,7 @@ public class MainActivity extends ActionBarActivity
                             } else {
                                 strHour = String.valueOf(hour);
                             }
-/*
-                            ParseQuery<ArrayItem> query = ArrayItem.getQuery();
-                            query.whereContains("time", strHour + ":");
-                            //query.whereEqualTo("foodscraps_mon", "N");
-                            //query.whereEqualTo("garbage_mon", "N");
-                            //query.whereEqualTo("recycling_mon", "N");
-*/
+
                             String wkFood = Utils.getWeekFoodTag();
                             String wkGarbage = Utils.getWeekGarbageTag();
                             String wkRecycling = Utils.getWeekRecyclingTag();
