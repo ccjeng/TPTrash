@@ -21,7 +21,7 @@ import com.parse.ParseQuery;
 
 import java.text.DecimalFormat;
 
-@ParseClassName("TPE201508")
+@ParseClassName("TPE092115")
 public class ArrayItem extends ParseObject {
 
     public String getAddress() {
@@ -46,6 +46,14 @@ public class ArrayItem extends ParseObject {
 
     public String getCarTime() {
         return getString("time");
+    }
+
+    public String getCarHour() {
+        return getString("hour");
+    }
+
+    public String getLineID() {
+        return getString("lineid");
     }
 
     //里

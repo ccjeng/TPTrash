@@ -127,6 +127,5 @@
     <orderEntry type="library" exported="" name="play-services-games-7.3.0" level="project" />
     <orderEntry type="library" exported="" name="admob-adapter-1.0.0-1505261651-830485e" level="project" />
     <orderEntry type="library" exported="" name="play-services-identity-7.3.0" level="project" />
-    <orderEntry type="module" module-name="volley" exported="" />
   </component>
 </module>

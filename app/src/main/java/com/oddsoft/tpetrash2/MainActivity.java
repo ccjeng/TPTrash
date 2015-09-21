@@ -147,8 +147,6 @@ public class MainActivity extends ActionBarActivity
     private static final int DIALOG_WELCOME = 1;
     private static final int DIALOG_UPDATE = 2;
 
-    //private VpadnBanner vponBanner = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -258,18 +256,6 @@ public class MainActivity extends ActionBarActivity
 
         }
         adView.loadAd(adRequest);
-
-/*
-        //create VpadnBanner instance
-        vponBanner = new VpadnBanner(this, Application.VPON_UNIT_ID, VpadnAdSize.SMART_BANNER, "TW");
-        VpadnAdRequest adRequest = new VpadnAdRequest();
-        //設定可以auto refresh去要banner
-        adRequest.setEnableAutoRefresh(true);
-        //開始取得banner
-        vponBanner.loadAd(adRequest);
-        //將banner放到您要放置廣告的layout上
-        adBannerLayout.addView(vponBanner);
-        */
 
     }
 
@@ -443,33 +429,35 @@ public class MainActivity extends ActionBarActivity
                     new ParseQueryAdapter.QueryFactory<ArrayItem>() {
                         public ParseQuery<ArrayItem> create() {
 
-                            String strHour;
+                            String strHour = String.valueOf(hour);
+                            /*
                             if (String.valueOf(hour).length() == 1) {
                                 strHour = "0" + String.valueOf(hour);
                             } else {
                                 strHour = String.valueOf(hour);
-                            }
+                            }*/
 
                             String wkFood = Utils.getWeekFoodTag();
                             String wkGarbage = Utils.getWeekGarbageTag();
                             String wkRecycling = Utils.getWeekRecyclingTag();
 
                             if (Application.APPDEBUG) {
+                                Log.d(TAG, "hour = " + strHour);
                                 Log.d(TAG, "wkFood = " + wkFood);
                                 Log.d(TAG, "wkGarbage = " + wkGarbage);
                                 Log.d(TAG, "wkRecycling = " + wkRecycling);
                             }
 
                             ParseQuery<ArrayItem> foodscrap = ArrayItem.getQuery();
-                            foodscrap.whereContains("time", strHour + ":");
+                            //foodscrap.whereEqualTo("hour", strHour);
                             foodscrap.whereEqualTo(wkFood, "Y");
 
                             ParseQuery<ArrayItem> garbage = ArrayItem.getQuery();
-                            garbage.whereContains("time", strHour + ":");
+                            //garbage.whereEqualTo("hour", strHour);
                             garbage.whereEqualTo(wkGarbage, "Y");
 
                             ParseQuery<ArrayItem> recycling = ArrayItem.getQuery();
-                            recycling.whereContains("time", strHour + ":");
+                            //recycling.whereEqualTo("hour", strHour);
                             recycling.whereEqualTo(wkRecycling, "Y");
 
                             List<ParseQuery<ArrayItem>> queries = new ArrayList<ParseQuery<ArrayItem>>();
@@ -477,17 +465,24 @@ public class MainActivity extends ActionBarActivity
                             queries.add(garbage);
                             queries.add(recycling);
 
+                            //ParseQuery<ArrayItem> finalQuery = ArrayItem.getQuery();
                             ParseQuery finalQuery = ParseQuery.or(queries);
 
                             if (sorting.equals("TIME")) {
                                 finalQuery.orderByAscending("time");
                             }
 
+
+                            finalQuery.whereEqualTo("hour", strHour);
                             finalQuery.whereWithinKilometers("location"
                                     , geoPointFromLocation(myLoc)
                                     , distance
                             );
 
+
+                            //finalQuery.whereNear("location"
+                            //                , geoPointFromLocation(myLoc)
+                            //        );
                             finalQuery.setLimit(50);
 
                             return finalQuery;
@@ -606,9 +601,6 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
 
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -729,11 +721,6 @@ public class MainActivity extends ActionBarActivity
         if (adView != null)
             adView.destroy();
 
-        /*
-        if (vponBanner != null) {
-            vponBanner.destroy();
-            vponBanner = null;
-        }*/
         Crouton.cancelAllCroutons();
         super.onDestroy();
     }
@@ -755,13 +742,6 @@ public class MainActivity extends ActionBarActivity
         bundle.putString("toLat", String.valueOf(item.getLocation().getLatitude()));
         bundle.putString("toLng", String.valueOf(item.getLocation().getLongitude()));
 
-//        ArrayList list = new ArrayList();
-//        list.add(item);
-//        bundle.putParcelableArrayList("list", list);
-
-
-        //bundle.putString("to", String.valueOf(item.getLocation().getLatitude()) + "," +
-        //        String.valueOf(item.getLocation().getLongitude()));
         bundle.putString("address", item.getFullAddress());
         //bundle.putString("carno", item.getCarNo());
         bundle.putString("carnumber", item.getCarNumber());
@@ -770,6 +750,8 @@ public class MainActivity extends ActionBarActivity
         bundle.putBoolean("food", item.checkTodayAvailableFood());
         bundle.putBoolean("recycling", item.checkTodayAvailableRecycling());
         bundle.putString("memo", item.getMemo());
+        bundle.putString("lineid", item.getLineID());
+
 
         intent.putExtras(bundle);
 

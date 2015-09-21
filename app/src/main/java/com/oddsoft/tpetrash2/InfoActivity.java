@@ -99,6 +99,7 @@ public class InfoActivity extends ActionBarActivity
     private String carnumber;
     private String time;
     private String memo;
+    private String lineid;
     private Boolean garbage;
     private Boolean food;
     private Boolean recycling;
@@ -150,6 +151,7 @@ public class InfoActivity extends ActionBarActivity
         carnumber = bundle.getString("carnumber");
         time = bundle.getString("time");
         memo = bundle.getString("memo");
+        lineid = bundle.getString("lineid");
         garbage = bundle.getBoolean("garbage");
         food = bundle.getBoolean("food");
         recycling = bundle.getBoolean("recycling");
