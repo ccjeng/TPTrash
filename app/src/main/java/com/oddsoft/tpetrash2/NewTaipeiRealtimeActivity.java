@@ -34,11 +34,21 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.realtime.RealtimeOItem;
 import com.oddsoft.tpetrash2.utils.Analytics;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import com.pnikosis.materialishprogress.ProgressWheel;
@@ -64,9 +74,9 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     private static int distance;
     private static String sorting;
 
-
-    @Bind(R.id.listRealtimeInfo)
-    ListView listView;
+    private GoogleMap map;
+    //@Bind(R.id.listRealtimeInfo)
+    //ListView listView;
 
     @Bind(R.id.pull_to_refresh)
     SwipeRefreshLayout mSwipeLayout;
@@ -129,6 +139,21 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         ga = new Analytics();
         ga.trackerPage(this);
 
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment)).getMap();
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.getUiSettings().setZoomControlsEnabled(true);
+
+        //get current location from global veriable
+        currentLocation = Application.getCurrentLocation();
+
+        if (currentLocation != null) {
+            CameraUpdate center =
+                    CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude()
+                            , currentLocation.getLongitude()), 15);
+            map.animateCamera(center);
+        }
+
+        map.setMyLocationEnabled(true);
 
         if (isNetworkConnected()) {
             // 建立Google API用戶端物件
@@ -141,8 +166,7 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
                 locationClient.connect();
             }
 
-            //get current location from global veriable
-            currentLocation = Application.getCurrentLocation();
+
             getData();
 
         } else {
@@ -183,6 +207,36 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
             if (Application.APPDEBUG)
                 Log.d(TAG, "location = " + myLoc.toString());
 
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("RealTime");
+            query.whereWithinKilometers("location", geoPointFromLocation(myLoc), 100);
+            //query.whereEqualTo("playerName", "Dan Stemkoski");
+            query.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> items, ParseException e) {
+                    if (e == null) {
+                        //Log.d(TAG, "Retrieved " + items.size());
+                        int i = 0;
+                        for (i = 0; i < items.size(); i++) {
+                            //Log.d(TAG, items.get(i).get("address").toString());
+
+                            //Marker
+                            MarkerOptions marker = new MarkerOptions();
+                            marker.position(new LatLng(items.get(i).getParseGeoPoint("location").getLatitude()
+                                    , items.get(i).getParseGeoPoint("location").getLongitude()));
+                            marker.title(items.get(i).get("address").toString())
+                                    .snippet(items.get(i).get("cartime").toString());
+                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
+
+                            map.addMarker(marker).showInfoWindow();
+
+                        }
+
+                    } else {
+                        Log.d(TAG, "Error: " + e.getMessage());
+                    }
+                }
+            });
+
+/*
             ParseQueryAdapter.QueryFactory<RealtimeOItem> factory =
                     new ParseQueryAdapter.QueryFactory<RealtimeOItem>() {
                         public ParseQuery<RealtimeOItem> create() {
@@ -253,7 +307,7 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
                     goIntent(item);
                 }
             });
-
+*/
 
 
         } else {

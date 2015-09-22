@@ -430,12 +430,6 @@ public class MainActivity extends ActionBarActivity
                         public ParseQuery<ArrayItem> create() {
 
                             String strHour = String.valueOf(hour);
-                            /*
-                            if (String.valueOf(hour).length() == 1) {
-                                strHour = "0" + String.valueOf(hour);
-                            } else {
-                                strHour = String.valueOf(hour);
-                            }*/
 
                             String wkFood = Utils.getWeekFoodTag();
                             String wkGarbage = Utils.getWeekGarbageTag();
@@ -449,15 +443,12 @@ public class MainActivity extends ActionBarActivity
                             }
 
                             ParseQuery<ArrayItem> foodscrap = ArrayItem.getQuery();
-                            //foodscrap.whereEqualTo("hour", strHour);
                             foodscrap.whereEqualTo(wkFood, "Y");
 
                             ParseQuery<ArrayItem> garbage = ArrayItem.getQuery();
-                            //garbage.whereEqualTo("hour", strHour);
                             garbage.whereEqualTo(wkGarbage, "Y");
 
                             ParseQuery<ArrayItem> recycling = ArrayItem.getQuery();
-                            //recycling.whereEqualTo("hour", strHour);
                             recycling.whereEqualTo(wkRecycling, "Y");
 
                             List<ParseQuery<ArrayItem>> queries = new ArrayList<ParseQuery<ArrayItem>>();
@@ -465,7 +456,6 @@ public class MainActivity extends ActionBarActivity
                             queries.add(garbage);
                             queries.add(recycling);
 
-                            //ParseQuery<ArrayItem> finalQuery = ArrayItem.getQuery();
                             ParseQuery finalQuery = ParseQuery.or(queries);
 
                             if (sorting.equals("TIME")) {
@@ -479,10 +469,6 @@ public class MainActivity extends ActionBarActivity
                                     , distance
                             );
 
-
-                            //finalQuery.whereNear("location"
-                            //                , geoPointFromLocation(myLoc)
-                            //        );
                             finalQuery.setLimit(50);
 
                             return finalQuery;

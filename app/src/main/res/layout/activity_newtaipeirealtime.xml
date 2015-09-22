@@ -30,10 +30,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
         android:layout_above="@id/footerLayout">
-        <ListView
+        <!--<ListView
             android:id="@+id/listRealtimeInfo"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content" />-->
+        <fragment
+            android:id="@+id/map_fragment"
+            class="com.google.android.gms.maps.MapFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"/>
+
         <LinearLayout
             android:id="@+id/croutonview"
             android:layout_width="wrap_content"

@@ -34,6 +34,10 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Time;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.io.IOException;
 import java.util.List;
@@ -195,7 +199,6 @@ public class InfoActivity extends ActionBarActivity
         Time today = new Time();
         todayView.setText("今天是" + today.getDayOfWeekName());
 
-
         if (garbage) {
             //今天有收一般垃圾
             garbageView.setText("今天有收一般垃圾");
@@ -237,14 +240,6 @@ public class InfoActivity extends ActionBarActivity
                         , Double.valueOf(strToLng)), 17);
         map.animateCamera(center);
 
-
-        //Current
-       /* MarkerOptions markerOpt = new MarkerOptions();
-        markerOpt.position(new LatLng(Double.valueOf(strFromLat)
-                , Double.valueOf(strFromLng)));
-        markerOpt.title("現在位置");
-        markerOpt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-        map.addMarker(markerOpt).showInfoWindow();*/
         map.setMyLocationEnabled(true);
 
         //Marker
@@ -266,7 +261,12 @@ public class InfoActivity extends ActionBarActivity
 
         line = map.addPolyline(polylineOpt);
 
-        //MapUtils.DrawArrowHead(map, from, to);
+        if (lineid != "") {
+            //query lineid from realtime data set, and draw it on the map.
+            Log.d(TAG, "lineid=" + lineid);
+            drawRealTimeCar(lineid);
+        }
+
     }
 
     private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
@@ -280,9 +280,7 @@ public class InfoActivity extends ActionBarActivity
                 case R.id.menu_navi:
                     goBrowser();
                     break;
-
             }
-
             return true;
         }
     };
@@ -294,7 +292,6 @@ public class InfoActivity extends ActionBarActivity
 
         MenuItem menuItem1 = menu.findItem(R.id.menu_navi);
         menuItem1.setIcon(new IconicsDrawable(this, CommunityMaterial.Icon.cmd_navigation).actionBarSize().color(Color.WHITE));
-
 
         return true;
     }
@@ -437,5 +434,36 @@ public class InfoActivity extends ActionBarActivity
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.i(TAG, "GoogleApiClient connection failed");
+    }
+
+
+    private void drawRealTimeCar(String lineID) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("RealTime");
+        query.whereEqualTo("lindid", lineID);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> items, ParseException e) {
+                if (e == null) {
+                    Log.d(TAG, "Retrieved " + items.size());
+                    int i = 0;
+                    for (i = 0; i < items.size(); i++) {
+
+                        //Marker
+                        MarkerOptions marker = new MarkerOptions();
+                        marker.position(new LatLng(items.get(i).getParseGeoPoint("location").getLatitude()
+                                , items.get(i).getParseGeoPoint("location").getLongitude()));
+                        marker.title(items.get(i).get("address").toString())
+                                .snippet(items.get(i).get("cartime").toString());
+                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
+
+                        map.addMarker(marker).showInfoWindow();
+
+                    }
+
+                } else {
+                    Log.d(TAG, "Error: " + e.getMessage());
+                }
+            }
+        });
+
     }
 }
