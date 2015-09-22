@@ -45,7 +45,7 @@ public class ArrayItem extends ParseObject {
     }
 
     public String getCarTime() {
-        return getString("time");
+        return getString("time") + " - " + getCarNumber();
     }
 
     public String getCarHour() {

@@ -159,20 +159,11 @@ public class InfoActivity extends ActionBarActivity
         garbage = bundle.getBoolean("garbage");
         food = bundle.getBoolean("food");
         recycling = bundle.getBoolean("recycling");
-        realtime = bundle.getBoolean("realtime");
 
         timeView.setText("時間：" + time);
         addressView.setText("地址：" + address);
         carNumberView.setText("車次：" + carnumber);
         memoView.setText("備註：" + memo);
-
-        if (realtime) {
-            //新北市垃圾車即時資訊 隱藏這些欄位
-            memoView.setVisibility(View.GONE);
-            garbageView.setVisibility(View.GONE);
-            foodView.setVisibility(View.GONE);
-            recyclingView.setVisibility(View.GONE);
-        }
 
         //reset title
         Geocoder geocoder = new Geocoder(this, new Locale("zh", "TW"));
@@ -242,6 +233,13 @@ public class InfoActivity extends ActionBarActivity
 
         map.setMyLocationEnabled(true);
 
+        //show realtime car
+        if (lineid != "") {
+            //query lineid from realtime data set, and draw it on the map.
+            Log.d(TAG, "lineid=" + lineid);
+            drawRealTimeCar(lineid);
+        }
+
         //Marker
         MarkerOptions markerOpt2 = new MarkerOptions();
         markerOpt2.position(new LatLng(Double.valueOf(strToLat)
@@ -261,11 +259,7 @@ public class InfoActivity extends ActionBarActivity
 
         line = map.addPolyline(polylineOpt);
 
-        if (lineid != "") {
-            //query lineid from realtime data set, and draw it on the map.
-            Log.d(TAG, "lineid=" + lineid);
-            drawRealTimeCar(lineid);
-        }
+
 
     }
 
@@ -439,7 +433,7 @@ public class InfoActivity extends ActionBarActivity
 
     private void drawRealTimeCar(String lineID) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("RealTime");
-        query.whereEqualTo("lindid", lineID);
+        query.whereEqualTo("lineid", lineID);
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> items, ParseException e) {
                 if (e == null) {
@@ -455,7 +449,7 @@ public class InfoActivity extends ActionBarActivity
                                 .snippet(items.get(i).get("cartime").toString());
                         marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
 
-                        map.addMarker(marker).showInfoWindow();
+                        map.addMarker(marker);
 
                     }
 

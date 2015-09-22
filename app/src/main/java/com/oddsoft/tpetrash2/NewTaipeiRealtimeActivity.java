@@ -71,12 +71,8 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "NewTaipeiRealtime";
-    private static int distance;
-    private static String sorting;
 
     private GoogleMap map;
-    //@Bind(R.id.listRealtimeInfo)
-    //ListView listView;
 
     @Bind(R.id.pull_to_refresh)
     SwipeRefreshLayout mSwipeLayout;
@@ -174,7 +170,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
                     (ViewGroup)findViewById(R.id.croutonview)).show();
         }
 
-        getPref();
         adView();
 
         mSwipeLayout.setOnRefreshListener(this);
@@ -208,16 +203,14 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
                 Log.d(TAG, "location = " + myLoc.toString());
 
             ParseQuery<ParseObject> query = ParseQuery.getQuery("RealTime");
-            query.whereWithinKilometers("location", geoPointFromLocation(myLoc), 100);
-            //query.whereEqualTo("playerName", "Dan Stemkoski");
+
+            //query.whereWithinKilometers("location", geoPointFromLocation(myLoc), 100);
+
             query.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> items, ParseException e) {
                     if (e == null) {
-                        //Log.d(TAG, "Retrieved " + items.size());
                         int i = 0;
                         for (i = 0; i < items.size(); i++) {
-                            //Log.d(TAG, items.get(i).get("address").toString());
-
                             //Marker
                             MarkerOptions marker = new MarkerOptions();
                             marker.position(new LatLng(items.get(i).getParseGeoPoint("location").getLatitude()
@@ -226,7 +219,7 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
                                     .snippet(items.get(i).get("cartime").toString());
                             marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
 
-                            map.addMarker(marker).showInfoWindow();
+                            map.addMarker(marker);
 
                         }
 
@@ -235,79 +228,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
                     }
                 }
             });
-
-/*
-            ParseQueryAdapter.QueryFactory<RealtimeOItem> factory =
-                    new ParseQueryAdapter.QueryFactory<RealtimeOItem>() {
-                        public ParseQuery<RealtimeOItem> create() {
-
-                            ParseQuery<RealtimeOItem> query = RealtimeOItem.getQuery();
-
-                            query.whereWithinKilometers("location"
-                                    , geoPointFromLocation(myLoc)
-                                    , 100 //distance
-                            );
-
-                            query.setLimit(50);
-
-                            return query;
-                        }
-                    };
-
-            // Set up the query adapter
-            listAdapter = new ParseQueryAdapter<RealtimeOItem>(this, factory) {
-                @Override
-                public View getItemView(RealtimeOItem trash, View view, ViewGroup parent) {
-                    if (view == null) {
-                        view = View.inflate(getContext(), R.layout.listitem_realtime, null);
-                    }
-
-                    TextView timeView = (TextView) view.findViewById(R.id.tvCarTime);
-                    TextView addressView = (TextView) view.findViewById(R.id.tvLocation);
-                    TextView distanceView = (TextView) view.findViewById(R.id.tvDistance);
-
-                    timeView.setText(trash.getCarTime());
-                    distanceView.setText(trash.getDistance(geoPointFromLocation(myLoc)).toString());
-                    addressView.setText(trash.getAddress());
-
-                    return view;
-                }
-            };
-
-            listAdapter.setPaginationEnabled(false);
-            listAdapter.addOnQueryLoadListener(new ParseQueryAdapter.OnQueryLoadListener<RealtimeOItem>() {
-
-                @Override
-                public void onLoading() {
-                    progressWheel.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onLoaded(List<RealtimeOItem> objects, Exception e) {
-                    progressWheel.setVisibility(View.GONE);
-                    //No data
-                    if (listView.getCount() == 0) {
-                        String msg = String.valueOf(distance) + "公里"
-                                + getString(R.string.data_not_found);
-
-                        Crouton.makeText(NewTaipeiRealtimeActivity.this, msg, Style.CONFIRM,
-                                (ViewGroup)findViewById(R.id.croutonview)).show();
-
-                    }
-                }
-            });
-
-            listView.setAdapter(listAdapter);
-
-            // Set up the handler for an item's selection
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    final RealtimeOItem item = listAdapter.getItem(position);
-                    //Open Detail Page
-                    goIntent(item);
-                }
-            });
-*/
 
 
         } else {
@@ -399,7 +319,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     protected void onResume() {
         super.onResume();
 
-        getPref();
         if (adView != null)
             adView.resume();
 
@@ -442,34 +361,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
 
         }
         adView.loadAd(adRequest);
-
-    }
-
-    private void goIntent(RealtimeOItem item) {
-
-        ga.trackEvent(this, "Location", "RealTimeLocation", item.getAddress(), 0);
-
-
-        Intent intent = new Intent();
-        intent.setClass(this, InfoActivity.class);
-        Bundle bundle = new Bundle();
-
-        bundle.putBoolean("realtime", true);
-        bundle.putString("fromLat", String.valueOf(myLoc.getLatitude()));
-        bundle.putString("fromLng", String.valueOf(myLoc.getLongitude()));
-        bundle.putString("toLat", String.valueOf(item.getLocation().getLatitude()));
-        bundle.putString("toLng", String.valueOf(item.getLocation().getLongitude()));
-
-        bundle.putString("address", item.getAddress());
-        //bundle.putString("carno", item.getCarNO());
-        bundle.putString("carnumber", item.getCarNo());
-        bundle.putString("time", item.getCarTime());
-
-        intent.putExtras(bundle);
-
-        //if (item.getDistance() != 999999999) {
-            startActivityForResult(intent, 0);
-        //}
 
     }
 
@@ -613,14 +504,5 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         lastLocation = location;
     }
 
-    private void getPref() {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(getBaseContext());
-        String distancePreference = prefs.getString("distance", "3");
-        String sortingPreference = prefs.getString("sorting", "DIST");
-
-        distance = Integer.valueOf(distancePreference);
-        sorting = String.valueOf(sortingPreference);
-    }
 
 }

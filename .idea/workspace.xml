@@ -33,10 +33,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dcf49f31-3f98-420b-809e-f77cab431e9b" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/ArrayItem.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/ArrayItem.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/InfoActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/InfoActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/NewTaipeiRealtimeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/NewTaipeiRealtimeActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_newtaipeirealtime.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_newtaipeirealtime.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TPTrash.iws" />
@@ -101,80 +100,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4229692">
-              <caret line="430" column="0" selection-start-line="430" selection-start-column="0" selection-end-line="430" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#initDrawerList#0;class#MainActivity#0" expanded="false" />
-                <element signature="method#selectMenuItem#0;class#MainActivity#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="InfoActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/InfoActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.3333333">
-              <caret line="443" column="17" selection-start-line="443" selection-start-column="17" selection-end-line="443" selection-end-column="17" />
-              <folding>
-                <element signature="e#5775#5803#0" expanded="true" />
-                <element signature="e#6075#6103#0" expanded="true" />
-                <element signature="method#onOptionsItemSelected#0;class#InfoActivity#0" expanded="false" />
-                <element signature="method#goBrowser#0;class#InfoActivity#0" expanded="false" />
-                <element signature="method#onStop#0;class#InfoActivity#0" expanded="false" />
-                <element signature="method#onStart#0;class#InfoActivity#0" expanded="false" />
-                <element signature="method#onPause#0;class#InfoActivity#0" expanded="false" />
-                <element signature="method#onResume#0;class#InfoActivity#0" expanded="false" />
-                <element signature="method#configGoogleApiClient#0;class#InfoActivity#0" expanded="false" />
-                <element signature="method#configLocationRequest#0;class#InfoActivity#0" expanded="false" />
-                <element signature="method#onLocationChanged#0;class#InfoActivity#0" expanded="false" />
-                <element signature="e#15152#15153#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NewTaipeiRealtimeActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/NewTaipeiRealtimeActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.111111">
-              <caret line="237" column="0" selection-start-line="209" selection-start-column="0" selection-end-line="237" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#7035#8262#0" expanded="true" />
-                <element signature="e#8261#8262#0" expanded="true" />
-                <element signature="e#11400#11423#0" expanded="true" />
-                <element signature="method#goIntent#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="activity_newtaipeirealtime.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_newtaipeirealtime.xml">
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.6551723">
-              <caret line="37" column="41" selection-start-line="37" selection-start-column="29" selection-end-line="37" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="activity_info.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-land/activity_info.xml">
           <provider editor-type-id="android-designer">
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.2413793">
+            <state vertical-scroll-proportion="-3.5517242">
               <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="86" selection-end-column="42" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Application.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/Application.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.29131654">
+              <caret line="25" column="47" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -2475,12 +2418,12 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/realtime/JsonService.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/realtime/ParseRealTimeItem.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/realtime/RealtimeOItem.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/Application.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/ArrayItem.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_newtaipeirealtime.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/NewTaipeiRealtimeActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/InfoActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/ArrayItem.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/InfoActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/NewTaipeiRealtimeActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/Application.java" />
       </list>
     </option>
   </component>
@@ -2554,41 +2497,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="AndroidView">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TPTrash" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Gradle Scripts" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TPTrash" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TPTrash" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -2839,6 +2747,41 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TPTrash" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+      <pane id="AndroidView">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TPTrash" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Gradle Scripts" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TPTrash" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -3230,35 +3173,23 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/NewTaipeiRealtimeActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="189" column="87" selection-start-line="189" selection-start-column="27" selection-end-line="189" selection-end-column="87" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#onOptionsItemSelected#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onStop#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onStart#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onPause#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onResume#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#adView#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#goIntent#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#isGoogleServicesAvailable#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#getLocation#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onConnected#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onConnectionSuspended#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onConnectionFailed#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#configGoogleApiClient#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onLocationChanged#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/InfoActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="178" column="0" selection-start-line="178" selection-start-column="0" selection-end-line="178" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#5462#5490#0" expanded="true" />
+            <element signature="e#5762#5790#0" expanded="true" />
+            <element signature="e#8473#8884#0" expanded="true" />
+            <element signature="e#8883#8884#0" expanded="true" />
+            <element signature="e#11492#11493#0" expanded="true" />
+            <element signature="e#11525#11526#0" expanded="true" />
+            <element signature="method#configGoogleApiClient#0;class#InfoActivity#0" expanded="false" />
+            <element signature="method#configLocationRequest#0;class#InfoActivity#0" expanded="false" />
+            <element signature="method#onLocationChanged#0;class#InfoActivity#0" expanded="false" />
+            <element signature="e#13803#14853#0" expanded="true" />
+            <element signature="e#14852#14853#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -3275,20 +3206,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#onOptionsItemSelected#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onStop#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onStart#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onPause#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onResume#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#adView#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#goIntent#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#isGoogleServicesAvailable#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#getLocation#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onConnected#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onConnectionSuspended#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onConnectionFailed#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#configGoogleApiClient#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-            <element signature="method#onLocationChanged#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -3574,30 +3491,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/Application.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29085872">
-          <caret line="25" column="47" selection-start-line="25" selection-start-column="43" selection-end-line="25" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-land/activity_info.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.2413793">
-          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="86" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/realtime/RealtimeOItem.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.16806723">
           <caret line="9" column="25" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3610,17 +3507,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
           <caret line="186" column="55" selection-start-line="186" selection-start-column="52" selection-end-line="186" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/ArrayItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13636364">
-          <caret line="3" column="18" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3628,22 +3514,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
           <caret line="20" column="13" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/NewTaipeiRealtimeActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.111111">
-          <caret line="237" column="0" selection-start-line="209" selection-start-column="0" selection-end-line="237" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#7035#8262#0" expanded="true" />
-            <element signature="e#8261#8262#0" expanded="true" />
-            <element signature="e#11400#11423#0" expanded="true" />
-            <element signature="method#goIntent#0;class#NewTaipeiRealtimeActivity#0" expanded="false" />
-          </folding>
-        </state>
+    <entry file="file://$USER_HOME$/Desktop/device-2015-09-22-134107.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_newtaipeirealtime.xml">
@@ -3651,42 +3527,82 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.6551723">
+        <state vertical-scroll-proportion="0.0">
           <caret line="37" column="41" selection-start-line="37" selection-start-column="29" selection-end-line="37" selection-end-column="41" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/NewTaipeiRealtimeActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.0168067">
+          <caret line="172" column="0" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/InfoActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.3333333">
-          <caret line="443" column="17" selection-start-line="443" selection-start-column="17" selection-end-line="443" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.12605043">
+          <caret line="161" column="0" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
           <folding>
-            <element signature="e#5775#5803#0" expanded="true" />
-            <element signature="e#6075#6103#0" expanded="true" />
-            <element signature="method#onOptionsItemSelected#0;class#InfoActivity#0" expanded="false" />
-            <element signature="method#goBrowser#0;class#InfoActivity#0" expanded="false" />
-            <element signature="method#onStop#0;class#InfoActivity#0" expanded="false" />
-            <element signature="method#onStart#0;class#InfoActivity#0" expanded="false" />
-            <element signature="method#onPause#0;class#InfoActivity#0" expanded="false" />
-            <element signature="method#onResume#0;class#InfoActivity#0" expanded="false" />
+            <element signature="e#5462#5490#0" expanded="true" />
+            <element signature="e#5762#5790#0" expanded="true" />
+            <element signature="e#8473#8884#0" expanded="true" />
+            <element signature="e#8883#8884#0" expanded="true" />
+            <element signature="e#11492#11493#0" expanded="true" />
+            <element signature="e#11525#11526#0" expanded="true" />
             <element signature="method#configGoogleApiClient#0;class#InfoActivity#0" expanded="false" />
             <element signature="method#configLocationRequest#0;class#InfoActivity#0" expanded="false" />
             <element signature="method#onLocationChanged#0;class#InfoActivity#0" expanded="false" />
-            <element signature="e#15152#15153#0" expanded="true" />
+            <element signature="e#13803#14853#0" expanded="true" />
+            <element signature="e#14852#14853#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4229692">
-          <caret line="430" column="0" selection-start-line="430" selection-start-column="0" selection-end-line="430" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="732" column="57" selection-start-line="732" selection-start-column="38" selection-end-line="732" selection-end-column="57" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#initDrawerList#0;class#MainActivity#0" expanded="false" />
             <element signature="method#selectMenuItem#0;class#MainActivity#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/ArrayItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7535014">
+          <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#997#998#0" expanded="true" />
+            <element signature="e#1062#1063#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-land/activity_info.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.5517242">
+          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="86" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/oddsoft/tpetrash2/Application.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.29131654">
+          <caret line="25" column="47" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
+          <folding />
         </state>
       </provider>
     </entry>
