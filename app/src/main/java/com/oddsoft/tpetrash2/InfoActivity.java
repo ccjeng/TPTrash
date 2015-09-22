@@ -2,8 +2,6 @@ package com.oddsoft.tpetrash2;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -27,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -50,7 +48,8 @@ import butterknife.ButterKnife;
 public class InfoActivity extends ActionBarActivity
         implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener
+        /*SwipeRefreshLayout.OnRefreshListener*/ {
 
     private static final String TAG = Application.class.getSimpleName();
 
@@ -62,6 +61,7 @@ public class InfoActivity extends ActionBarActivity
     // A fast interval ceiling
     private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = 1000;
 
+    public static final int REFRESH_DELAY = 1000;
 
     @Bind(R.id.todayView)
     TextView todayView;
@@ -81,14 +81,14 @@ public class InfoActivity extends ActionBarActivity
     @Bind(R.id.address)
     TextView addressView;
 
-    @Bind(R.id.carnumber)
-    TextView carNumberView;
-
     @Bind(R.id.memo)
     TextView memoView;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+
+    //@Bind(R.id.pull_to_refresh)
+    //SwipeRefreshLayout mSwipeLayout;
 
     private String strFrom = "";
     private String strFromLat = "";
@@ -99,21 +99,19 @@ public class InfoActivity extends ActionBarActivity
     private String strToLng = "";
 
     private String address;
-    private String carno;
-    private String carnumber;
     private String time;
     private String memo;
     private String lineid;
     private Boolean garbage;
     private Boolean food;
     private Boolean recycling;
-    private Boolean realtime;
 
     // Map fragment
     private GoogleMap map;
     private Analytics ga;
 
     private Polyline line;
+    private Marker markerCar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +133,13 @@ public class InfoActivity extends ActionBarActivity
         // Menu item click 的監聽事件一樣要設定在 setSupportActionBar 才有作用
         toolbar.setOnMenuItemClickListener(onMenuItemClick);
 
+        /*
+        mSwipeLayout.setOnRefreshListener(this);
+        mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light, android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+*/
+
         configGoogleApiClient();
         configLocationRequest();
         if (!locationClient.isConnected()) {
@@ -152,7 +157,7 @@ public class InfoActivity extends ActionBarActivity
         strTo = strToLat + "," + strToLng;
 
         address = bundle.getString("address");
-        carnumber = bundle.getString("carnumber");
+        //carnumber = bundle.getString("carnumber");
         time = bundle.getString("time");
         memo = bundle.getString("memo");
         lineid = bundle.getString("lineid");
@@ -160,32 +165,11 @@ public class InfoActivity extends ActionBarActivity
         food = bundle.getBoolean("food");
         recycling = bundle.getBoolean("recycling");
 
-        timeView.setText("時間：" + time);
         addressView.setText("地址：" + address);
-        carNumberView.setText("車次：" + carnumber);
         memoView.setText("備註：" + memo);
 
-        //reset title
-        Geocoder geocoder = new Geocoder(this, new Locale("zh", "TW"));
-        String current_location = "現在位置:";
-        try {
-            List<Address> addressList = geocoder.getFromLocation(Double.valueOf(strFromLat)
-                    , Double.valueOf(strFromLng), 1);
-
-            if (addressList == null) {
-                current_location = getString(R.string.app_name);
-            } else {
-                current_location = current_location + addressList.get(0).getAdminArea() + "" + addressList.get(0).getLocality();
-            }
-
-        } catch (IOException e) {
-
-            Log.d(TAG, e.toString());
-
-            current_location = getString(R.string.app_name);
-        }
-
-        getSupportActionBar().setTitle(current_location);
+        //set toolbar title
+        getSupportActionBar().setTitle(time);
 
         Time today = new Time();
         todayView.setText("今天是" + today.getDayOfWeekName());
@@ -236,18 +220,17 @@ public class InfoActivity extends ActionBarActivity
         //show realtime car
         if (lineid != "") {
             //query lineid from realtime data set, and draw it on the map.
-            Log.d(TAG, "lineid=" + lineid);
             drawRealTimeCar(lineid);
         }
 
         //Marker
-        MarkerOptions markerOpt2 = new MarkerOptions();
-        markerOpt2.position(new LatLng(Double.valueOf(strToLat)
-                , Double.valueOf(strToLng)));
-        markerOpt2.title(address);
-        markerOpt2.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
+        MarkerOptions markerOpt = new MarkerOptions();
+        markerOpt.position(new LatLng(Double.valueOf(strToLat), Double.valueOf(strToLng)))
+                .title(address)
+                .snippet(time)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
 
-        map.addMarker(markerOpt2).showInfoWindow();
+        map.addMarker(markerOpt).showInfoWindow();
 
         //Draw Line
         PolylineOptions polylineOpt = new PolylineOptions();
@@ -279,6 +262,26 @@ public class InfoActivity extends ActionBarActivity
         }
     };
 
+    /*
+    SwipeRefreshLayout
+ */
+    /*
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (lineid != "") {
+                    //query lineid from realtime data set, and draw it on the map.
+                    drawRealTimeCar(lineid);
+                }
+                mSwipeLayout.setRefreshing(false);
+            }
+        }, REFRESH_DELAY);
+
+    }
+    */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -307,7 +310,6 @@ public class InfoActivity extends ActionBarActivity
     private void goBrowser() {
 
         ga.trackEvent(this, "Click", "Button", "Google Map", 0);
-        //Location myLoc = (currentLocation == null) ? lastLocation : currentLocation;
         String from = "saddr=" + strFrom;
         String to = "daddr=" + strTo;
         String para = "&hl=zh&dirflg=w";
@@ -430,26 +432,30 @@ public class InfoActivity extends ActionBarActivity
         Log.i(TAG, "GoogleApiClient connection failed");
     }
 
-
     private void drawRealTimeCar(String lineID) {
+
+        //if (markerCar!= null) {
+        //    markerCar.remove();
+        //}
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery("RealTime");
         query.whereEqualTo("lineid", lineID);
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> items, ParseException e) {
                 if (e == null) {
-                    Log.d(TAG, "Retrieved " + items.size());
+
                     int i = 0;
                     for (i = 0; i < items.size(); i++) {
 
                         //Marker
-                        MarkerOptions marker = new MarkerOptions();
-                        marker.position(new LatLng(items.get(i).getParseGeoPoint("location").getLatitude()
+                        MarkerOptions markerOption = new MarkerOptions();
+                        markerOption.position(new LatLng(items.get(i).getParseGeoPoint("location").getLatitude()
                                 , items.get(i).getParseGeoPoint("location").getLongitude()));
-                        marker.title(items.get(i).get("address").toString())
+                        markerOption.title(items.get(i).get("address").toString())
                                 .snippet(items.get(i).get("cartime").toString());
-                        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
+                        markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
 
-                        map.addMarker(marker);
+                        markerCar = map.addMarker(markerOption);
 
                     }
 

@@ -2,88 +2,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.oddsoft.tpetrash2.InfoActivity"
-    android:background="@color/write">
+    android:background="@color/write"
+    tools:context="com.oddsoft.tpetrash2.InfoActivity">
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
-        />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/todayView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/garbageView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/todayView"
-        />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/foodView"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/garbageView"
-        />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/recyclingView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/foodView"
-        />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/time"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/recyclingView"
-        />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="gone" />
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/address"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/time"
-        />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/carnumber"
-        android:layout_below="@+id/address"
-        />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/memo"
-        android:layout_below="@+id/carnumber"
-        />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/address"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <fragment
         android:id="@+id/map_fragment"
         class="com.google.android.gms.maps.MapFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1"
+        android:layout_below="@+id/memo"
         android:layout_marginTop="16dp"
-        android:layout_below="@+id/memo"/>
+        android:layout_weight="1" />
+
 
 </RelativeLayout>

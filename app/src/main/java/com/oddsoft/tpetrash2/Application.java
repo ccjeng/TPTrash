@@ -38,7 +38,6 @@ public class Application extends android.app.Application {
     private static final String PARSE_APPLICATION_ID = "nxkxfDhpFQBXOReTPFIPhGIaYowmT5uuscj3w3Kb";
     private static final String PARSE_CLIENT_KEY = "oo7CwnSrT3XCjVHuN3r1JBw7rvJzjmYZCRCX9e2U";
 
-
     public Application() {
     }
 
@@ -47,7 +46,7 @@ public class Application extends android.app.Application {
         super.onCreate();
 
         ParseObject.registerSubclass(ArrayItem.class);
-        ParseObject.registerSubclass(RealtimeOItem.class);
+        //ParseObject.registerSubclass(RealtimeOItem.class);
 
         Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
         ParseInstallation.getCurrentInstallation().saveInBackground();

@@ -729,15 +729,12 @@ public class MainActivity extends ActionBarActivity
         bundle.putString("toLng", String.valueOf(item.getLocation().getLongitude()));
 
         bundle.putString("address", item.getFullAddress());
-        //bundle.putString("carno", item.getCarNo());
-        bundle.putString("carnumber", item.getCarNumber());
         bundle.putString("time", item.getCarTime());
         bundle.putBoolean("garbage", item.checkTodayAvailableGarbage());
         bundle.putBoolean("food", item.checkTodayAvailableFood());
         bundle.putBoolean("recycling", item.checkTodayAvailableRecycling());
         bundle.putString("memo", item.getMemo());
         bundle.putString("lineid", item.getLineID());
-
 
         intent.putExtras(bundle);
 
@@ -819,6 +816,7 @@ public class MainActivity extends ActionBarActivity
 
         //call Parse service to get data
         //parseQuery(hour);
+
         if (!stopAutoSelection) {
             hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
         }

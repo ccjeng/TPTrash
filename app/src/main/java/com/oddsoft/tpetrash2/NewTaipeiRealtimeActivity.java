@@ -2,27 +2,21 @@ package com.oddsoft.tpetrash2;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -51,14 +45,11 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
-import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 /**
@@ -79,9 +70,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
-    @Bind(R.id.progress_wheel)
-    ProgressWheel progressWheel;
 
     private Analytics ga;
     private AdView adView;
@@ -166,8 +154,9 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
             getData();
 
         } else {
-            Crouton.makeText(NewTaipeiRealtimeActivity.this, R.string.network_error, Style.ALERT,
-                    (ViewGroup)findViewById(R.id.croutonview)).show();
+            //Network error
+            Toast.makeText(NewTaipeiRealtimeActivity.this, R.string.network_error, Toast.LENGTH_LONG).show();
+
         }
 
         adView();
@@ -202,38 +191,41 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
             if (Application.APPDEBUG)
                 Log.d(TAG, "location = " + myLoc.toString());
 
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("RealTime");
+            //clear map markers
+            map.clear();
 
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("RealTime");
+            query.setLimit(300);
             //query.whereWithinKilometers("location", geoPointFromLocation(myLoc), 100);
 
             query.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> items, ParseException e) {
+
                     if (e == null) {
                         int i = 0;
                         for (i = 0; i < items.size(); i++) {
                             //Marker
                             MarkerOptions marker = new MarkerOptions();
                             marker.position(new LatLng(items.get(i).getParseGeoPoint("location").getLatitude()
-                                    , items.get(i).getParseGeoPoint("location").getLongitude()));
-                            marker.title(items.get(i).get("address").toString())
-                                    .snippet(items.get(i).get("cartime").toString());
-                            marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
-
+                                       , items.get(i).getParseGeoPoint("location").getLongitude()))
+                                    .title(items.get(i).get("address").toString())
+                                    .snippet(items.get(i).get("cartime").toString())
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
                             map.addMarker(marker);
-
                         }
 
                     } else {
                         Log.d(TAG, "Error: " + e.getMessage());
                     }
+
                 }
             });
 
 
         } else {
             //location error
-            Crouton.makeText(NewTaipeiRealtimeActivity.this, R.string.location_error, Style.ALERT,
-                    (ViewGroup)findViewById(R.id.croutonview)).show();
+            Toast.makeText(NewTaipeiRealtimeActivity.this, R.string.location_error, Toast.LENGTH_LONG).show();
+
         }
     }
 
@@ -334,8 +326,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     protected void onDestroy() {
         if (adView != null)
             adView.destroy();
-
-        Crouton.cancelAllCroutons();
         super.onDestroy();
     }
 
@@ -456,8 +446,7 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
 
         // 裝置沒有安裝Google Play服務
         if (errorCode == ConnectionResult.SERVICE_MISSING) {
-            Crouton.makeText(NewTaipeiRealtimeActivity.this, R.string.google_play_service_missing, Style.ALERT,
-                    (ViewGroup)findViewById(R.id.croutonview)).show();
+            Toast.makeText(NewTaipeiRealtimeActivity.this, R.string.google_play_service_missing, Toast.LENGTH_LONG).show();
         }
 
     }
