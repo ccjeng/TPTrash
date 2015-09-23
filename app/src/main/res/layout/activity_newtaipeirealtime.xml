@@ -7,26 +7,17 @@
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
-        />
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/pull_to_refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:layout_above="@id/footerLayout">
+        android:layout_alignParentTop="true" />
 
-        <fragment
-            android:id="@+id/map_fragment"
-            class="com.google.android.gms.maps.MapFragment"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"/>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <fragment
+        android:id="@+id/map_fragment"
+        class="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/footerLayout" />
 
 
     <RelativeLayout
@@ -34,13 +25,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
-<!--
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:adSize="SMART_BANNER"
-            app:adUnitId="ca-app-pub-6914084100751028/1776974015" />-->
+        <!--
+                <com.google.android.gms.ads.AdView
+                    android:id="@+id/adView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:adSize="SMART_BANNER"
+                    app:adUnitId="ca-app-pub-6914084100751028/1776974015" />-->
     </RelativeLayout>
 
 </RelativeLayout>

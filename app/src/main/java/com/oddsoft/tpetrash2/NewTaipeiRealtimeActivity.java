@@ -58,15 +58,12 @@ import butterknife.ButterKnife;
 public class NewTaipeiRealtimeActivity extends ActionBarActivity
         implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        SwipeRefreshLayout.OnRefreshListener {
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "NewTaipeiRealtime";
 
     private GoogleMap map;
 
-    @Bind(R.id.pull_to_refresh)
-    SwipeRefreshLayout mSwipeLayout;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -75,12 +72,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     private AdView adView;
     public static final int REFRESH_DELAY = 1000;
     //private VpadnBanner vponBanner = null;
-
-    /*
-  * Define a request code to send to Google Play services This code is returned in
-  * Activity.onActivityResult
-  */
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     /*
      * Constants for location update parameters
@@ -161,12 +152,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
 
         adView();
 
-        mSwipeLayout.setOnRefreshListener(this);
-        mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light, android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
-
     }
 
     private void getData() {
@@ -229,25 +214,15 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         }
     }
 
-    /*
-        SwipeRefreshLayout
-     */
-    @Override
-    public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getData();
-                mSwipeLayout.setRefreshing(false);
-            }
-        }, REFRESH_DELAY);
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.realtime, menu);
+
+        MenuItem menuItem1 = menu.findItem(R.id.menu_refresh);
+        menuItem1.setIcon(new IconicsDrawable(this, CommunityMaterial.Icon.cmd_refresh).actionBarSize().color(Color.WHITE));
+
         return true;
     }
 
@@ -257,7 +232,10 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                return true;
+                break;
+            case R.id.menu_refresh:
+                getData();
+                break;
         }
 
         return super.onOptionsItemSelected(item);

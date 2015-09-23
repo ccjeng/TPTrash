@@ -130,9 +130,6 @@ public class InfoActivity extends ActionBarActivity
                 .color(Color.WHITE)
                 .actionBarSize());
 
-        // Menu item click 的監聽事件一樣要設定在 setSupportActionBar 才有作用
-        toolbar.setOnMenuItemClickListener(onMenuItemClick);
-
         /*
         mSwipeLayout.setOnRefreshListener(this);
         mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -246,21 +243,6 @@ public class InfoActivity extends ActionBarActivity
 
     }
 
-    private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-
-            switch (menuItem.getItemId()) {
-                case android.R.id.home:
-                    finish();
-                    break;
-                case R.id.menu_navi:
-                    goBrowser();
-                    break;
-            }
-            return true;
-        }
-    };
 
     /*
     SwipeRefreshLayout
@@ -295,12 +277,14 @@ public class InfoActivity extends ActionBarActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
 
-        if (item.getItemId() == android.R.id.home) {
-            finish();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.menu_navi:
+                goBrowser();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
