@@ -129,6 +129,9 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         }
 
         map.setMyLocationEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(true);
+        map.getUiSettings().setCompassEnabled(true);
+
 
         if (isNetworkConnected()) {
             // 建立Google API用戶端物件

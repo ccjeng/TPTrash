@@ -142,8 +142,6 @@ public class MainActivity extends ActionBarActivity
     // Stores the current instantiation of the location client in this object
     private GoogleApiClient locationClient;
 
-    private boolean stopAutoSelection = false;
-
     private static final int DIALOG_WELCOME = 1;
     private static final int DIALOG_UPDATE = 2;
 
@@ -196,11 +194,9 @@ public class MainActivity extends ActionBarActivity
         });
 
         if (Utils.isNewInstallation(this)) {
-            stopAutoSelection = true;
             this.showDialog(DIALOG_WELCOME);
         } else
         if (Utils.newVersionInstalled(this)) {
-            stopAutoSelection = true;
             this.showDialog(DIALOG_UPDATE);
         }
 
@@ -613,7 +609,6 @@ public class MainActivity extends ActionBarActivity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             if (extras.containsKey("alert")) {
-                stopAutoSelection = true;
                 String msg = extras.getString("alert");
 
                 if (!msg.equals("")) {
@@ -817,9 +812,7 @@ public class MainActivity extends ActionBarActivity
         //call Parse service to get data
         //parseQuery(hour);
 
-        if (!stopAutoSelection) {
             hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
-        }
 
     }
 
