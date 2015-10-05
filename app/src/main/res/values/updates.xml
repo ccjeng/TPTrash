@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>3.4.0\n-新北市即時資訊改以地圖模式呈現\n-新北市垃圾車即時位置現在會顯示在定位點地圖上
+    	<item>3.4.1\n修正新北即時資訊Toolbar消失的問題
     	</item>
 </string-array>
 </resources>
