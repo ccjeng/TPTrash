@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -38,6 +39,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -112,6 +114,8 @@ public class InfoActivity extends ActionBarActivity
 
     private Polyline line;
     private Marker markerCar;
+
+    public static final String TRAVEL_MODE = "driving";// default
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,7 +205,6 @@ public class InfoActivity extends ActionBarActivity
             recyclingView.setTextColor(getResources().getColor(R.color.red));
         }
 
-
         // Set up the map fragment
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment)).getMap();
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -238,6 +241,9 @@ public class InfoActivity extends ActionBarActivity
         polylineOpt.add(from, to).color(Color.BLUE).width(5);
 
         line = map.addPolyline(polylineOpt);
+
+        //draw route on the map
+        //routeSearch(from, to);
 
 
 
@@ -450,4 +456,57 @@ public class InfoActivity extends ActionBarActivity
         });
 
     }
+
+    /*
+    private void routeSearch(LatLng origin, LatLng dest) {
+        // 顯示進度對話框
+        //ProgressDialogFragment.newInstance("檢索中...").show(
+        //        getSupportFragmentManager(), ProgressDialogFragment.FRG_TAG);
+
+        // 進行通訊
+        RequestDirectionsTask task = new RequestDirectionsTask(this, origin,
+                dest, TRAVEL_MODE);
+        task.setRequestDirectionsTaskCallback(
+                new RequestDirectionsTaskCallback() {
+
+                    @Override
+                    public void onSucceed(List<PushRoutes.Route> routes) {
+                        // 關閉進度對話框
+                        FragmentManager fm = getSupportFragmentManager();
+                        ProgressDialogFragment progressDialogFragment = (ProgressDialogFragment) fm
+                                .findFragmentByTag(ProgressDialogFragment.FRG_TAG);
+                        if (progressDialogFragment != null) {
+                            progressDialogFragment.dismissAllowingStateLoss();
+                        }
+
+                        // 開始繪製路線
+                        if (routes.size() > 0) {
+                            PolylineOptions lineOptions = new PolylineOptions();
+                            for (Route route : routes) {
+                                for (Leg leg : route.getLegs()) {
+                                    for (Step step : leg.getSteps()) {
+                                        lineOptions.addAll(step
+                                                .getPolylinePoints());
+                                        lineOptions.width(10);
+                                        lineOptions.color(0x550000ff);
+                                    }
+                                }
+                            }
+                            // 繪圖
+                            mGmap.addPolyline(lineOptions);
+                        } else {
+                            mGmap.clear();
+                            Toast.makeText(Ch1004.this, "無法取得路線資訊",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(Throwable e) {
+                        Toast.makeText(Ch1004.this,
+                                "路線搜尋中發生了錯誤(" + e + ")",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }).execute();
+    }*/
 }
