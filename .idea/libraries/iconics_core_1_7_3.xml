@@ -2,7 +2,7 @@
   <library name="iconics-core-1.7.3">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.mikepenz/iconics-core/1.7.3/res" />
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.mikepenz/iconics-core/1.7.3/classes.jar!/" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.mikepenz/iconics-core/1.7.3/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

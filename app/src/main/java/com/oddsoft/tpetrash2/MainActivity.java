@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -53,6 +54,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.drawer.DrawerItem;
 import com.oddsoft.tpetrash2.drawer.DrawerItemAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
+import com.oddsoft.tpetrash2.utils.Time;
 import com.oddsoft.tpetrash2.utils.Utils;
 import com.parse.ParseAnalytics;
 import com.parse.ParseGeoPoint;
@@ -543,7 +545,6 @@ public class MainActivity extends ActionBarActivity
                         Crouton.makeText(MainActivity.this, msg, Style.CONFIRM,
                                 (ViewGroup)findViewById(R.id.croutonview)).show();
 
-
                     }
                 }
             });
@@ -565,6 +566,11 @@ public class MainActivity extends ActionBarActivity
                     (ViewGroup)findViewById(R.id.croutonview)).show();
         }
 
+        //show 3/7 messages
+        if (Time.getDayOfWeekNumber().equals("3") || Time.getDayOfWeekNumber().equals("0")) {
+            Toast.makeText(this,"今天是"+Time.getDayOfWeekName()+"，台北市沒有收垃圾，新北市僅部分區域有收垃圾！"
+                    ,Toast.LENGTH_LONG).show();
+        }
     }
 
     /*
@@ -812,7 +818,7 @@ public class MainActivity extends ActionBarActivity
         //call Parse service to get data
         //parseQuery(hour);
 
-            hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
+        hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
 
     }
 

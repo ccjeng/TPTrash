@@ -22,7 +22,7 @@ public class Time {
     }
 
 
-    public static  String getDayOfWeekName() {
+    public static String getDayOfWeekName() {
         Calendar calendar = Calendar.getInstance();
         dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 

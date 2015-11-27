@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>3.4.1\n修正新北即時資訊Toolbar消失的問題
+    	<item>3.4.2\n週三和週日提示不收垃圾資訊
     	</item>
 </string-array>
 </resources>
