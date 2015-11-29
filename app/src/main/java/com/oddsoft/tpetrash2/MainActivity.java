@@ -156,7 +156,6 @@ public class MainActivity extends ActionBarActivity
         ga = new Analytics();
         ga.trackerPage(this);
 
-
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
         initActionBar();
@@ -223,8 +222,12 @@ public class MainActivity extends ActionBarActivity
         if (hour < 5) {
             hour = 5;
         }
-        //set default value
-        //hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
+
+        //show 3/7 messages
+        if (Time.getDayOfWeekNumber().equals("3") || Time.getDayOfWeekNumber().equals("0")) {
+            Toast.makeText(this,"今天是"+Time.getDayOfWeekName()+"，台北市沒有收垃圾，新北市僅部分區域有收垃圾！"
+                    ,Toast.LENGTH_LONG).show();
+        }
 
         getPref();
         adView();
@@ -566,11 +569,7 @@ public class MainActivity extends ActionBarActivity
                     (ViewGroup)findViewById(R.id.croutonview)).show();
         }
 
-        //show 3/7 messages
-        if (Time.getDayOfWeekNumber().equals("3") || Time.getDayOfWeekNumber().equals("0")) {
-            Toast.makeText(this,"今天是"+Time.getDayOfWeekName()+"，台北市沒有收垃圾，新北市僅部分區域有收垃圾！"
-                    ,Toast.LENGTH_LONG).show();
-        }
+
     }
 
     /*
@@ -803,7 +802,6 @@ public class MainActivity extends ActionBarActivity
         if (Application.APPDEBUG)
             Log.d(TAG, "onConnected - Connected to location services");
 
-
         currentLocation = getLocation();
 
         // 已經連線到Google Services
@@ -818,7 +816,11 @@ public class MainActivity extends ActionBarActivity
         //call Parse service to get data
         //parseQuery(hour);
 
-        hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
+        if (Application.getRefreshFlag()) {
+            hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
+            Application.setRefreshFlag(false);
+        }
+
 
     }
 

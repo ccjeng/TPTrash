@@ -10,7 +10,6 @@ import android.util.Log;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
-import com.oddsoft.tpetrash2.realtime.RealtimeOItem;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
@@ -46,7 +45,6 @@ public class Application extends android.app.Application {
         super.onCreate();
 
         ParseObject.registerSubclass(ArrayItem.class);
-        //ParseObject.registerSubclass(RealtimeOItem.class);
 
         Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
         ParseInstallation.getCurrentInstallation().saveInBackground();
@@ -94,5 +92,13 @@ public class Application extends android.app.Application {
     }
     public static void setCurrentLocation(Location l){
         mLocation = l;
+    }
+
+    private static Boolean mRefresh = true;
+    public static Boolean getRefreshFlag(){
+        return mRefresh;
+    }
+    public static void setRefreshFlag(Boolean s){
+        mRefresh = s;
     }
 }

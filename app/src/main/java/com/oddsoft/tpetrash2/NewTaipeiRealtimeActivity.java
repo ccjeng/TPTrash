@@ -37,7 +37,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.oddsoft.tpetrash2.realtime.RealtimeOItem;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -93,7 +92,6 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
     // Stores the current instantiation of the location client in this object
     private GoogleApiClient locationClient;
 
-    private ParseQueryAdapter<RealtimeOItem> listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
