@@ -7,14 +7,12 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
+
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -43,7 +41,6 @@ import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
 
 import java.util.List;
 
@@ -54,7 +51,7 @@ import butterknife.ButterKnife;
 /**
  * Created by andycheng on 2015/8/11.
  */
-public class NewTaipeiRealtimeActivity extends ActionBarActivity
+public class NewTaipeiRealtimeActivity extends AppCompatActivity
         implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -222,7 +219,7 @@ public class NewTaipeiRealtimeActivity extends ActionBarActivity
         getMenuInflater().inflate(R.menu.realtime, menu);
 
         MenuItem menuItem1 = menu.findItem(R.id.menu_refresh);
-        menuItem1.setIcon(new IconicsDrawable(this, CommunityMaterial.Icon.cmd_refresh).actionBarSize().color(Color.WHITE));
+        menuItem1.setIcon(new IconicsDrawable(this, CommunityMaterial.Icon.cmd_refresh).actionBar().color(Color.WHITE));
 
         return true;
     }

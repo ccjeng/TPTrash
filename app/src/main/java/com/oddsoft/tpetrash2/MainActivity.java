@@ -14,11 +14,11 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -51,8 +51,6 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.oddsoft.tpetrash2.drawer.DrawerItem;
-import com.oddsoft.tpetrash2.drawer.DrawerItemAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.oddsoft.tpetrash2.utils.Utils;
@@ -72,7 +70,7 @@ import butterknife.ButterKnife;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends AppCompatActivity
         implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -88,20 +86,16 @@ public class MainActivity extends ActionBarActivity
     @Bind(R.id.trashList)
     ListView trashListView;
 
-    @Bind(R.id.lsv_drawer_menu)
-    ListView mLsvDrawerMenu;
+    @Bind(R.id.navigation)
+    NavigationView navigation;
 
-    @Bind(R.id.llv_left_drawer)
-    LinearLayout mLlvDrawerContent;
-
-    @Bind(R.id.drw_layout)
-    DrawerLayout mDrawerLayout;
+    @Bind(R.id.drawerlayout)
+    DrawerLayout drawerLayout;
 
     private AdView adView;
     private String[] hourCode;
     private String[] hourName;
 
-    private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar actionbar;
 
     @Bind(R.id.toolbar)
@@ -109,9 +103,6 @@ public class MainActivity extends ActionBarActivity
 
     @Bind(R.id.progress_wheel)
     ProgressWheel progressWheel;
-
-    // 記錄被選擇的選單指標用
-    private int mCurrentMenuItemPosition = -1;
 
     /*
      * Define a request code to send to Google Play services This code is returned in
@@ -160,7 +151,6 @@ public class MainActivity extends ActionBarActivity
 
         initActionBar();
         initDrawer();
-        initDrawerList();
         showPushNotification();
 
         hourCode = getResources().getStringArray(R.array.hour_spinnner_code);
@@ -266,137 +256,85 @@ public class MainActivity extends ActionBarActivity
         toolbar.setNavigationIcon(new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_menu)
                 .color(Color.WHITE)
-                .actionBarSize());
+                .actionBar());
 
         actionbar = getSupportActionBar();
+
     }
 
     private void initDrawer() {
-        //mDrawerLayout = (DrawerLayout) findViewById(R.id.drw_layout);
-        // 設定 Drawer 的影子
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,
-                mDrawerLayout,    // 讓 Drawer Toggle 知道母體介面是誰
-                R.drawable.ic_drawer, // Drawer 的 Icon
-                R.string.app_name, // Drawer 被打開時的描述
-                R.string.app_name // Drawer 被關閉時的描述
-        ) {
-            //被打開後要做的事情
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onDrawerOpened(View drawerView) {
-                // 將 Title 設定為自定義的文字
-                actionbar.setTitle(R.string.app_name);
-            }
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                switch (id) {
+                    case R.id.navRecycle:
+                        startActivity(new Intent(MainActivity.this, RecycleActivity.class));
+                        break;
+                    case R.id.navRealtime:
+                        startActivity(new Intent(MainActivity.this, NewTaipeiRealtimeActivity.class));
+                        break;
+                    case R.id.navSetting:
+                        startActivity(new Intent(MainActivity.this, Prefs.class));
+                        break;
+                    case R.id.navAbout:
+                        new LibsBuilder()
+                                //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
+                                .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                                .withAboutIconShown(true)
+                                .withAboutVersionShown(true)
+                                .withAboutAppName(getString(R.string.app_name))
+                                .withActivityTitle(getString(R.string.about))
+                                .withAboutDescription(getString(R.string.license))
+                                        //start the activity
+                                .start(MainActivity.this);
+                        break;
+                    case R.id.navSuggest:
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("market://details?id=com.oddsoft.tpetrash2")));
+                        break;
 
-            //被關上後要做的事情
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                // 將 Title 設定回 APP 的名稱
-                actionbar.setTitle(R.string.app_name);
-            }
-        };
-
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-    }
-
-    private void initDrawerList() {
-
-        String[] drawer_menu = this.getResources().getStringArray(R.array.drawer_menu);
-
-        DrawerItem[] drawerItem = new DrawerItem[5];
-
-        drawerItem[0] = new DrawerItem(new IconicsDrawable(this)
-                .icon(FontAwesome.Icon.faw_recycle)
-                .color(Color.GRAY)
-                .sizeDp(24),
-                drawer_menu[0]);
-        drawerItem[1] = new DrawerItem(new IconicsDrawable(this)
-                .icon(FontAwesome.Icon.faw_truck)
-                .color(Color.GRAY)
-                .sizeDp(24),
-                drawer_menu[1]);
-        drawerItem[2] = new DrawerItem(new IconicsDrawable(this)
-                .icon(FontAwesome.Icon.faw_cog)
-                .color(Color.GRAY)
-                .sizeDp(24),
-                drawer_menu[2]);
-        drawerItem[3] = new DrawerItem(new IconicsDrawable(this)
-                .icon(FontAwesome.Icon.faw_info_circle)
-                .color(Color.GRAY)
-                .sizeDp(24),
-                drawer_menu[3]);
-        drawerItem[4] = new DrawerItem(new IconicsDrawable(this)
-                .icon(FontAwesome.Icon.faw_thumbs_up)
-                .color(Color.GRAY)
-                .sizeDp(24),
-                drawer_menu[4]);
-
-        DrawerItemAdapter adapter = new DrawerItemAdapter(this, R.layout.drawer_item, drawerItem);
-        mLsvDrawerMenu.setAdapter(adapter);
-
-        // 當清單選項的子物件被點擊時要做的動作
-        mLsvDrawerMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                selectMenuItem(position);
+                }
+                return false;
             }
         });
 
+        //change navigation drawer item icons
+        navigation.getMenu().findItem(R.id.navRecycle).setIcon(new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_recycle)
+                .color(Color.GRAY)
+                .sizeDp(24));
+
+        navigation.getMenu().findItem(R.id.navRealtime).setIcon(new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_truck)
+                .color(Color.GRAY)
+                .sizeDp(24));
+
+        navigation.getMenu().findItem(R.id.navSetting).setIcon(new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_cog)
+                .color(Color.GRAY)
+                .sizeDp(24));
+
+        navigation.getMenu().findItem(R.id.navAbout).setIcon(new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_info_circle)
+                .color(Color.GRAY)
+                .sizeDp(24));
+
+        navigation.getMenu().findItem(R.id.navSuggest).setIcon(new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_thumbs_up)
+                .color(Color.GRAY)
+                .sizeDp(24));
     }
 
-    private void selectMenuItem(int position) {
-        mCurrentMenuItemPosition = position;
-
-        switch (mCurrentMenuItemPosition) {
-            case 0:
-                startActivity(new Intent(this, RecycleActivity.class));
-                break;
-            case 1:
-                startActivity(new Intent(this, NewTaipeiRealtimeActivity.class));
-                break;
-            case 2:
-                startActivity(new Intent(this, Prefs.class));
-                break;
-            case 3:
-                //startActivity(new Intent(this, AboutActivity.class));
-                new LibsBuilder()
-                        //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
-                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                        .withAboutIconShown(true)
-                        .withAboutVersionShown(true)
-                        .withAboutAppName(getString(R.string.app_name))
-                        .withActivityTitle(getString(R.string.about))
-                        .withAboutDescription(getString(R.string.license))
-                                //start the activity
-                        .start(this);
-                break;
-            case 4:
-                startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("market://details?id=com.oddsoft.tpetrash2")));
-                break;
-        }
-
-        // 將選單的子物件設定為被選擇的狀態
-        mLsvDrawerMenu.setItemChecked(position, true);
-
-        // 關掉 Drawer
-        mDrawerLayout.closeDrawer(mLlvDrawerContent);
-    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     private void parseQuery(final int hour) {
@@ -591,7 +529,7 @@ public class MainActivity extends ActionBarActivity
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
+                drawerLayout.openDrawer(GravityCompat.START);
                 return true;
         }
 

@@ -2,7 +2,7 @@ package com.oddsoft.tpetrash2;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,7 +35,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 /**
  * Created by andycheng on 2015/7/10.
  */
-public class RecycleActivity extends ActionBarActivity {
+public class RecycleActivity extends AppCompatActivity {
 
     @Bind(R.id.searchText)
     AutoCompleteTextView searchText;
@@ -72,17 +72,16 @@ public class RecycleActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycle);
         ButterKnife.bind(this);
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
 
         setSupportActionBar(toolbar);
+        if (getSupportActionBar()!=null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         toolbar.setNavigationIcon(new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_keyboard_backspace)
                 .color(Color.WHITE)
-                .actionBarSize());
+                .actionBar());
 
         ga = new Analytics();
         ga.trackerPage(this);

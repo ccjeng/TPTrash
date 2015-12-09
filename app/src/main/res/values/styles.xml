@@ -22,4 +22,8 @@
         <item name="android:textColor">@color/color_primaryText</item>
     </style>
 
+    <style name="NavigationDrawerStyle">
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>

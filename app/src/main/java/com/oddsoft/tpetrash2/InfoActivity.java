@@ -5,8 +5,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -47,7 +46,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class InfoActivity extends ActionBarActivity
+public class InfoActivity extends AppCompatActivity
         implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener
@@ -127,12 +126,14 @@ public class InfoActivity extends ActionBarActivity
         ga.trackerPage(this);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar()!=null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         toolbar.setNavigationIcon(new IconicsDrawable(this)
                 .icon(CommunityMaterial.Icon.cmd_keyboard_backspace)
                 .color(Color.WHITE)
-                .actionBarSize());
+                .actionBar());
 
         /*
         mSwipeLayout.setOnRefreshListener(this);

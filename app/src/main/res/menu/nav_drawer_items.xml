@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/navRecycle"
+            android:title="@string/recycle"/>
+        <item
+            android:id="@+id/navRealtime"
+            android:title="@string/action_realtime"/>
+        <item
+            android:id="@+id/navSetting"
+            android:title="@string/action_settings"/>
+        <item
+            android:id="@+id/navAbout"
+            android:title="@string/about_subject"/>
+        <item
+            android:id="@+id/navSuggest"
+            android:title="@string/action_suggest"/>
+    </group>
+</menu>
