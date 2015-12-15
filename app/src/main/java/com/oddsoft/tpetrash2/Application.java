@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 public class Application extends android.app.Application {
     // Debugging switch 
-    public static final boolean APPDEBUG = true;
+    public static final boolean APPDEBUG = BuildConfig.DEBUG;
 
     // Debugging tag for the application
     public static final String APPTAG = Application.class.getSimpleName();
@@ -88,6 +88,11 @@ public class Application extends android.app.Application {
     //Global variable for current location
     private static Location mLocation;
     public static Location getCurrentLocation(){
+        if (mLocation == null) {
+            mLocation = new Location("");
+            mLocation.setLatitude(24.8979347);
+            mLocation.setLongitude(121.5393508);
+        }
         return mLocation;
     }
     public static void setCurrentLocation(Location l){

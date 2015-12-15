@@ -149,6 +149,10 @@ public class MainActivity extends AppCompatActivity
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
+        if (Application.APPDEBUG) {
+            Toast.makeText(this,"Debug Mode", Toast.LENGTH_LONG).show();
+        }
+
         initActionBar();
         initDrawer();
         showPushNotification();
