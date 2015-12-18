@@ -21,7 +21,7 @@ import com.parse.ParseQuery;
 
 import java.text.DecimalFormat;
 
-@ParseClassName("TPE121415")
+@ParseClassName("TPE121815")
 public class ArrayItem extends ParseObject {
 
     public String getAddress() {

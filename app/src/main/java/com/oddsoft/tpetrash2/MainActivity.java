@@ -374,6 +374,8 @@ public class MainActivity extends AppCompatActivity
 
                             String strHour = String.valueOf(hour);
 
+
+
                             String wkFood = Utils.getWeekFoodTag();
                             String wkGarbage = Utils.getWeekGarbageTag();
                             String wkRecycling = Utils.getWeekRecyclingTag();
