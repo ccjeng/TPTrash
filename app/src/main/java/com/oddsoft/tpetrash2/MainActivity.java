@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity
                 if (!hr.equals("5")) {
                     parseQuery(Integer.valueOf(hr));
                 }
-
             }
 
             @Override
@@ -345,20 +344,6 @@ public class MainActivity extends AppCompatActivity
 
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
-        //fake location
-        /*
-        if (Application.APPDEBUG) {
-            myLoc = new Location("");
-            //myLoc.setLatitude(24.8979347);
-            //myLoc.setLongitude(121.5393508);
-            //myLoc.setLatitude(25.0249034);
-            //myLoc.setLongitude(121.560214);
-            //Taipei City
-            myLoc.setLatitude(25.0950492);
-            myLoc.setLongitude(121.5246077);
-
-        }*/
-
         if (myLoc != null) {
 
             //set current location to global veriable
@@ -373,9 +358,6 @@ public class MainActivity extends AppCompatActivity
                         public ParseQuery<ArrayItem> create() {
 
                             String strHour = String.valueOf(hour);
-
-
-
                             String wkFood = Utils.getWeekFoodTag();
                             String wkGarbage = Utils.getWeekGarbageTag();
                             String wkRecycling = Utils.getWeekRecyclingTag();
@@ -545,10 +527,13 @@ public class MainActivity extends AppCompatActivity
     private void getPref() {
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
-        String distancePreference = prefs.getString("distance", "3");
+        String distancePreference = prefs.getString("distance", "1");
         String sortingPreference = prefs.getString("sorting", "DIST");
 
         distance = Integer.valueOf(distancePreference);
+        if (distance > 10) {
+            distance = 10;
+        }
         sorting = String.valueOf(sortingPreference);
     }
 

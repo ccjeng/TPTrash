@@ -29,16 +29,16 @@
     <string name="pref_distance">查詢範圍</string>
     <string name="pref_distance_summary">查詢距離(公里)</string>
     <string-array name="pref_distance_item">
+        <item>1 公里</item>
         <item>3 公里</item>
         <item>5公里</item>
         <item>10公里</item>
-        <item>15公里</item>
     </string-array>
     <string-array name="pref_distance_code">
+        <item>1</item>
         <item>3</item>
         <item>5</item>
         <item>10</item>
-        <item>15</item>
     </string-array>
 
     <string name="pref_sorting">排序方式</string>

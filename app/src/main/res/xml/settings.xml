@@ -6,7 +6,7 @@
             android:title="@string/pref_distance"
             android:summary="@string/pref_distance_summary"
             android:key="distance"
-            android:defaultValue="3"
+            android:defaultValue="1"
             android:entries="@array/pref_distance_item"
             android:entryValues="@array/pref_distance_code" />
         <ListPreference
