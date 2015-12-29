@@ -149,10 +149,6 @@ public class MainActivity extends AppCompatActivity
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
-        if (Application.APPDEBUG) {
-            Toast.makeText(this,"Debug Mode", Toast.LENGTH_LONG).show();
-        }
-
         initActionBar();
         initDrawer();
         showPushNotification();
@@ -182,8 +178,6 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-
             }
         });
 
@@ -403,6 +397,7 @@ public class MainActivity extends AppCompatActivity
                     };
 
             // Set up the query adapter
+            //todo change to recyclerview + cardview
             trashQueryAdapter = new ParseQueryAdapter<ArrayItem>(this, factory) {
                 @Override
                 public View getItemView(ArrayItem trash, View view, ViewGroup parent) {
