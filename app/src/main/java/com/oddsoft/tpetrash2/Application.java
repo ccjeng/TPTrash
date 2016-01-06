@@ -36,6 +36,7 @@ public class Application extends android.app.Application {
     //Parse
     private static final String PARSE_APPLICATION_ID = "nxkxfDhpFQBXOReTPFIPhGIaYowmT5uuscj3w3Kb";
     private static final String PARSE_CLIENT_KEY = "oo7CwnSrT3XCjVHuN3r1JBw7rvJzjmYZCRCX9e2U";
+    public  static final String PARSE_OBJECT_NAME = "TPE010616";
 
     public Application() {
     }

@@ -99,10 +99,13 @@ public class InfoActivity extends AppCompatActivity
     private String strToLat = "";
     private String strToLng = "";
 
+    private String city;
     private String address;
     private String time;
     private String memo;
     private String lineid;
+    private String lineName;
+    private String carNo;
     private Boolean garbage;
     private Boolean food;
     private Boolean recycling;
@@ -135,13 +138,6 @@ public class InfoActivity extends AppCompatActivity
                 .color(Color.WHITE)
                 .actionBar());
 
-        /*
-        mSwipeLayout.setOnRefreshListener(this);
-        mSwipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light, android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-*/
-
         configGoogleApiClient();
         configLocationRequest();
         if (!locationClient.isConnected()) {
@@ -158,8 +154,10 @@ public class InfoActivity extends AppCompatActivity
         strToLng = bundle.getString("toLng");
         strTo = strToLat + "," + strToLng;
 
+        city = bundle.getString("city");
         address = bundle.getString("address");
-        //carnumber = bundle.getString("carnumber");
+        lineName = bundle.getString("line");
+        carNo = bundle.getString("carno");
         time = bundle.getString("time");
         memo = bundle.getString("memo");
         lineid = bundle.getString("lineid");
@@ -224,6 +222,8 @@ public class InfoActivity extends AppCompatActivity
             drawRealTimeCar(lineid);
         }
 
+        drawLineCar();
+
         //Marker
         MarkerOptions markerOpt = new MarkerOptions();
         markerOpt.position(new LatLng(Double.valueOf(strToLat), Double.valueOf(strToLng)))
@@ -251,33 +251,13 @@ public class InfoActivity extends AppCompatActivity
     }
 
 
-    /*
-    SwipeRefreshLayout
- */
-    /*
-    @Override
-    public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (lineid != "") {
-                    //query lineid from realtime data set, and draw it on the map.
-                    drawRealTimeCar(lineid);
-                }
-                mSwipeLayout.setRefreshing(false);
-            }
-        }, REFRESH_DELAY);
-
-    }
-    */
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.info, menu);
 
         MenuItem menuItem1 = menu.findItem(R.id.menu_navi);
-        menuItem1.setIcon(new IconicsDrawable(this, CommunityMaterial.Icon.cmd_navigation).actionBarSize().color(Color.WHITE));
+        menuItem1.setIcon(new IconicsDrawable(this, CommunityMaterial.Icon.cmd_navigation).actionBar().color(Color.WHITE));
 
         return true;
     }
@@ -431,6 +411,7 @@ public class InfoActivity extends AppCompatActivity
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("RealTime");
         query.whereEqualTo("lineid", lineID);
+
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> items, ParseException e) {
                 if (e == null) {
@@ -456,6 +437,41 @@ public class InfoActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    private void drawLineCar(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(Application.PARSE_OBJECT_NAME);
+        query.whereEqualTo("line", lineName);
+        query.whereNotEqualTo("address", address);
+
+        if (city.equals("Taipei")) {
+            query.whereEqualTo("carno", carNo);
+        }
+
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    public void done(List<ParseObject> items, ParseException e) {
+                        if (e == null) {
+
+                            int i = 0;
+
+                            for (i = 0; i < items.size(); i++) {
+                                //Marker
+                                MarkerOptions markerOption = new MarkerOptions();
+                                markerOption.position(new LatLng(items.get(i).getParseGeoPoint("location").getLatitude()
+                                        , items.get(i).getParseGeoPoint("location").getLongitude()));
+                                markerOption.title(items.get(i).get("address").toString())
+                                        .snippet(items.get(i).get("time").toString()+ " [" + items.get(i).get("carno").toString()+ "]" );
+                                markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
+
+                                markerCar = map.addMarker(markerOption);
+
+                            }
+
+                        } else {
+                            Log.d(TAG, "Error: " + e.getMessage());
+                        }
+                    }
+                });
     }
 
     /*

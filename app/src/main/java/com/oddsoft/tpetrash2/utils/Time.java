@@ -17,7 +17,7 @@ public class Time {
     public static String getDayOfWeekNumber() {
         Calendar calendar = Calendar.getInstance();
         dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
+        //dayOfWeek=dayOfWeek-1;
         return String.valueOf(dayOfWeek -1);
     }
 

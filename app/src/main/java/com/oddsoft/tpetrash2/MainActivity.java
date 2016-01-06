@@ -659,6 +659,10 @@ public class MainActivity extends AppCompatActivity
         bundle.putBoolean("recycling", item.checkTodayAvailableRecycling());
         bundle.putString("memo", item.getMemo());
         bundle.putString("lineid", item.getLineID());
+        bundle.putString("line", item.getLine());
+        bundle.putString("carno", item.getCarNo());
+        bundle.putString("city", item.getCity());
+
 
         intent.putExtras(bundle);
 
