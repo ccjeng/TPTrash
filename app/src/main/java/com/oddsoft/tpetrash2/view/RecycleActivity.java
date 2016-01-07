@@ -1,4 +1,4 @@
-package com.oddsoft.tpetrash2;
+package com.oddsoft.tpetrash2.view;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,8 +15,9 @@ import android.widget.ListView;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.oddsoft.tpetrash2.recycle.RecycleItem;
-import com.oddsoft.tpetrash2.recycle.RecycleListAdapter;
+import com.oddsoft.tpetrash2.R;
+import com.oddsoft.tpetrash2.adapter.RecycleItem;
+import com.oddsoft.tpetrash2.adapter.RecycleListAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 
 import org.json.JSONArray;

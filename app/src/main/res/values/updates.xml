@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>3.5.2\n更新垃圾車班表資料\n在地圖上標示同一班次的垃圾車
+    	<item>3.5.2\n在地圖上標示同一班次的垃圾車
     	</item>
 </string-array>
 </resources>

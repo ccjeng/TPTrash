@@ -1,4 +1,4 @@
-package com.oddsoft.tpetrash2;
+package com.oddsoft.tpetrash2.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -35,6 +35,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.oddsoft.tpetrash2.Application;
+import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.parse.FindCallback;
 import com.parse.ParseException;

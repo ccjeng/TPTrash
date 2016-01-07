@@ -1,4 +1,4 @@
-package com.oddsoft.tpetrash2.recycle;
+package com.oddsoft.tpetrash2.adapter;
 
 import android.util.Log;
 

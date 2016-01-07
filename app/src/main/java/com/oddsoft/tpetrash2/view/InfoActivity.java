@@ -1,4 +1,4 @@
-package com.oddsoft.tpetrash2;
+package com.oddsoft.tpetrash2.view;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -30,6 +30,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.oddsoft.tpetrash2.Application;
+import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.parse.FindCallback;
@@ -213,7 +215,6 @@ public class InfoActivity extends AppCompatActivity
                 CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(strToLat)
                         , Double.valueOf(strToLng)), 17);
         map.animateCamera(center);
-
         map.setMyLocationEnabled(true);
 
         //show realtime car

@@ -42,7 +42,7 @@
 
         <!-- The main/home activity -->
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:hardwareAccelerated="true">
@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Prefs"
+            android:name=".view.Prefs"
             android:label="@string/action_settings">
         </activity>
         <activity
@@ -60,13 +60,13 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
         <activity
-            android:name=".InfoActivity"
+            android:name=".view.InfoActivity"
             android:label="@string/app_name"/>
         <activity
-            android:name=".RecycleActivity"
+            android:name=".view.RecycleActivity"
             android:label="@string/recycle"/>
         <activity
-            android:name=".NewTaipeiRealtimeActivity"
+            android:name=".view.NewTaipeiRealtimeActivity"
             android:label="@string/newtaipeirealtime"
             android:hardwareAccelerated="true"/>
 

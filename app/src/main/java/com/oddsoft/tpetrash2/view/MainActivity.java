@@ -1,4 +1,4 @@
-package com.oddsoft.tpetrash2;
+package com.oddsoft.tpetrash2.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -51,6 +51,9 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.oddsoft.tpetrash2.Application;
+import com.oddsoft.tpetrash2.R;
+import com.oddsoft.tpetrash2.adapter.ArrayItem;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.oddsoft.tpetrash2.utils.Utils;
@@ -230,7 +233,6 @@ public class MainActivity extends AppCompatActivity
         adBannerLayout.addView(adView);
 
         AdRequest adRequest;
-
 
         if (Application.APPDEBUG) {
             //Test Mode
@@ -662,7 +664,6 @@ public class MainActivity extends AppCompatActivity
         bundle.putString("line", item.getLine());
         bundle.putString("carno", item.getCarNo());
         bundle.putString("city", item.getCity());
-
 
         intent.putExtras(bundle);
 

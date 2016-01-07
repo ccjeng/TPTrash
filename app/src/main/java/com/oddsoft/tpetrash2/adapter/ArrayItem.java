@@ -1,4 +1,4 @@
-package com.oddsoft.tpetrash2;
+package com.oddsoft.tpetrash2.adapter;
 
 /**
  * Data model for a trash item.
@@ -11,8 +11,8 @@ package com.oddsoft.tpetrash2;
 * 週二、四、六：乾淨保麗龍, 一般類（瓶罐、容器、小家電等.
 *
 * */
-import android.util.Log;
 
+import com.oddsoft.tpetrash2.Application;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.parse.ParseClassName;
 import com.parse.ParseGeoPoint;

@@ -10,6 +10,7 @@ import android.util.Log;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
+import com.oddsoft.tpetrash2.adapter.ArrayItem;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
