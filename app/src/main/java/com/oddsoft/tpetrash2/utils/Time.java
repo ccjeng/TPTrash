@@ -1,6 +1,9 @@
 package com.oddsoft.tpetrash2.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by andycheng on 2015/5/4.
@@ -50,5 +53,31 @@ public class Time {
                 dayOfWeekName = "星期六";
         }
         return dayOfWeekName;
+    }
+
+    //check if today is Chinese New Year
+    public static Boolean isCNY() {
+        Boolean result = false;
+
+        Date todayDate = new Date();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-mm-dd");
+
+        try {
+            Date fromDate = dateFormatter.parse("2016-01-08"); //2016-02-08
+            Date toDate = dateFormatter.parse("2016-02-11"); //2016-02-11
+
+            if(todayDate.after(fromDate) && todayDate.before(toDate)) {
+                // In between
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
     }
 }

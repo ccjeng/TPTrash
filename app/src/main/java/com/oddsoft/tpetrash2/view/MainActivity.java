@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity
         initDrawer();
         showPushNotification();
 
+
         hourCode = getResources().getStringArray(R.array.hour_spinnner_code);
         hourName = getResources().getStringArray(R.array.hour_spinnner_name);
 
@@ -213,14 +214,22 @@ public class MainActivity extends AppCompatActivity
             hour = 5;
         }
 
-        //show 3/7 messages
-        if (Time.getDayOfWeekNumber().equals("3") || Time.getDayOfWeekNumber().equals("0")) {
-            Toast.makeText(this,"今天是"+Time.getDayOfWeekName()+"，台北市沒有收垃圾，新北市僅部分區域有收垃圾！"
-                    ,Toast.LENGTH_LONG).show();
-        }
-
         getPref();
         adView();
+
+
+        Log.d(TAG, "isCNY=" + Time.isCNY());
+        if (Time.isCNY()) {
+            Toast.makeText(this,"春節期間初一至初三不收垃圾，初四開始收垃圾！"
+                    ,Toast.LENGTH_LONG).show();
+        } else {
+
+            //show 3/7 messages
+            if (Time.getDayOfWeekNumber().equals("3") || Time.getDayOfWeekNumber().equals("0")) {
+                Toast.makeText(this,"今天是"+Time.getDayOfWeekName()+"，台北市沒有收垃圾，新北市僅部分區域有收垃圾！"
+                        ,Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void adView() {
