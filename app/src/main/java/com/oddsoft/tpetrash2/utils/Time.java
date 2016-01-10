@@ -1,15 +1,18 @@
 package com.oddsoft.tpetrash2.utils;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by andycheng on 2015/5/4.
  */
 public class Time {
-
+    private static final String TAG = "Time";
     private Calendar calendar;
     private static int dayOfWeek;
 
@@ -20,7 +23,7 @@ public class Time {
     public static String getDayOfWeekNumber() {
         Calendar calendar = Calendar.getInstance();
         dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        //dayOfWeek=dayOfWeek-1;
+        //dayOfWeek=dayOfWeek+1;
         return String.valueOf(dayOfWeek -1);
     }
 
@@ -57,14 +60,17 @@ public class Time {
 
     //check if today is Chinese New Year
     public static Boolean isCNY() {
-        Boolean result = false;
 
-        Date todayDate = new Date();
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.TAIWAN);
 
         try {
-            Date fromDate = dateFormatter.parse("2016-01-08"); //2016-02-08
+            Date todayDate = dateFormatter.parse(dateFormatter.format(new Date())); //Today
+            Date fromDate = dateFormatter.parse("2016-02-08"); //2016-02-08
             Date toDate = dateFormatter.parse("2016-02-11"); //2016-02-11
+
+            //Log.d(TAG, "Today = " + todayDate);
+            //Log.d(TAG, "fromDate = " + fromDate);
+            //Log.d(TAG, "toDate = " + toDate);
 
             if(todayDate.after(fromDate) && todayDate.before(toDate)) {
                 // In between
