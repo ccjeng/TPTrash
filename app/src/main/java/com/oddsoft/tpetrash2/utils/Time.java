@@ -83,7 +83,15 @@ public class Time {
             e.printStackTrace();
             return false;
         }
+    }
 
+    public static int getCurrentHHMM() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        int hours = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendar.get(Calendar.MINUTE);
+
+        return Integer.valueOf(String.valueOf(hours) + String.valueOf(minutes));
 
     }
 }

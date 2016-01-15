@@ -41,11 +41,36 @@ public class ArrayItem extends ParseObject {
     }
 
     public String getCarNumber() {
-        return getLine() + " [" + getCarNo() + "]";
+        return " [" +getLine() + " #" + getCarNo() + "]";
     }
 
     public String getCarTime() {
-        return getString("time") + " - " + getCarNumber();
+        return getString("time") + " " + getCarNumber();
+    }
+
+    public int getCarStartTime() {
+        String startTime = getString("time");
+
+        if (startTime.contains("-")) {
+            startTime = startTime.split("-")[0];
+        } else if(startTime.contains("~")) {
+            startTime = startTime.split("~")[0];
+        }
+
+        return Integer.valueOf(startTime.replace("：","").replace(":","").trim());
+    }
+
+    public int getCarEndTime() {
+        String endTime = getString("time");
+
+        if (endTime.contains("-")) {
+            endTime = endTime.split("-")[1];
+        } else if(endTime.contains("~")) {
+            endTime = endTime.split("~")[1];
+        } else {
+            endTime = String.valueOf(getCarStartTime()+10);
+        }
+        return Integer.valueOf(endTime.replace("：", "").replace(":", "").trim());
     }
 
     public String getCarHour() {

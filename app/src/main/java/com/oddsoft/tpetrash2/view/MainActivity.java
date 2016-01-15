@@ -425,8 +425,18 @@ public class MainActivity extends AppCompatActivity
                     TextView recyclingView = (TextView) view.findViewById(R.id.recycling_view);
 
                     timeView.setText(trash.getCarTime());
-                    distanceView.setText(trash.getDistance(geoPointFromLocation(myLoc)).toString());
+                    distanceView.setText(trash.getDistance(geoPointFromLocation(myLoc)));
                     addressView.setText(trash.getAddress());
+
+                    Log.d(TAG, trash.getCarTime() + Time.getCurrentHHMM() +" # " + trash.getCarStartTime() + " # " + trash.getCarEndTime());
+
+                    if ((trash.getCarStartTime()<=Time.getCurrentHHMM())) {
+                        if ((trash.getCarEndTime() !=0) && (trash.getCarEndTime()>=Time.getCurrentHHMM())) {
+                            //within time 執行勤務中
+                            timeView.setTextColor(getResources().getColor(R.color.red));
+                        }
+
+                    }
 
                     if (trash.checkTodayAvailableGarbage()) {
                         garbageView.setText("[收一般垃圾]");
