@@ -85,7 +85,7 @@ public class Time {
         }
     }
 
-    public static int getCurrentHHMM() {
+    public static Integer getCurrentHHMM() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         int hours = calendar.get(Calendar.HOUR_OF_DAY);

@@ -6,6 +6,7 @@
     android:id="@+id/drawerlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/write"
     tools:context=".view.MainActivity">
 
     <RelativeLayout
@@ -25,24 +26,49 @@
             android:id="@+id/spinner_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_below="@id/toolbar">
-
-            <TextView
-                android:layout_width="match_parent"
+            <TableLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/hour_spinner_prompt"
-                android:textColor="#ff2460ff"
-                android:textSize="18dp" />
-
-            <Spinner
-                android:id="@+id/hour_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:prompt="@string/hour_spinner_prompt"
-                android:textColor="#ff2460ff" />
+                android:stretchColumns="1">
+                <TableRow>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="@string/hour_spinner_prompt"
+                        android:textColor="#ff2460ff"
+                        android:background="@color/write"
+                        android:textSize="18dp" />
+                    <Spinner
+                        android:id="@+id/hour_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:prompt="@string/hour_spinner_prompt"
+                        android:background="@color/write"
+                        android:textColor="#ff2460ff" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="@string/pref_sorting"
+                        android:textColor="#ff2460ff"
+                        android:background="@color/write"
+                        android:textSize="18dp" />
+                    <Spinner
+                        android:id="@+id/sort_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:prompt="@string/pref_sorting"
+                        android:background="@color/write"
+                        android:textColor="#ff2460ff" />
+                </TableRow>
+            </TableLayout>
         </LinearLayout>
 
         <com.pnikosis.materialishprogress.ProgressWheel

@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity
 
     @Bind(R.id.hour_spinner)
     Spinner hourSpinner;
+    @Bind(R.id.sort_spinner)
+    Spinner sortSpinner;
 
     @Bind(R.id.trashList)
     ListView trashListView;
@@ -98,6 +100,8 @@ public class MainActivity extends AppCompatActivity
     private AdView adView;
     private String[] hourCode;
     private String[] hourName;
+    private String[] sortCode;
+    private String[] sortName;
 
     private ActionBar actionbar;
 
@@ -152,6 +156,8 @@ public class MainActivity extends AppCompatActivity
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
+        getPref();
+
         initActionBar();
         initDrawer();
         showPushNotification();
@@ -159,6 +165,32 @@ public class MainActivity extends AppCompatActivity
 
         hourCode = getResources().getStringArray(R.array.hour_spinnner_code);
         hourName = getResources().getStringArray(R.array.hour_spinnner_name);
+        sortCode = getResources().getStringArray(R.array.pref_sorting_code);
+        sortName = getResources().getStringArray(R.array.pref_sorting_item);
+
+        ArrayAdapter<CharSequence> adapterSort = ArrayAdapter.createFromResource(
+                this, R.array.pref_sorting_item,
+                android.R.layout.simple_spinner_item);
+        adapterSort.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(adapterSort);
+        sortSpinner.setSelection(Arrays.asList(sortCode).indexOf(sorting));
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+
+                String sort = sortCode[sortSpinner.getSelectedItemPosition()];
+
+                if (hourSpinner.getSelectedItemPosition()!=0) {
+                    parseQuery(Integer.valueOf(hourCode[hourSpinner.getSelectedItemPosition()]), sort);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.hour_spinnner_name,
@@ -166,7 +198,6 @@ public class MainActivity extends AppCompatActivity
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         hourSpinner.setAdapter(adapter);
-
         hourSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -176,7 +207,7 @@ public class MainActivity extends AppCompatActivity
                 String hr = hourCode[hourSpinner.getSelectedItemPosition()];
 
                 if (!hr.equals("5")) {
-                    parseQuery(Integer.valueOf(hr));
+                    parseQuery(Integer.valueOf(hr), sortCode[sortSpinner.getSelectedItemPosition()]);
                 }
             }
 
@@ -184,6 +215,7 @@ public class MainActivity extends AppCompatActivity
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
+
 
         if (Utils.isNewInstallation(this)) {
             this.showDialog(DIALOG_WELCOME);
@@ -214,7 +246,6 @@ public class MainActivity extends AppCompatActivity
             hour = 5;
         }
 
-        getPref();
         adView();
 
 
@@ -345,7 +376,7 @@ public class MainActivity extends AppCompatActivity
         super.onConfigurationChanged(newConfig);
     }
 
-    private void parseQuery(final int hour) {
+    private void parseQuery(final int hour, final String sort) {
 
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
@@ -390,7 +421,7 @@ public class MainActivity extends AppCompatActivity
 
                             ParseQuery finalQuery = ParseQuery.or(queries);
 
-                            if (sorting.equals("TIME")) {
+                            if (sort.equals("TIME")) {
                                 finalQuery.orderByAscending("time");
                             }
 
@@ -401,7 +432,7 @@ public class MainActivity extends AppCompatActivity
                                     , distance
                             );
 
-                            finalQuery.setLimit(50);
+                            finalQuery.setLimit(100);
 
                             return finalQuery;
                         }
@@ -416,6 +447,7 @@ public class MainActivity extends AppCompatActivity
                         view = View.inflate(getContext(), R.layout.trash_item, null);
                     }
 
+                    LinearLayout row = (LinearLayout) view.findViewById(R.id.row);
                     TextView timeView = (TextView) view.findViewById(R.id.time_view);
                     TextView addressView = (TextView) view.findViewById(R.id.address_view);
                     TextView distanceView = (TextView) view.findViewById(R.id.distance_view);
@@ -428,14 +460,15 @@ public class MainActivity extends AppCompatActivity
                     distanceView.setText(trash.getDistance(geoPointFromLocation(myLoc)));
                     addressView.setText(trash.getAddress());
 
-                    Log.d(TAG, trash.getCarTime() + Time.getCurrentHHMM() +" # " + trash.getCarStartTime() + " # " + trash.getCarEndTime());
+                   // Log.d(TAG, trash.getCarTime() + Time.getCurrentHHMM() + " # " + trash.getCarStartTime() + " # " + trash.getCarEndTime());
 
-                    if ((trash.getCarStartTime()<=Time.getCurrentHHMM())) {
-                        if ((trash.getCarEndTime() !=0) && (trash.getCarEndTime()>=Time.getCurrentHHMM())) {
-                            //within time 執行勤務中
-                            timeView.setTextColor(getResources().getColor(R.color.red));
-                        }
-
+                    if ((trash.getCarStartTime()<=Time.getCurrentHHMM()) && (Time.getCurrentHHMM()<=trash.getCarEndTime())) {
+                        //within time 執行勤務中
+                        row.setBackgroundColor(getResources().getColor(R.color.md_red_50));
+                    } else if(Time.getCurrentHHMM()>trash.getCarEndTime()) {
+                        row.setBackgroundColor(getResources().getColor(R.color.gray));
+                    } else {
+                        row.setBackgroundColor(getResources().getColor(R.color.write));
                     }
 
                     if (trash.checkTodayAvailableGarbage()) {
@@ -646,6 +679,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
 
     @Override
     protected void onDestroy() {

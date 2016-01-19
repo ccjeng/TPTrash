@@ -5,6 +5,8 @@
     <item name="orange" type="color">#FFFFBB33</item>
     <item name="red" type="color">#FFFF4444</item>
     <item name="write" type="color">#FFFFFFFF</item>
+    <item name="black" type="color">#000000</item>
+    <item name="gray" type="color">#E0E0E0</item>
 
     <color name="color_primary">@color/md_blue_500</color>
     <color name="color_primaryDark">@color/md_blue_700</color>

@@ -48,7 +48,7 @@ public class ArrayItem extends ParseObject {
         return getString("time") + " " + getCarNumber();
     }
 
-    public int getCarStartTime() {
+    public Integer getCarStartTime() {
         String startTime = getString("time");
 
         if (startTime.contains("-")) {
@@ -60,7 +60,7 @@ public class ArrayItem extends ParseObject {
         return Integer.valueOf(startTime.replace("：","").replace(":","").trim());
     }
 
-    public int getCarEndTime() {
+    public Integer getCarEndTime() {
         String endTime = getString("time");
 
         if (endTime.contains("-")) {
