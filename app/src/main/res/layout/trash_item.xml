@@ -1,10 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/row"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="6dip"
-    android:orientation="vertical">
+    android:padding="6dp">
+
+    <TextView
+        android:id="@+id/status_view"
+        android:layout_alignParentLeft="true"
+        android:layout_width="12sp"
+        android:layout_marginRight="3dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/time_view"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/status_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/distance_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    <TextView
+        android:id="@+id/address_view"
+        android:layout_toRightOf="@+id/status_view"
+        android:layout_below="@+id/time_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/garbage_view"
+        android:layout_toRightOf="@+id/status_view"
+        android:layout_below="@+id/address_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+    <TextView
+        android:id="@+id/food_view"
+        android:layout_below="@+id/address_view"
+        android:layout_toRightOf="@+id/garbage_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+    <TextView
+        android:id="@+id/recycling_view"
+        android:layout_below="@+id/address_view"
+        android:layout_toRightOf="@+id/food_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <!--
 
     <TableLayout
         android:layout_width="fill_parent"
@@ -56,6 +110,6 @@
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </TableRow>
     </TableLayout>
+-->
 
-
-</LinearLayout>
+</RelativeLayout>

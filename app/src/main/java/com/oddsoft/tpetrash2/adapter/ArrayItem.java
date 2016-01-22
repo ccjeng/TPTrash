@@ -29,7 +29,11 @@ public class ArrayItem extends ParseObject {
         String address = getString("address");
 
         if (this.getCity().equals("Taipei")) {
-            return "[" + getRegion() + "] " + address.substring(6, address.length());
+            if (address.length()>6) {
+                return "[" + getRegion() + "] " + address.substring(6, address.length());
+            } else {
+                return "[" + getRegion() + "] " + address;
+            }
         } else {
             return "[" + getRegion() + "] " + address;
         }
@@ -51,26 +55,37 @@ public class ArrayItem extends ParseObject {
     public Integer getCarStartTime() {
         String startTime = getString("time");
 
-        if (startTime.contains("-")) {
-            startTime = startTime.split("-")[0];
-        } else if(startTime.contains("~")) {
-            startTime = startTime.split("~")[0];
+        try {
+            if (startTime.contains("-")) {
+                startTime = startTime.split("-")[0];
+            } else if(startTime.contains("~")) {
+                startTime = startTime.split("~")[0];
+            }
+        } catch (Exception e) {
+            startTime="00";
+            e.printStackTrace();
         }
 
-        return Integer.valueOf(startTime.replace("：","").replace(":","").trim());
+        return Integer.valueOf(startTime.replace("01:","25:").replace("：", "").replace(":","").trim());
     }
 
     public Integer getCarEndTime() {
         String endTime = getString("time");
 
-        if (endTime.contains("-")) {
-            endTime = endTime.split("-")[1];
-        } else if(endTime.contains("~")) {
-            endTime = endTime.split("~")[1];
-        } else {
-            endTime = String.valueOf(getCarStartTime()+10);
+        try {
+            if (endTime.contains("-")) {
+                endTime = endTime.split("-")[1];
+            } else if(endTime.contains("~")) {
+                endTime = endTime.split("~")[1];
+            } else {
+                endTime = String.valueOf(getCarStartTime()+10);
+            }
+        } catch (Exception e) {
+            endTime = "00";
+            e.printStackTrace();
         }
-        return Integer.valueOf(endTime.replace("：", "").replace(":", "").trim());
+
+        return Integer.valueOf(endTime.replace("01:", "25:").replace("：", "").replace(":", "").trim());
     }
 
     public String getCarHour() {

@@ -32,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -447,7 +448,8 @@ public class MainActivity extends AppCompatActivity
                         view = View.inflate(getContext(), R.layout.trash_item, null);
                     }
 
-                    LinearLayout row = (LinearLayout) view.findViewById(R.id.row);
+                    RelativeLayout row = (RelativeLayout) view.findViewById(R.id.row);
+                    TextView statusView = (TextView) view.findViewById(R.id.status_view);
                     TextView timeView = (TextView) view.findViewById(R.id.time_view);
                     TextView addressView = (TextView) view.findViewById(R.id.address_view);
                     TextView distanceView = (TextView) view.findViewById(R.id.distance_view);
@@ -460,16 +462,22 @@ public class MainActivity extends AppCompatActivity
                     distanceView.setText(trash.getDistance(geoPointFromLocation(myLoc)));
                     addressView.setText(trash.getAddress());
 
-                   // Log.d(TAG, trash.getCarTime() + Time.getCurrentHHMM() + " # " + trash.getCarStartTime() + " # " + trash.getCarEndTime());
-
+                    //Log.d(TAG, trash.getCarTime() + Time.getCurrentHHMM() + " # " + trash.getCarStartTime() + " # " + trash.getCarEndTime());
                     if ((trash.getCarStartTime()<=Time.getCurrentHHMM()) && (Time.getCurrentHHMM()<=trash.getCarEndTime())) {
                         //within time 執行勤務中
+                        statusView.setText("執行勤務中");
+                        statusView.setVisibility(View.VISIBLE);
                         row.setBackgroundColor(getResources().getColor(R.color.md_red_50));
+
                     } else if(Time.getCurrentHHMM()>trash.getCarEndTime()) {
+                        statusView.setText("已結束勤務");
+                        statusView.setVisibility(View.VISIBLE);
                         row.setBackgroundColor(getResources().getColor(R.color.gray));
                     } else {
+                        statusView.setVisibility(View.GONE);
                         row.setBackgroundColor(getResources().getColor(R.color.write));
                     }
+
 
                     if (trash.checkTodayAvailableGarbage()) {
                         garbageView.setText("[收一般垃圾]");

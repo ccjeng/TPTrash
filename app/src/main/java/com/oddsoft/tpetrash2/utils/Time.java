@@ -23,7 +23,7 @@ public class Time {
     public static String getDayOfWeekNumber() {
         Calendar calendar = Calendar.getInstance();
         dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        //dayOfWeek=dayOfWeek+1;
+        //dayOfWeek=7;
         return String.valueOf(dayOfWeek -1);
     }
 
@@ -91,7 +91,17 @@ public class Time {
         int hours = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
 
-        return Integer.valueOf(String.valueOf(hours) + String.valueOf(minutes));
+        String strHour = String.valueOf(hours);
+        String strMin = String.valueOf(minutes);
+
+        if (strHour.equals("0")) {
+            strHour = "24";
+        }
+        if (strMin.length() == 1) {
+            strMin = "0" + strMin;
+        }
+
+        return Integer.valueOf(strHour + strMin);
 
     }
 }
