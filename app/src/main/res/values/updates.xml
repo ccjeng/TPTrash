@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>3.6.1\n停止支援Android 4.0.X (Ice Cream Sandwich)
+    	<item>3.6.2\n更新班表資訊
     	</item>
 </string-array>
 </resources>

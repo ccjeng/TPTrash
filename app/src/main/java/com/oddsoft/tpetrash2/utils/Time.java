@@ -65,7 +65,7 @@ public class Time {
 
         try {
             Date todayDate = dateFormatter.parse(dateFormatter.format(new Date())); //Today
-            Date fromDate = dateFormatter.parse("2016-02-08"); //2016-02-08
+            Date fromDate = dateFormatter.parse("2016-02-07"); //2016-02-08
             Date toDate = dateFormatter.parse("2016-02-11"); //2016-02-11
 
             //Log.d(TAG, "Today = " + todayDate);

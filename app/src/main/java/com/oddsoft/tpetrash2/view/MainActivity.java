@@ -381,178 +381,182 @@ public class MainActivity extends AppCompatActivity
 
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
-        if (myLoc != null) {
-
-            //set current location to global veriable
-            Application.setCurrentLocation(myLoc);
-
-            if (Application.APPDEBUG)
-                Log.d(TAG, "location = " + myLoc.toString());
-
-            // Set up a customized query
-            ParseQueryAdapter.QueryFactory<ArrayItem> factory =
-                    new ParseQueryAdapter.QueryFactory<ArrayItem>() {
-                        public ParseQuery<ArrayItem> create() {
-
-                            String strHour = String.valueOf(hour);
-                            String wkFood = Utils.getWeekFoodTag();
-                            String wkGarbage = Utils.getWeekGarbageTag();
-                            String wkRecycling = Utils.getWeekRecyclingTag();
-
-                            if (Application.APPDEBUG) {
-                                Log.d(TAG, "hour = " + strHour);
-                                Log.d(TAG, "wkFood = " + wkFood);
-                                Log.d(TAG, "wkGarbage = " + wkGarbage);
-                                Log.d(TAG, "wkRecycling = " + wkRecycling);
-                            }
-
-                            ParseQuery<ArrayItem> foodscrap = ArrayItem.getQuery();
-                            foodscrap.whereEqualTo(wkFood, "Y");
-
-                            ParseQuery<ArrayItem> garbage = ArrayItem.getQuery();
-                            garbage.whereEqualTo(wkGarbage, "Y");
-
-                            ParseQuery<ArrayItem> recycling = ArrayItem.getQuery();
-                            recycling.whereEqualTo(wkRecycling, "Y");
-
-                            List<ParseQuery<ArrayItem>> queries = new ArrayList<ParseQuery<ArrayItem>>();
-                            queries.add(foodscrap);
-                            queries.add(garbage);
-                            queries.add(recycling);
-
-                            ParseQuery finalQuery = ParseQuery.or(queries);
-
-                            if (sort.equals("TIME")) {
-                                finalQuery.orderByAscending("time");
-                            }
-
-
-                            finalQuery.whereEqualTo("hour", strHour);
-                            finalQuery.whereWithinKilometers("location"
-                                    , geoPointFromLocation(myLoc)
-                                    , distance
-                            );
-
-                            finalQuery.setLimit(100);
-
-                            return finalQuery;
-                        }
-                    };
-
-            // Set up the query adapter
-            //todo change to recyclerview + cardview
-            trashQueryAdapter = new ParseQueryAdapter<ArrayItem>(this, factory) {
-                @Override
-                public View getItemView(ArrayItem trash, View view, ViewGroup parent) {
-                    if (view == null) {
-                        view = View.inflate(getContext(), R.layout.trash_item, null);
-                    }
-
-                    RelativeLayout row = (RelativeLayout) view.findViewById(R.id.row);
-                    TextView statusView = (TextView) view.findViewById(R.id.status_view);
-                    TextView timeView = (TextView) view.findViewById(R.id.time_view);
-                    TextView addressView = (TextView) view.findViewById(R.id.address_view);
-                    TextView distanceView = (TextView) view.findViewById(R.id.distance_view);
-
-                    TextView garbageView = (TextView) view.findViewById(R.id.garbage_view);
-                    TextView foodView = (TextView) view.findViewById(R.id.food_view);
-                    TextView recyclingView = (TextView) view.findViewById(R.id.recycling_view);
-
-                    timeView.setText(trash.getCarTime());
-                    distanceView.setText(trash.getDistance(geoPointFromLocation(myLoc)));
-                    addressView.setText(trash.getAddress());
-
-                    //Log.d(TAG, trash.getCarTime() + Time.getCurrentHHMM() + " # " + trash.getCarStartTime() + " # " + trash.getCarEndTime());
-                    if ((trash.getCarStartTime()<=Time.getCurrentHHMM()) && (Time.getCurrentHHMM()<=trash.getCarEndTime())) {
-                        //within time 執行勤務中
-                        statusView.setText("執行勤務中");
-                        statusView.setVisibility(View.VISIBLE);
-                        row.setBackgroundColor(getResources().getColor(R.color.md_red_50));
-
-                    } else if(Time.getCurrentHHMM()>trash.getCarEndTime()) {
-                        statusView.setText("已結束勤務");
-                        statusView.setVisibility(View.VISIBLE);
-                        row.setBackgroundColor(getResources().getColor(R.color.gray));
-                    } else {
-                        statusView.setVisibility(View.GONE);
-                        row.setBackgroundColor(getResources().getColor(R.color.write));
-                    }
-
-
-                    if (trash.checkTodayAvailableGarbage()) {
-                        garbageView.setText("[收一般垃圾]");
-                        garbageView.setTextColor(getResources().getColor(R.color.green));
-
-                    } else {
-                        garbageView.setText("[不收一般垃圾]");
-                        garbageView.setTextColor(getResources().getColor(R.color.red));
-                    }
-
-                    if (trash.checkTodayAvailableFood()) {
-                        foodView.setText(" [收廚餘]");
-                        foodView.setTextColor(getResources().getColor(R.color.green));
-                    } else {
-                        foodView.setText(" [不收廚餘]");
-                        foodView.setTextColor(getResources().getColor(R.color.red));
-                    }
-
-                    if (trash.checkTodayAvailableRecycling()) {
-                        recyclingView.setText(" [收資源回收]");
-                        recyclingView.setTextColor(getResources().getColor(R.color.green));
-                    } else {
-                        recyclingView.setText(" [不收資源回收]");
-                        recyclingView.setTextColor(getResources().getColor(R.color.red));
-                    }
-
-
-                    return view;
-                }
-            };
-
-            trashQueryAdapter.setPaginationEnabled(false);
-            trashQueryAdapter.addOnQueryLoadListener(new ParseQueryAdapter.OnQueryLoadListener<ArrayItem>() {
-
-                @Override
-                public void onLoading() {
-                    progressWheel.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onLoaded(List<ArrayItem> objects, Exception e) {
-
-                    progressWheel.setVisibility(View.GONE);
-
-                    //No data
-                    if (trashListView.getCount() == 0) {
-                        String msg = String.valueOf(distance) + "公里"
-                                + getString(R.string.data_not_found);
-
-                        //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
-                        Crouton.makeText(MainActivity.this, msg, Style.CONFIRM,
-                                (ViewGroup)findViewById(R.id.croutonview)).show();
-
-                    }
-                }
-            });
-
-            trashListView.setAdapter(trashQueryAdapter);
-
-            // Set up the handler for an item's selection
-            trashListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    final ArrayItem item = trashQueryAdapter.getItem(position);
-                    //Open Detail Page
-                    goIntent(item);
-                }
-            });
-
+        if (Time.isCNY()) {
+            Toast.makeText(MainActivity.this, "春節期間初一至初三不收垃圾，初四開始收垃圾！"
+                    , Toast.LENGTH_LONG).show();
         } else {
-            //location error
-            Crouton.makeText(MainActivity.this, R.string.location_error, Style.ALERT,
-                    (ViewGroup)findViewById(R.id.croutonview)).show();
+            if (myLoc != null) {
+
+                //set current location to global veriable
+                Application.setCurrentLocation(myLoc);
+
+                if (Application.APPDEBUG)
+                    Log.d(TAG, "location = " + myLoc.toString());
+
+                // Set up a customized query
+                ParseQueryAdapter.QueryFactory<ArrayItem> factory =
+                        new ParseQueryAdapter.QueryFactory<ArrayItem>() {
+                            public ParseQuery<ArrayItem> create() {
+
+                                String strHour = String.valueOf(hour);
+                                String wkFood = Utils.getWeekFoodTag();
+                                String wkGarbage = Utils.getWeekGarbageTag();
+                                String wkRecycling = Utils.getWeekRecyclingTag();
+
+                                if (Application.APPDEBUG) {
+                                    Log.d(TAG, "hour = " + strHour);
+                                    Log.d(TAG, "wkFood = " + wkFood);
+                                    Log.d(TAG, "wkGarbage = " + wkGarbage);
+                                    Log.d(TAG, "wkRecycling = " + wkRecycling);
+                                }
+
+                                ParseQuery<ArrayItem> foodscrap = ArrayItem.getQuery();
+                                foodscrap.whereEqualTo(wkFood, "Y");
+
+                                ParseQuery<ArrayItem> garbage = ArrayItem.getQuery();
+                                garbage.whereEqualTo(wkGarbage, "Y");
+
+                                ParseQuery<ArrayItem> recycling = ArrayItem.getQuery();
+                                recycling.whereEqualTo(wkRecycling, "Y");
+
+                                List<ParseQuery<ArrayItem>> queries = new ArrayList<ParseQuery<ArrayItem>>();
+                                queries.add(foodscrap);
+                                queries.add(garbage);
+                                queries.add(recycling);
+
+                                ParseQuery finalQuery = ParseQuery.or(queries);
+
+                                if (sort.equals("TIME")) {
+                                    finalQuery.orderByAscending("time");
+                                }
+
+
+                                finalQuery.whereEqualTo("hour", strHour);
+                                finalQuery.whereWithinKilometers("location"
+                                        , geoPointFromLocation(myLoc)
+                                        , distance
+                                );
+
+                                finalQuery.setLimit(100);
+
+                                return finalQuery;
+                            }
+                        };
+
+                // Set up the query adapter
+                //todo change to recyclerview + cardview
+                trashQueryAdapter = new ParseQueryAdapter<ArrayItem>(this, factory) {
+                    @Override
+                    public View getItemView(ArrayItem trash, View view, ViewGroup parent) {
+                        if (view == null) {
+                            view = View.inflate(getContext(), R.layout.trash_item, null);
+                        }
+
+                        RelativeLayout row = (RelativeLayout) view.findViewById(R.id.row);
+                        TextView statusView = (TextView) view.findViewById(R.id.status_view);
+                        TextView timeView = (TextView) view.findViewById(R.id.time_view);
+                        TextView addressView = (TextView) view.findViewById(R.id.address_view);
+                        TextView distanceView = (TextView) view.findViewById(R.id.distance_view);
+
+                        TextView garbageView = (TextView) view.findViewById(R.id.garbage_view);
+                        TextView foodView = (TextView) view.findViewById(R.id.food_view);
+                        TextView recyclingView = (TextView) view.findViewById(R.id.recycling_view);
+
+                        timeView.setText(trash.getCarTime());
+                        distanceView.setText(trash.getDistance(geoPointFromLocation(myLoc)));
+                        addressView.setText(trash.getAddress());
+
+                        //Log.d(TAG, trash.getCarTime() + Time.getCurrentHHMM() + " # " + trash.getCarStartTime() + " # " + trash.getCarEndTime());
+                        if ((trash.getCarStartTime() <= Time.getCurrentHHMM()) && (Time.getCurrentHHMM() <= trash.getCarEndTime())) {
+                            //within time 執行勤務中
+                            statusView.setText("執行勤務中");
+                            statusView.setVisibility(View.VISIBLE);
+                            row.setBackgroundColor(getResources().getColor(R.color.md_red_50));
+
+                        } else if (Time.getCurrentHHMM() > trash.getCarEndTime()) {
+                            statusView.setText("已結束勤務");
+                            statusView.setVisibility(View.VISIBLE);
+                            row.setBackgroundColor(getResources().getColor(R.color.gray));
+                        } else {
+                            statusView.setVisibility(View.GONE);
+                            row.setBackgroundColor(getResources().getColor(R.color.write));
+                        }
+
+
+                        if (trash.checkTodayAvailableGarbage()) {
+                            garbageView.setText("[收一般垃圾]");
+                            garbageView.setTextColor(getResources().getColor(R.color.green));
+
+                        } else {
+                            garbageView.setText("[不收一般垃圾]");
+                            garbageView.setTextColor(getResources().getColor(R.color.red));
+                        }
+
+                        if (trash.checkTodayAvailableFood()) {
+                            foodView.setText(" [收廚餘]");
+                            foodView.setTextColor(getResources().getColor(R.color.green));
+                        } else {
+                            foodView.setText(" [不收廚餘]");
+                            foodView.setTextColor(getResources().getColor(R.color.red));
+                        }
+
+                        if (trash.checkTodayAvailableRecycling()) {
+                            recyclingView.setText(" [收資源回收]");
+                            recyclingView.setTextColor(getResources().getColor(R.color.green));
+                        } else {
+                            recyclingView.setText(" [不收資源回收]");
+                            recyclingView.setTextColor(getResources().getColor(R.color.red));
+                        }
+
+
+                        return view;
+                    }
+                };
+
+                trashQueryAdapter.setPaginationEnabled(false);
+                trashQueryAdapter.addOnQueryLoadListener(new ParseQueryAdapter.OnQueryLoadListener<ArrayItem>() {
+
+                    @Override
+                    public void onLoading() {
+                        progressWheel.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onLoaded(List<ArrayItem> objects, Exception e) {
+
+                        progressWheel.setVisibility(View.GONE);
+
+                        //No data
+                        if (trashListView.getCount() == 0) {
+                            String msg = String.valueOf(distance) + "公里"
+                                    + getString(R.string.data_not_found);
+
+                            //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
+                            Crouton.makeText(MainActivity.this, msg, Style.CONFIRM,
+                                    (ViewGroup) findViewById(R.id.croutonview)).show();
+
+                        }
+                    }
+                });
+
+                trashListView.setAdapter(trashQueryAdapter);
+
+                // Set up the handler for an item's selection
+                trashListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        final ArrayItem item = trashQueryAdapter.getItem(position);
+                        //Open Detail Page
+                        goIntent(item);
+                    }
+                });
+
+            } else {
+                //location error
+                Crouton.makeText(MainActivity.this, R.string.location_error, Style.ALERT,
+                        (ViewGroup) findViewById(R.id.croutonview)).show();
+            }
+
         }
-
-
     }
 
     /*
