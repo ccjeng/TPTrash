@@ -7,8 +7,8 @@ android {
         applicationId 'com.oddsoft.tpetrash2'
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 39
-        versionName '3.6.2.021116TT'
+        versionCode 40
+        versionName '3.6.3.022216TT'
     }
     buildTypes {
         release {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>3.6.2\n更新班表資訊
+    	<item>3.6.3\n變更已結束勤務之底色\n增加臉書粉絲頁連結
     	</item>
 </string-array>
 </resources>

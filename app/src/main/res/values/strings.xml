@@ -7,6 +7,7 @@
     <string name="newtaipeirealtime">新北市垃圾車即時資訊</string>
     <string name="action_realtime">新北市即時資訊</string>
     <string name="action_suggest">建議與評價</string>
+    <string name="action_facebook">臉書粉絲頁</string>
     <string name="action_settings">設定</string>
     <string name="exit_settings">離開</string>
     <string name="refresh_settings">更新</string>

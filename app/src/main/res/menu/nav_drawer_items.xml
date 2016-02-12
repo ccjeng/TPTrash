@@ -16,5 +16,8 @@
         <item
             android:id="@+id/navSuggest"
             android:title="@string/action_suggest"/>
+        <item
+            android:id="@+id/navFacebook"
+            android:title="@string/action_facebook"/>
     </group>
 </menu>

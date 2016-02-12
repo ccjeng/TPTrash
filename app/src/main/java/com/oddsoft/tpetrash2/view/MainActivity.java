@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = Application.class.getSimpleName();
     private static int distance;
     private static int hour;
+    private static int currentHour;
     private static String sorting;
 
     @Bind(R.id.hour_spinner)
@@ -240,7 +241,9 @@ public class MainActivity extends AppCompatActivity
                     (ViewGroup)findViewById(R.id.croutonview)).show();
         }
         Calendar calendar = Calendar.getInstance();
-        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+
+        hour = currentHour;
 
         //set hour spinner to current hour
         if (hour < 5) {
@@ -333,7 +336,10 @@ public class MainActivity extends AppCompatActivity
                         startActivity(new Intent(Intent.ACTION_VIEW,
                                 Uri.parse("market://details?id=com.oddsoft.tpetrash2")));
                         break;
-
+                    case R.id.navFacebook:
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("https://www.facebook.com/TaipeiTrash")));
+                        break;
                 }
                 return false;
             }
@@ -364,6 +370,13 @@ public class MainActivity extends AppCompatActivity
                 .icon(FontAwesome.Icon.faw_thumbs_up)
                 .color(Color.GRAY)
                 .sizeDp(24));
+
+        navigation.getMenu().findItem(R.id.navFacebook).setIcon(new IconicsDrawable(this)
+                .icon(FontAwesome.Icon.faw_facebook_official)
+                .color(Color.GRAY)
+                .sizeDp(24));
+
+
     }
 
 
@@ -467,21 +480,27 @@ public class MainActivity extends AppCompatActivity
                         addressView.setText(trash.getAddress());
 
                         //Log.d(TAG, trash.getCarTime() + Time.getCurrentHHMM() + " # " + trash.getCarStartTime() + " # " + trash.getCarEndTime());
-                        if ((trash.getCarStartTime() <= Time.getCurrentHHMM()) && (Time.getCurrentHHMM() <= trash.getCarEndTime())) {
-                            //within time 執行勤務中
-                            statusView.setText("執行勤務中");
-                            statusView.setVisibility(View.VISIBLE);
-                            row.setBackgroundColor(getResources().getColor(R.color.md_red_50));
+                        if (Integer.valueOf(trash.getCarHour()).equals(currentHour)) {
 
-                        } else if (Time.getCurrentHHMM() > trash.getCarEndTime()) {
-                            statusView.setText("已結束勤務");
-                            statusView.setVisibility(View.VISIBLE);
-                            row.setBackgroundColor(getResources().getColor(R.color.gray));
-                        } else {
+                            if ((trash.getCarStartTime() <= Time.getCurrentHHMM()) && (Time.getCurrentHHMM() <= trash.getCarEndTime())) {
+                                //within time 執行勤務中
+                                statusView.setText("執行勤務中");
+                                statusView.setVisibility(View.VISIBLE);
+                                row.setBackgroundColor(getResources().getColor(R.color.md_red_50));
+
+                            } else if (Time.getCurrentHHMM() > trash.getCarEndTime()) {
+                                statusView.setText("已結束勤務");
+                                statusView.setVisibility(View.VISIBLE);
+                                row.setBackgroundColor(getResources().getColor(R.color.lightyellow));
+                            } else {
+                                statusView.setVisibility(View.GONE);
+                                row.setBackgroundColor(getResources().getColor(R.color.write));
+                            }
+                        }
+                        else {
                             statusView.setVisibility(View.GONE);
                             row.setBackgroundColor(getResources().getColor(R.color.write));
                         }
-
 
                         if (trash.checkTodayAvailableGarbage()) {
                             garbageView.setText("[收一般垃圾]");
