@@ -12,6 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,6 +37,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.Application;
 import com.oddsoft.tpetrash2.R;
+import com.oddsoft.tpetrash2.adapter.RealtimeItem;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.parse.FindCallback;
@@ -39,10 +45,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,8 +54,7 @@ import butterknife.ButterKnife;
 public class InfoActivity extends AppCompatActivity
         implements LocationListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener
-        /*SwipeRefreshLayout.OnRefreshListener*/ {
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = Application.class.getSimpleName();
 
@@ -406,37 +408,35 @@ public class InfoActivity extends AppCompatActivity
 
     private void drawRealTimeCar(String lineID) {
 
-        //if (markerCar!= null) {
-        //    markerCar.remove();
-        //}
+        Firebase ref = new Firebase("https://tptrashcarrealtime.firebaseio.com/PROD");
+        Query queryRef = ref.orderByChild("lineid").equalTo(lineID);
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("RealTime");
-        query.whereEqualTo("lineid", lineID);
+        queryRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
 
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> items, ParseException e) {
-                if (e == null) {
+                for (DataSnapshot carSnapshot : snapshot.getChildren()) {
+                    RealtimeItem car = carSnapshot.getValue(RealtimeItem.class);
 
-                    int i = 0;
-                    for (i = 0; i < items.size(); i++) {
+                    //Marker
+                    MarkerOptions markerOption = new MarkerOptions();
+                    markerOption.position(new LatLng(car.getLat(), car.getLng()));
+                    markerOption.title(car.getAddress());
+                    markerOption.snippet(car.getTime());
+                    markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
 
-                        //Marker
-                        MarkerOptions markerOption = new MarkerOptions();
-                        markerOption.position(new LatLng(items.get(i).getParseGeoPoint("location").getLatitude()
-                                , items.get(i).getParseGeoPoint("location").getLongitude()));
-                        markerOption.title(items.get(i).get("address").toString())
-                                .snippet(items.get(i).get("cartime").toString());
-                        markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
+                    map.addMarker(markerOption);
 
-                        markerCar = map.addMarker(markerOption);
-
-                    }
-
-                } else {
-                    Log.d(TAG, "Error: " + e.getMessage());
                 }
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError error) {
+                Log.d(TAG, "The read failed: " + error.getMessage());
             }
         });
+
 
     }
 
@@ -475,56 +475,5 @@ public class InfoActivity extends AppCompatActivity
                 });
     }
 
-    /*
-    private void routeSearch(LatLng origin, LatLng dest) {
-        // 顯示進度對話框
-        //ProgressDialogFragment.newInstance("檢索中...").show(
-        //        getSupportFragmentManager(), ProgressDialogFragment.FRG_TAG);
 
-        // 進行通訊
-        RequestDirectionsTask task = new RequestDirectionsTask(this, origin,
-                dest, TRAVEL_MODE);
-        task.setRequestDirectionsTaskCallback(
-                new RequestDirectionsTaskCallback() {
-
-                    @Override
-                    public void onSucceed(List<PushRoutes.Route> routes) {
-                        // 關閉進度對話框
-                        FragmentManager fm = getSupportFragmentManager();
-                        ProgressDialogFragment progressDialogFragment = (ProgressDialogFragment) fm
-                                .findFragmentByTag(ProgressDialogFragment.FRG_TAG);
-                        if (progressDialogFragment != null) {
-                            progressDialogFragment.dismissAllowingStateLoss();
-                        }
-
-                        // 開始繪製路線
-                        if (routes.size() > 0) {
-                            PolylineOptions lineOptions = new PolylineOptions();
-                            for (Route route : routes) {
-                                for (Leg leg : route.getLegs()) {
-                                    for (Step step : leg.getSteps()) {
-                                        lineOptions.addAll(step
-                                                .getPolylinePoints());
-                                        lineOptions.width(10);
-                                        lineOptions.color(0x550000ff);
-                                    }
-                                }
-                            }
-                            // 繪圖
-                            mGmap.addPolyline(lineOptions);
-                        } else {
-                            mGmap.clear();
-                            Toast.makeText(Ch1004.this, "無法取得路線資訊",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailed(Throwable e) {
-                        Toast.makeText(Ch1004.this,
-                                "路線搜尋中發生了錯誤(" + e + ")",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }).execute();
-    }*/
 }

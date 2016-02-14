@@ -16,6 +16,10 @@ import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -37,14 +41,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.Application;
 import com.oddsoft.tpetrash2.R;
+import com.oddsoft.tpetrash2.adapter.RealtimeItem;
 import com.oddsoft.tpetrash2.utils.Analytics;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -111,6 +109,8 @@ public class NewTaipeiRealtimeActivity extends AppCompatActivity
         ga = new Analytics();
         ga.trackerPage(this);
 
+
+
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment)).getMap();
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.getUiSettings().setZoomControlsEnabled(true);
@@ -157,20 +157,6 @@ public class NewTaipeiRealtimeActivity extends AppCompatActivity
     private void getData() {
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
-
-        //fake location
-/*
-        if (Application.APPDEBUG) {
-            myLoc = new Location("");
-            //myLoc.setLatitude(25.175579);
-            //myLoc.setLongitude(121.43847);
-
-            //Taipei City
-            myLoc.setLatitude(25.0950492);
-            myLoc.setLongitude(121.5246077);
-
-        }
-*/
         if (myLoc != null) {
 
             if (Application.APPDEBUG)
@@ -179,33 +165,32 @@ public class NewTaipeiRealtimeActivity extends AppCompatActivity
             //clear map markers
             map.clear();
 
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("RealTime");
-            query.setLimit(300);
-            //query.whereWithinKilometers("location", geoPointFromLocation(myLoc), 100);
+            Firebase ref = new Firebase("https://tptrashcarrealtime.firebaseio.com/PROD");
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
 
-            query.findInBackground(new FindCallback<ParseObject>() {
-                public void done(List<ParseObject> items, ParseException e) {
+                    for (DataSnapshot carSnapshot : snapshot.getChildren()) {
+                        RealtimeItem car = carSnapshot.getValue(RealtimeItem.class);
 
-                    if (e == null) {
-                        int i = 0;
-                        for (i = 0; i < items.size(); i++) {
-                            //Marker
-                            MarkerOptions marker = new MarkerOptions();
-                            marker.position(new LatLng(items.get(i).getParseGeoPoint("location").getLatitude()
-                                       , items.get(i).getParseGeoPoint("location").getLongitude()))
-                                    .title(items.get(i).get("address").toString())
-                                    .snippet(items.get(i).get("cartime").toString())
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
-                            map.addMarker(marker);
-                        }
+                        //Marker
+                        MarkerOptions markerOption = new MarkerOptions();
+                        markerOption.position(new LatLng(car.getLat(), car.getLng()));
+                        markerOption.title(car.getAddress());
+                        markerOption.snippet(car.getTime());
+                        markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
 
-                    } else {
-                        Log.d(TAG, "Error: " + e.getMessage());
+                        map.addMarker(markerOption);
+
                     }
 
                 }
-            });
 
+                @Override
+                public void onCancelled(FirebaseError error) {
+                    Log.d(TAG, "The read failed: " + error.getMessage());
+                }
+            });
 
         } else {
             //location error
@@ -438,11 +423,11 @@ public class NewTaipeiRealtimeActivity extends AppCompatActivity
                 .addOnConnectionFailedListener(this)
                 .build();
     }
-
+/*
     private ParseGeoPoint geoPointFromLocation(Location loc) {
         return new ParseGeoPoint(loc.getLatitude(), loc.getLongitude());
     }
-
+*/
     private void configLocationRequest() {
         // Create a new global location parameters object
         locationRequest = LocationRequest.create();
@@ -462,12 +447,12 @@ public class NewTaipeiRealtimeActivity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
-        if (lastLocation != null
+    /*    if (lastLocation != null
                 && geoPointFromLocation(location)
                 .distanceInKilometersTo(geoPointFromLocation(lastLocation)) < 0.01) {
             // If the location hasn't changed by more than 10 meters, ignore it.
             return;
-        }
+        }*/
         lastLocation = location;
     }
 

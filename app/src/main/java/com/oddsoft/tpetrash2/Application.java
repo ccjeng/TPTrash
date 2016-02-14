@@ -7,6 +7,7 @@ package com.oddsoft.tpetrash2;
 import android.location.Location;
 import android.util.Log;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
@@ -46,6 +47,8 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Firebase.setAndroidContext(this);
 
         ParseObject.registerSubclass(ArrayItem.class);
 
