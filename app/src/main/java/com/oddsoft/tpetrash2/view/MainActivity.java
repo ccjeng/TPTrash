@@ -412,38 +412,19 @@ public class MainActivity extends AppCompatActivity
                             public ParseQuery<ArrayItem> create() {
 
                                 String strHour = String.valueOf(hour);
-                                String wkFood = Utils.getWeekFoodTag();
-                                String wkGarbage = Utils.getWeekGarbageTag();
-                                String wkRecycling = Utils.getWeekRecyclingTag();
+                                String weekTag = Utils.getWeekTag();
 
                                 if (Application.APPDEBUG) {
                                     Log.d(TAG, "hour = " + strHour);
-                                    Log.d(TAG, "wkFood = " + wkFood);
-                                    Log.d(TAG, "wkGarbage = " + wkGarbage);
-                                    Log.d(TAG, "wkRecycling = " + wkRecycling);
+                                    Log.d(TAG, "weekTag = " + weekTag);
                                 }
 
-                                ParseQuery<ArrayItem> foodscrap = ArrayItem.getQuery();
-                                foodscrap.whereEqualTo(wkFood, "Y");
-
-                                ParseQuery<ArrayItem> garbage = ArrayItem.getQuery();
-                                garbage.whereEqualTo(wkGarbage, "Y");
-
-                                ParseQuery<ArrayItem> recycling = ArrayItem.getQuery();
-                                recycling.whereEqualTo(wkRecycling, "Y");
-
-                                List<ParseQuery<ArrayItem>> queries = new ArrayList<ParseQuery<ArrayItem>>();
-                                queries.add(foodscrap);
-                                queries.add(garbage);
-                                queries.add(recycling);
-
-                                ParseQuery finalQuery = ParseQuery.or(queries);
+                                ParseQuery<ArrayItem> finalQuery = ArrayItem.getQuery();
 
                                 if (sort.equals("TIME")) {
                                     finalQuery.orderByAscending("time");
                                 }
-
-
+                                finalQuery.whereEqualTo(weekTag,"Y");
                                 finalQuery.whereEqualTo("hour", strHour);
                                 finalQuery.whereWithinKilometers("location"
                                         , geoPointFromLocation(myLoc)

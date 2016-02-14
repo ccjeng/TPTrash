@@ -82,9 +82,8 @@ public class Utils {
         } else if (o instanceof Boolean) {
             editor.putBoolean(constant, (Boolean) o);
         }
-        editor.commit();
+        editor.apply();
     }
-
 
     public static String getWeekFoodTag(){
         String tag = "";
@@ -175,4 +174,36 @@ public class Utils {
 
         return tag;
     }
+
+
+    public static String getWeekTag(){
+        String tag = "";
+
+        switch (Time.getDayOfWeekNumber()) {
+            case "1":
+                tag = "mon";
+                break;
+            case "2":
+                tag = "tue";
+                break;
+            case "3":
+                tag = "wed";
+                break;
+            case "4":
+                tag = "thu";
+                break;
+            case "5":
+                tag = "fri";
+                break;
+            case "6":
+                tag = "sat";
+                break;
+            case "0":
+                tag = "sun";
+                break;
+        }
+
+        return tag;
+    }
+
 }
