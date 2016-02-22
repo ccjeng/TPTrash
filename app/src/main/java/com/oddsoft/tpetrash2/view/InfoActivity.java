@@ -2,6 +2,8 @@ package com.oddsoft.tpetrash2.view;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +14,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -33,10 +40,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.Application;
 import com.oddsoft.tpetrash2.R;
+import com.oddsoft.tpetrash2.adapter.RealtimeGson;
 import com.oddsoft.tpetrash2.adapter.RealtimeItem;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Time;
@@ -45,7 +55,11 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -133,7 +147,7 @@ public class InfoActivity extends AppCompatActivity
         ga.trackerPage(this);
 
         setSupportActionBar(toolbar);
-        if (getSupportActionBar()!=null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -222,10 +236,9 @@ public class InfoActivity extends AppCompatActivity
         //show realtime car
         if (lineid != "") {
             //query lineid from realtime data set, and draw it on the map.
-            drawRealTimeCar(lineid);
+            queryRealtimeJson(lineid);
         }
 
-        drawLineCar();
 
         //Marker
         MarkerOptions markerOpt = new MarkerOptions();
@@ -246,10 +259,7 @@ public class InfoActivity extends AppCompatActivity
 
         line = map.addPolyline(polylineOpt);
 
-        //draw route on the map
-        //routeSearch(from, to);
-
-
+        drawLineCar();
 
     }
 
@@ -386,8 +396,6 @@ public class InfoActivity extends AppCompatActivity
         polylineOpt.add(from, to).color(Color.BLUE).width(5);
 
         line = map.addPolyline(polylineOpt);
-
-        //Log.d(TAG, "onLocationChanged");
     }
 
     @Override
@@ -401,43 +409,10 @@ public class InfoActivity extends AppCompatActivity
     public void onConnectionSuspended(int i) {
         Log.i(TAG, "GoogleApiClient connection has been suspend");
     }
+
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.i(TAG, "GoogleApiClient connection failed");
-    }
-
-    private void drawRealTimeCar(String lineID) {
-
-        Firebase ref = new Firebase("https://tptrashcarrealtime.firebaseio.com/PROD");
-        Query queryRef = ref.orderByChild("lineid").equalTo(lineID);
-
-        queryRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-
-                for (DataSnapshot carSnapshot : snapshot.getChildren()) {
-                    RealtimeItem car = carSnapshot.getValue(RealtimeItem.class);
-
-                    //Marker
-                    MarkerOptions markerOption = new MarkerOptions();
-                    markerOption.position(new LatLng(car.getLat(), car.getLng()));
-                    markerOption.title(car.getAddress());
-                    markerOption.snippet(car.getTime());
-                    markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
-
-                    map.addMarker(markerOption);
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError error) {
-                Log.d(TAG, "The read failed: " + error.getMessage());
-            }
-        });
-
-
     }
 
     private void drawLineCar(){
@@ -449,31 +424,100 @@ public class InfoActivity extends AppCompatActivity
             query.whereEqualTo("carno", carNo);
         }
 
-                query.findInBackground(new FindCallback<ParseObject>() {
-                    public void done(List<ParseObject> items, ParseException e) {
-                        if (e == null) {
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> items, ParseException e) {
+                if (e == null) {
 
-                            int i = 0;
+                    int i = 0;
 
-                            for (i = 0; i < items.size(); i++) {
-                                //Marker
-                                MarkerOptions markerOption = new MarkerOptions();
-                                markerOption.position(new LatLng(items.get(i).getParseGeoPoint("location").getLatitude()
-                                        , items.get(i).getParseGeoPoint("location").getLongitude()));
-                                markerOption.title(items.get(i).get("address").toString())
-                                        .snippet(items.get(i).get("time").toString()+ " [" + items.get(i).get("carno").toString()+ "]" );
-                                markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
+                    for (i = 0; i < items.size(); i++) {
+                        //Marker
+                        MarkerOptions markerOption = new MarkerOptions();
+                        markerOption.position(new LatLng(items.get(i).getParseGeoPoint("location").getLatitude()
+                                , items.get(i).getParseGeoPoint("location").getLongitude()));
+                        markerOption.title(items.get(i).get("address").toString())
+                                .snippet(items.get(i).get("time").toString() + " [" + items.get(i).get("carno").toString() + "]");
+                        markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
 
-                                markerCar = map.addMarker(markerOption);
+                        markerCar = map.addMarker(markerOption);
 
-                            }
-
-                        } else {
-                            Log.d(TAG, "Error: " + e.getMessage());
-                        }
                     }
-                });
+
+                } else {
+                    Log.d(TAG, "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void drawRealTimeCar(Double lat, Double lng, String time, String address) {
+
+        //Marker
+        MarkerOptions markerOption = new MarkerOptions();
+        markerOption.position(new LatLng(lat, lng));
+        markerOption.title(address);
+        markerOption.snippet(time);
+        markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
+
+        map.addMarker(markerOption);
+
     }
 
 
+    private void queryRealtimeJson(final String lindID) {
+
+        RequestQueue mQueue = Volley.newRequestQueue(this);
+
+        String url = "http://data.ntpc.gov.tw/od/data/api/28AB4122-60E1-4065-98E5-ABCCB69AACA6?$format=json";
+
+        StringRequest stringRequest = new StringRequest(url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Gson gson = new Gson();
+
+                        Type listType = new TypeToken<ArrayList<RealtimeGson>>() {
+                        }.getType();
+                        ArrayList<RealtimeGson> jsonArr = gson.fromJson(response, listType);
+
+                        for (RealtimeGson obj : jsonArr) {
+                            //Log.d(TAG, obj.getLineid() +'-' + obj.getLocation());
+
+                            if (obj.getLineid().equals(lindID)) {
+
+                                try {
+                                    Geocoder geocoder = new Geocoder(InfoActivity.this, new Locale("zh", "TW"));
+
+                                    String address = obj.getLocation();
+
+                                    List<Address> addressList = geocoder.getFromLocationName(address, 1);
+
+                                    Double lat = addressList.get(0).getLatitude();
+                                    Double lng = addressList.get(0).getLongitude();
+
+                                    if (lat > 0) {
+                                        drawRealTimeCar(lat, lng, obj.getTime(), "[" +obj.getCar() +"] " + obj.getLocation());
+                                    }
+
+                                } catch (Exception e) {
+                                    Log.d(TAG, e.toString());
+                                }
+
+                            }
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.getMessage(), error);
+            }
+        });
+
+        mQueue.add(stringRequest);
+
+
+    }
 }

@@ -12,6 +12,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 import com.oddsoft.tpetrash2.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.utils.Constant;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
@@ -30,16 +31,16 @@ public class Application extends android.app.Application {
     public static final String APPTAG = Application.class.getSimpleName();
 
     //Admob
-    public static final String ADMOB_TEST_DEVICE_ID = "DF9E888CAA233DE54A7FD15B3B1A1522"; //5.0
-    //public static final String ADMOB_TEST_DEVICE_ID = "1B583A23DC5020F5F1C46451CBF42359"; //4.1
-    public static final String ADMOB_UNIT_ID = "ca-app-pub-6914084100751028/1776974015";
+    public static final String ADMOB_TEST_DEVICE_ID = Constant.ADMOB_TEST_DEVICE_ID;
+    public static final String ADMOB_UNIT_ID = Constant.ADMOB_UNIT_ID;
+    public static final String ADMOB_UNIT_ID_RT = Constant.ADMOB_UNIT_ID_RT;
     //Vpon
-    public static final String VPON_UNIT_ID = "8a8081824fb5a83f014fc9a9ba071724";
+    public static final String VPON_UNIT_ID = Constant.VPON_UNIT_ID;
 
     //Parse
-    private static final String PARSE_APPLICATION_ID = "nxkxfDhpFQBXOReTPFIPhGIaYowmT5uuscj3w3Kb";
-    private static final String PARSE_CLIENT_KEY = "oo7CwnSrT3XCjVHuN3r1JBw7rvJzjmYZCRCX9e2U";
-    public  static final String PARSE_OBJECT_NAME = "TPE021416";
+    private static final String PARSE_APPLICATION_ID = Constant.PARSE_APPLICATION_ID;
+    private static final String PARSE_CLIENT_KEY = Constant.PARSE_CLIENT_KEY;
+    public  static final String PARSE_OBJECT_NAME = Constant.PARSE_OBJECT_NAME;
 
     public Application() {
     }

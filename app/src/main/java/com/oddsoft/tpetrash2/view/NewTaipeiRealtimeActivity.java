@@ -296,7 +296,7 @@ public class NewTaipeiRealtimeActivity extends AppCompatActivity
         RelativeLayout adBannerLayout = (RelativeLayout) findViewById(R.id.footerLayout);
 
         adView = new AdView(this);
-        adView.setAdUnitId(Application.ADMOB_UNIT_ID);
+        adView.setAdUnitId(Application.ADMOB_UNIT_ID_RT);
         adView.setAdSize(AdSize.SMART_BANNER);
         adBannerLayout.addView(adView);
 

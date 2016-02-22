@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.oddsoft.tpetrash2">
+    package="com.oddsoft.tpetrash2" >
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
@@ -21,15 +20,18 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <permission android:protectionLevel="signature"
-        android:name="com.oddsoft.tpetrash2.permission.C2D_MESSAGE" />
+
+    <permission
+        android:name="com.oddsoft.tpetrash2.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="com.oddsoft.tpetrash2.permission.C2D_MESSAGE" />
 
     <application
         android:name=".Application"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/MyMaterialTheme">
+        android:theme="@style/MyMaterialTheme" >
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -44,16 +46,17 @@
         <activity
             android:name=".view.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:hardwareAccelerated="true">
+            android:hardwareAccelerated="true"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".view.Prefs"
-            android:label="@string/action_settings">
+            android:label="@string/action_settings" >
         </activity>
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
@@ -61,21 +64,19 @@
             android:theme="@android:style/Theme.Translucent" />
         <activity
             android:name=".view.InfoActivity"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name" />
         <activity
             android:name=".view.RecycleActivity"
-            android:label="@string/recycle"/>
+            android:label="@string/recycle" />
         <activity
             android:name=".view.NewTaipeiRealtimeActivity"
-            android:label="@string/newtaipeirealtime"
-            android:hardwareAccelerated="true"/>
-
+            android:hardwareAccelerated="true"
+            android:label="@string/newtaipeirealtime" />
         <activity
             android:name="com.vpadn.widget.VpadnActivity"
             android:configChanges="orientation|keyboardHidden|navigation|keyboard|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:theme="@android:style/Theme.Translucent"
             android:hardwareAccelerated="true"
-            >
+            android:theme="@android:style/Theme.Translucent" >
         </activity>
 
         <service
@@ -86,7 +87,7 @@
         <!-- Parse Push Nofification -->
         <service android:name="com.parse.PushService" />
 
-        <receiver android:name="com.parse.ParseBroadcastReceiver">
+        <receiver android:name="com.parse.ParseBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -103,10 +104,11 @@
         </receiver>
         <receiver
             android:name="com.parse.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="com.oddsoft.tpetrash2" />
             </intent-filter>
         </receiver>

@@ -78,7 +78,7 @@ public class ArrayItem extends ParseObject {
             } else if(endTime.contains("~")) {
                 endTime = endTime.split("~")[1];
             } else {
-                endTime = String.valueOf(getCarStartTime()+10);
+                endTime = String.valueOf(getCarStartTime()+3);
             }
         } catch (Exception e) {
             endTime = "00";

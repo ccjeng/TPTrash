@@ -28,3 +28,6 @@ proguard/
 
 # images for google play
 art/
+
+# Constant File
+Constant.java
