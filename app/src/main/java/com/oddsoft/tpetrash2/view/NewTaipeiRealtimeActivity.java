@@ -174,14 +174,15 @@ public class NewTaipeiRealtimeActivity extends AppCompatActivity
                         RealtimeItem car = carSnapshot.getValue(RealtimeItem.class);
 
                         //Marker
-                        MarkerOptions markerOption = new MarkerOptions();
-                        markerOption.position(new LatLng(car.getLat(), car.getLng()));
-                        markerOption.title(car.getAddress());
-                        markerOption.snippet(car.getTime());
-                        markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
+                        if (car.getLat() != null) {
+                            MarkerOptions markerOption = new MarkerOptions();
+                            markerOption.position(new LatLng(car.getLat(), car.getLng()));
+                            markerOption.title(car.getAddress());
+                            markerOption.snippet(car.getTime());
+                            markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
 
-                        map.addMarker(markerOption);
-
+                            map.addMarker(markerOption);
+                        }
                     }
 
                 }
