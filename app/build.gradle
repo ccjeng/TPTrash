@@ -7,8 +7,8 @@ android {
         applicationId 'com.oddsoft.tpetrash2'
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 40
-        versionName '3.6.3.022216TT'
+        versionCode 41
+        versionName '3.7.0.022416TT'
     }
     buildTypes {
         release {
@@ -27,7 +27,6 @@ android {
 }
 
 dependencies {
-
     //compile fileTree(include: ['*.jar'], dir: 'libs')
     compile('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
         // exclusion is not necessary, but generally a good idea.
@@ -51,7 +50,6 @@ dependencies {
     compile 'com.parse.bolts:bolts-android:1.4.0'
     compile 'com.parse:parse-android:1.13.0'
     compile 'com.parse:parseui-widget-android:0.0.1'
-    compile 'com.firebase:firebase-client-android:2.5.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.mikepenz:iconics-core:1.7.3@aar'
     compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'

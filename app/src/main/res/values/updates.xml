@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>3.6.4\n新北市即時資訊更即時
+    	<item>3.7.0\n因雲端平台因素，移除『新北市垃圾車即時資訊』之功能，在班表地圖仍會顯示該班次垃圾車之即時位置
     	</item>
 </string-array>
 </resources>

@@ -7,7 +7,6 @@ package com.oddsoft.tpetrash2;
 import android.location.Location;
 import android.util.Log;
 
-import com.firebase.client.Firebase;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
@@ -30,18 +29,6 @@ public class Application extends android.app.Application {
     // Debugging tag for the application
     public static final String APPTAG = Application.class.getSimpleName();
 
-    //Admob
-    public static final String ADMOB_TEST_DEVICE_ID = Constant.ADMOB_TEST_DEVICE_ID;
-    public static final String ADMOB_UNIT_ID = Constant.ADMOB_UNIT_ID;
-    public static final String ADMOB_UNIT_ID_RT = Constant.ADMOB_UNIT_ID_RT;
-    //Vpon
-    public static final String VPON_UNIT_ID = Constant.VPON_UNIT_ID;
-
-    //Parse
-    private static final String PARSE_APPLICATION_ID = Constant.PARSE_APPLICATION_ID;
-    private static final String PARSE_CLIENT_KEY = Constant.PARSE_CLIENT_KEY;
-    public  static final String PARSE_OBJECT_NAME = Constant.PARSE_OBJECT_NAME;
-
     public Application() {
     }
 
@@ -49,10 +36,8 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
 
-        Firebase.setAndroidContext(this);
-
         ParseObject.registerSubclass(ArrayItem.class);
-        Parse.initialize(this, PARSE_APPLICATION_ID, PARSE_CLIENT_KEY);
+        Parse.initialize(this, Constant.PARSE_APPLICATION_ID, Constant.PARSE_CLIENT_KEY);
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
         ParsePush.subscribeInBackground("", new SaveCallback() {

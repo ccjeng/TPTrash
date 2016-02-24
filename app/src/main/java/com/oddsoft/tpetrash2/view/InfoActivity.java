@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -19,11 +20,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
-import com.firebase.client.ValueEventListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -47,8 +46,8 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.Application;
 import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.adapter.RealtimeGson;
-import com.oddsoft.tpetrash2.adapter.RealtimeItem;
 import com.oddsoft.tpetrash2.utils.Analytics;
+import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -59,7 +58,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -79,11 +77,6 @@ public class InfoActivity extends AppCompatActivity
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
     // A fast interval ceiling
     private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = 1000;
-
-    public static final int REFRESH_DELAY = 1000;
-
-    @Bind(R.id.todayView)
-    TextView todayView;
 
     @Bind(R.id.garbageView)
     TextView garbageView;
@@ -105,9 +98,6 @@ public class InfoActivity extends AppCompatActivity
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
-    //@Bind(R.id.pull_to_refresh)
-    //SwipeRefreshLayout mSwipeLayout;
 
     private String strFrom = "";
     private String strFromLat = "";
@@ -135,7 +125,7 @@ public class InfoActivity extends AppCompatActivity
     private Polyline line;
     private Marker markerCar;
 
-    public static final String TRAVEL_MODE = "driving";// default
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,36 +179,35 @@ public class InfoActivity extends AppCompatActivity
         //set toolbar title
         getSupportActionBar().setTitle(time);
 
-        Time today = new Time();
-        todayView.setText("今天是" + today.getDayOfWeekName());
+        String strToday = Time.getDayOfWeekName();
 
         if (garbage) {
             //今天有收一般垃圾
-            garbageView.setText("今天有收一般垃圾");
+            garbageView.setText(strToday + "有收一般垃圾");
             garbageView.setTextColor(getResources().getColor(R.color.green));
         } else {
             //今天沒收一般垃圾"
-            garbageView.setText("今天不收一般垃圾");
+            garbageView.setText(strToday + "不收一般垃圾");
             garbageView.setTextColor(getResources().getColor(R.color.red));
         }
 
         if (food) {
             //今天有收廚餘
-            foodView.setText("今天有收廚餘");
+            foodView.setText(strToday + "有收廚餘");
             foodView.setTextColor(getResources().getColor(R.color.green));
         } else {
             //今天沒收廚餘
-            foodView.setText("今天不收廚餘");
+            foodView.setText(strToday + "不收廚餘");
             foodView.setTextColor(getResources().getColor(R.color.red));
         }
 
         if (recycling) {
             //今天有收資源回收
-            recyclingView.setText("今天有收資源回收");
+            recyclingView.setText(strToday + "有收資源回收");
             recyclingView.setTextColor(getResources().getColor(R.color.green));
         } else {
             //今天沒收資源回收
-            recyclingView.setText("今天不收資源回收");
+            recyclingView.setText(strToday + "不收資源回收");
             recyclingView.setTextColor(getResources().getColor(R.color.red));
         }
 
@@ -234,7 +223,7 @@ public class InfoActivity extends AppCompatActivity
         map.setMyLocationEnabled(true);
 
         //show realtime car
-        if (lineid != "") {
+        if (!lineid.equals("")) {
             //query lineid from realtime data set, and draw it on the map.
             queryRealtimeJson(lineid);
         }
@@ -260,7 +249,7 @@ public class InfoActivity extends AppCompatActivity
         line = map.addPolyline(polylineOpt);
 
         drawLineCar();
-
+        adView();
     }
 
 
@@ -329,6 +318,10 @@ public class InfoActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
+
+        if (adView != null)
+            adView.pause();
+
         if (locationClient != null) {
             if (locationClient.isConnected()) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(
@@ -337,12 +330,13 @@ public class InfoActivity extends AppCompatActivity
         }
     }
 
-    /*
-    * Called when the Activity is resumed. Updates the view.
-     */
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (adView != null)
+            adView.resume();
+
         if (locationClient != null) {
             if (!locationClient.isConnected()) {
                 locationClient.connect();
@@ -353,6 +347,9 @@ public class InfoActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if (adView != null)
+            adView.destroy();
     }
 
     // 建立Google API用戶端物件
@@ -416,7 +413,7 @@ public class InfoActivity extends AppCompatActivity
     }
 
     private void drawLineCar(){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(Application.PARSE_OBJECT_NAME);
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(Constant.PARSE_OBJECT_NAME);
         query.whereEqualTo("line", lineName);
         query.whereNotEqualTo("address", address);
 
@@ -482,7 +479,7 @@ public class InfoActivity extends AppCompatActivity
                         ArrayList<RealtimeGson> jsonArr = gson.fromJson(response, listType);
 
                         for (RealtimeGson obj : jsonArr) {
-                            //Log.d(TAG, obj.getLineid() +'-' + obj.getLocation());
+                            Log.d(TAG, obj.getLineid() +'-' + obj.getLocation());
 
                             if (obj.getLineid().equals(lindID)) {
 
@@ -520,4 +517,31 @@ public class InfoActivity extends AppCompatActivity
 
 
     }
+
+    private void adView() {
+
+        RelativeLayout adBannerLayout = (RelativeLayout) findViewById(R.id.footerLayout);
+
+        adView = new AdView(this);
+        adView.setAdUnitId(Constant.ADMOB_UNIT_ID_INFO);
+        adView.setAdSize(AdSize.SMART_BANNER);
+        adBannerLayout.addView(adView);
+
+        AdRequest adRequest;
+
+        if (Application.APPDEBUG) {
+            //Test Mode
+            adRequest = new AdRequest.Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                    .addTestDevice(Constant.ADMOB_TEST_DEVICE_ID)
+                    .build();
+        } else {
+
+            adRequest = new AdRequest.Builder().build();
+
+        }
+        adView.loadAd(adRequest);
+
+    }
+
 }

@@ -69,10 +69,6 @@
             android:name=".view.RecycleActivity"
             android:label="@string/recycle" />
         <activity
-            android:name=".view.NewTaipeiRealtimeActivity"
-            android:hardwareAccelerated="true"
-            android:label="@string/newtaipeirealtime" />
-        <activity
             android:name="com.vpadn.widget.VpadnActivity"
             android:configChanges="orientation|keyboardHidden|navigation|keyboard|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:hardwareAccelerated="true"

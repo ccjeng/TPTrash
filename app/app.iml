@@ -103,9 +103,7 @@
     <orderEntry type="library" exported="" name="gson-2.6.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-location-8.4.0" level="project" />
     <orderEntry type="library" exported="" name="community-material-typeface-1.1.70.3" level="project" />
-    <orderEntry type="library" exported="" name="firebase-client-jvm-2.5.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-base-8.4.0" level="project" />
-    <orderEntry type="library" exported="" name="firebase-client-android-2.5.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-maps-8.4.0" level="project" />
     <orderEntry type="library" exported="" name="iconics-core-1.7.3" level="project" />
     <orderEntry type="library" exported="" name="bolts-tasks-1.4.0" level="project" />
@@ -115,7 +113,6 @@
     <orderEntry type="library" exported="" name="support-v4-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-8.4.0" level="project" />
     <orderEntry type="library" exported="" name="fontawesome-typeface-4.4.0.1" level="project" />
-    <orderEntry type="library" exported="" name="jackson-annotations-2.2.2" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.4.0" level="project" />
     <orderEntry type="library" exported="" name="parseui-widget-android-0.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.1.1" level="project" />
@@ -125,11 +122,8 @@
     <orderEntry type="library" exported="" name="AudienceNetwork" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-23.0.0" level="project" />
     <orderEntry type="library" exported="" name="materialish-progress-1.5" level="project" />
-    <orderEntry type="library" exported="" name="jackson-core-2.2.2" level="project" />
     <orderEntry type="library" exported="" name="design-23.1.1" level="project" />
-    <orderEntry type="library" exported="" name="jackson-databind-2.2.2" level="project" />
     <orderEntry type="library" exported="" name="vpadn-sdk-obf431-82605102-1506291043-d57fd2a" level="project" />
-    <orderEntry type="library" exported="" name="tubesock-0.0.12" level="project" />
     <orderEntry type="library" exported="" name="crouton-1.8.5" level="project" />
     <orderEntry type="library" exported="" name="bolts-applinks-1.4.0" level="project" />
     <orderEntry type="library" exported="" name="admob-adapter-1.0.0-1505261651-830485e" level="project" />

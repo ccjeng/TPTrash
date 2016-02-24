@@ -13,6 +13,7 @@ package com.oddsoft.tpetrash2.adapter;
 * */
 
 import com.oddsoft.tpetrash2.Application;
+import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.parse.ParseClassName;
 import com.parse.ParseGeoPoint;
@@ -21,7 +22,7 @@ import com.parse.ParseQuery;
 
 import java.text.DecimalFormat;
 
-@ParseClassName(Application.PARSE_OBJECT_NAME)
+@ParseClassName(Constant.PARSE_OBJECT_NAME)
 public class ArrayItem extends ParseObject {
 
     public String getAddress() {

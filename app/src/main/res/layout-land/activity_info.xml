@@ -14,18 +14,10 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/todayView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:visibility="gone" />
-
-    <TextView
         android:id="@+id/garbageView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/todayView"
+        android:layout_below="@+id/toolbar"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:visibility="gone" />
 
@@ -75,6 +67,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/memo"
-        android:layout_weight="1" />
+        android:layout_above="@+id/footerLayout" />
+
+    <RelativeLayout
+        android:id="@+id/footerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

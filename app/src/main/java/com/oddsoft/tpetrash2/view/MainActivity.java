@@ -56,6 +56,7 @@ import com.oddsoft.tpetrash2.Application;
 import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.adapter.ArrayItem;
 import com.oddsoft.tpetrash2.utils.Analytics;
+import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.oddsoft.tpetrash2.utils.Utils;
 import com.parse.ParseAnalytics;
@@ -272,7 +273,7 @@ public class MainActivity extends AppCompatActivity
         LinearLayout adBannerLayout = (LinearLayout) findViewById(R.id.footerLayout);
 
         adView = new AdView(this);
-        adView.setAdUnitId(Application.ADMOB_UNIT_ID);
+        adView.setAdUnitId(Constant.ADMOB_UNIT_ID);
         adView.setAdSize(AdSize.SMART_BANNER);
         adBannerLayout.addView(adView);
 
@@ -282,7 +283,7 @@ public class MainActivity extends AppCompatActivity
             //Test Mode
             adRequest = new AdRequest.Builder()
                     .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice(Application.ADMOB_TEST_DEVICE_ID)
+                    .addTestDevice(Constant.ADMOB_TEST_DEVICE_ID)
                     .build();
         } else {
 
@@ -313,9 +314,6 @@ public class MainActivity extends AppCompatActivity
                 switch (id) {
                     case R.id.navRecycle:
                         startActivity(new Intent(MainActivity.this, RecycleActivity.class));
-                        break;
-                    case R.id.navRealtime:
-                        startActivity(new Intent(MainActivity.this, NewTaipeiRealtimeActivity.class));
                         break;
                     case R.id.navSetting:
                         startActivity(new Intent(MainActivity.this, Prefs.class));
@@ -348,11 +346,6 @@ public class MainActivity extends AppCompatActivity
         //change navigation drawer item icons
         navigation.getMenu().findItem(R.id.navRecycle).setIcon(new IconicsDrawable(this)
                 .icon(FontAwesome.Icon.faw_recycle)
-                .color(Color.GRAY)
-                .sizeDp(24));
-
-        navigation.getMenu().findItem(R.id.navRealtime).setIcon(new IconicsDrawable(this)
-                .icon(FontAwesome.Icon.faw_truck)
                 .color(Color.GRAY)
                 .sizeDp(24));
 

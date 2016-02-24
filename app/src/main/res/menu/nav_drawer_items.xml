@@ -5,9 +5,6 @@
             android:id="@+id/navRecycle"
             android:title="@string/recycle"/>
         <item
-            android:id="@+id/navRealtime"
-            android:title="@string/action_realtime"/>
-        <item
             android:id="@+id/navSetting"
             android:title="@string/action_settings"/>
         <item
