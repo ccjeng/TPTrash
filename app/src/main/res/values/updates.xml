@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>3.7.1\n修正功能表不正常縮合的問題</item>
+    	<item>3.7.2\n改善介面</item>
 </string-array>
 </resources>
