@@ -19,6 +19,7 @@ import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.adapter.RecycleItem;
 import com.oddsoft.tpetrash2.adapter.RecycleListAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
+import com.oddsoft.tpetrash2.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,8 +31,6 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
  * Created by andycheng on 2015/7/10.
@@ -122,8 +121,8 @@ public class RecycleActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (adapter.getCount() == 0 && !searchText.getText().toString().trim().equals(""))
-                    Crouton.makeText(RecycleActivity.this, R.string.search_nodata, Style.CONFIRM,
-                            (ViewGroup)findViewById(R.id.croutonview)).show();
+                    Utils.showSnackBar(recycleView, getString(R.string.search_nodata), Utils.Mode.INFO);
+
 
             }
         });
@@ -194,7 +193,6 @@ public class RecycleActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Crouton.cancelAllCroutons();
         super.onDestroy();
     }
 }

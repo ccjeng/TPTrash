@@ -9,8 +9,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 public class Utils {
     public static final String TAG = "Utils";
@@ -204,6 +208,35 @@ public class Utils {
         }
 
         return tag;
+    }
+
+
+    public enum Mode {
+        ERROR, INFO, WARNING
+    }
+    public static void showSnackBar(View view, String message, Mode mode) {
+
+        Snackbar snackbar = Snackbar
+                .make(view, message, Snackbar.LENGTH_LONG);
+
+        TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+        tv.setTextColor(Color.WHITE);
+
+        switch(mode) {
+            case ERROR:
+                snackbar.getView().setBackgroundColor(Color.RED);
+                tv.setTextColor(Color.WHITE);
+                break;
+            case INFO:
+            case WARNING:
+                snackbar.getView().setBackgroundColor(Color.GREEN);
+                tv.setTextColor(Color.BLACK);
+                break;
+        }
+
+
+        snackbar.show();
+
     }
 
 }

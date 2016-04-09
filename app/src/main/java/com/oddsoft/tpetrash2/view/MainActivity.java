@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -50,7 +49,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.Application;
@@ -73,8 +71,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MainActivity extends AppCompatActivity
         implements LocationListener,
@@ -86,6 +82,7 @@ public class MainActivity extends AppCompatActivity
     private static int hour;
     private static int currentHour;
     private static String sorting;
+
 
     @Bind(R.id.hour_spinner)
     Spinner hourSpinner;
@@ -239,9 +236,10 @@ public class MainActivity extends AppCompatActivity
             if (!locationClient.isConnected()) {
                 locationClient.connect();
             }
+
         } else {
-            Crouton.makeText(MainActivity.this, R.string.network_error, Style.ALERT,
-                    (ViewGroup)findViewById(R.id.croutonview)).show();
+
+            Utils.showSnackBar(drawerLayout, getString(R.string.network_error), Utils.Mode.ERROR);
         }
         Calendar calendar = Calendar.getInstance();
         currentHour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -550,9 +548,8 @@ public class MainActivity extends AppCompatActivity
                             String msg = String.valueOf(distance) + "公里"
                                     + getString(R.string.data_not_found);
 
-                            //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
-                            Crouton.makeText(MainActivity.this, msg, Style.CONFIRM,
-                                    (ViewGroup) findViewById(R.id.croutonview)).show();
+                            Utils.showSnackBar(drawerLayout, msg, Utils.Mode.INFO);
+
 
                         }
                     }
@@ -571,8 +568,8 @@ public class MainActivity extends AppCompatActivity
 
             } else {
                 //location error
-                Crouton.makeText(MainActivity.this, R.string.location_error, Style.ALERT,
-                        (ViewGroup) findViewById(R.id.croutonview)).show();
+                Utils.showSnackBar(drawerLayout, getString(R.string.location_error), Utils.Mode.ERROR);
+
             }
 
         }
@@ -714,7 +711,6 @@ public class MainActivity extends AppCompatActivity
         if (adView != null)
             adView.destroy();
 
-        Crouton.cancelAllCroutons();
         super.onDestroy();
     }
 
@@ -850,7 +846,8 @@ public class MainActivity extends AppCompatActivity
 
         // 裝置沒有安裝Google Play服務
         if (errorCode == ConnectionResult.SERVICE_MISSING) {
-            Crouton.makeText(MainActivity.this, R.string.google_play_service_missing, Style.ALERT).show();
+            Utils.showSnackBar(drawerLayout, getString(R.string.google_play_service_missing), Utils.Mode.ERROR);
+
         }
 
     }

@@ -17,5 +17,5 @@ public class Constant {
     //Parse
     public static final String PARSE_APPLICATION_ID = "nxkxfDhpFQBXOReTPFIPhGIaYowmT5uuscj3w3Kb";
     public static final String PARSE_CLIENT_KEY = "oo7CwnSrT3XCjVHuN3r1JBw7rvJzjmYZCRCX9e2U";
-    public static final String PARSE_OBJECT_NAME = "TPE021416";
+    public static final String PARSE_OBJECT_NAME = "TPE041016";
 }
