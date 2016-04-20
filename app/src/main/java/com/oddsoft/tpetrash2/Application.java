@@ -5,19 +5,14 @@ package com.oddsoft.tpetrash2;
  */
 
 import android.location.Location;
-import android.util.Log;
 
+import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.AVObject;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 import com.oddsoft.tpetrash2.adapter.ArrayItem;
 import com.oddsoft.tpetrash2.utils.Constant;
-import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParseInstallation;
-import com.parse.ParseObject;
-import com.parse.ParsePush;
-import com.parse.SaveCallback;
 
 import java.util.HashMap;
 
@@ -36,7 +31,12 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
 
-        ParseObject.registerSubclass(ArrayItem.class);
+        AVOSCloud.initialize(this, Constant.LEANCLOUD_APP_ID, Constant.LEANCLOUD_APP_KEY);
+        AVOSCloud.useAVCloudCN();
+        AVObject.registerSubclass(ArrayItem.class);
+
+
+       /* ParseObject.registerSubclass(ArrayItem.class);
         Parse.initialize(this, Constant.PARSE_APPLICATION_ID, Constant.PARSE_CLIENT_KEY);
         ParseInstallation.getCurrentInstallation().saveInBackground();
 
@@ -49,7 +49,7 @@ public class Application extends android.app.Application {
                     Log.e("com.parse.push", "failed to subscribe for push", e);
                 }
             }
-        });
+        });*/
     }
 
 

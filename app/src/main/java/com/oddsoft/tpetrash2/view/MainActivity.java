@@ -27,16 +27,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVGeoPoint;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -58,13 +60,8 @@ import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.oddsoft.tpetrash2.utils.Utils;
-import com.parse.ParseAnalytics;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseQuery;
-import com.parse.ParseQueryAdapter;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -77,7 +74,7 @@ public class MainActivity extends AppCompatActivity
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = Application.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static int distance;
     private static int hour;
     private static int currentHour;
@@ -130,7 +127,7 @@ public class MainActivity extends AppCompatActivity
     private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = 1000;
 
     // Adapter for the Parse query
-    private ParseQueryAdapter<ArrayItem> trashQueryAdapter;
+    //private ParseQueryAdapter<ArrayItem> trashQueryAdapter;
 
     // Fields for helping process map and location changes
     private Location lastLocation;
@@ -156,7 +153,7 @@ public class MainActivity extends AppCompatActivity
         ga = new Analytics();
         ga.trackerPage(this);
 
-        ParseAnalytics.trackAppOpenedInBackground(getIntent());
+      //  ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
         getPref();
 
@@ -253,19 +250,19 @@ public class MainActivity extends AppCompatActivity
 
         adView();
 
-
+/*
         Log.d(TAG, "isCNY=" + Time.isCNY());
         if (Time.isCNY()) {
             Toast.makeText(this,"春節期間初一至初三不收垃圾，初四開始收垃圾！"
                     ,Toast.LENGTH_LONG).show();
         } else {
-
+*/
             //show 3/7 messages
             if (Time.getDayOfWeekNumber().equals("3") || Time.getDayOfWeekNumber().equals("0")) {
                 Toast.makeText(this,"今天是"+Time.getDayOfWeekName()+"，台北市沒有收垃圾，新北市僅部分區域有收垃圾！"
                         ,Toast.LENGTH_LONG).show();
             }
-        }
+ //       }
     }
 
     private void adView() {
@@ -396,7 +393,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -411,10 +407,14 @@ public class MainActivity extends AppCompatActivity
 
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
 
+
+
+
+/*
         if (Time.isCNY()) {
             Toast.makeText(MainActivity.this, "春節期間初一至初三不收垃圾，初四開始收垃圾！"
                     , Toast.LENGTH_LONG).show();
-        } else {
+        } else {*/
             if (myLoc != null) {
 
                 //set current location to global veriable
@@ -423,13 +423,39 @@ public class MainActivity extends AppCompatActivity
                 if (Application.APPDEBUG)
                     Log.d(TAG, "location = " + myLoc.toString());
 
+                final String strHour = String.valueOf(hour);
+                final String weekTag = Utils.getWeekTag();
+
+                AVGeoPoint userLocation = new AVGeoPoint(myLoc.getLatitude(), myLoc.getLongitude());
+                AVQuery<ArrayItem> query = AVQuery.getQuery(ArrayItem.class);
+
+                if (sort.equals("TIME")) {
+                    query.orderByAscending("time");
+                }
+
+                query.whereEqualTo(weekTag,"Y")
+                        .whereEqualTo("hour",  strHour)
+                        .whereWithinKilometers("location", userLocation, distance)
+                        .setLimit(100);
+
+                query.findInBackground(new FindCallback<ArrayItem>() {
+                    public void done(List<ArrayItem> avObjects, AVException e) {
+                        if (e == null) {
+                            for(ArrayItem i: avObjects) {
+                                Log.d(TAG, i.getAddress());
+                            }
+                            Log.d("成功", "查询到" + avObjects.size() + " 条符合条件的数据");
+                        } else {
+                            Log.d("失败", "查询错误: " + e.getMessage());
+                        }
+                    }
+                });
+
                 // Set up a customized query
+                /*
                 ParseQueryAdapter.QueryFactory<ArrayItem> factory =
                         new ParseQueryAdapter.QueryFactory<ArrayItem>() {
                             public ParseQuery<ArrayItem> create() {
-
-                                String strHour = String.valueOf(hour);
-                                String weekTag = Utils.getWeekTag();
 
                                 if (Application.APPDEBUG) {
                                     Log.d(TAG, "hour = " + strHour);
@@ -453,9 +479,10 @@ public class MainActivity extends AppCompatActivity
                                 return finalQuery;
                             }
                         };
-
+*/
                 // Set up the query adapter
                 //todo change to recyclerview + cardview
+                /*
                 trashQueryAdapter = new ParseQueryAdapter<ArrayItem>(this, factory) {
                     @Override
                     public View getItemView(ArrayItem trash, View view, ViewGroup parent) {
@@ -566,20 +593,22 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
+                */
+
             } else {
                 //location error
                 Utils.showSnackBar(drawerLayout, getString(R.string.location_error), Utils.Mode.ERROR);
 
             }
 
-        }
+        //}
     }
 
     /*
  * Helper method to get the Parse GEO point representation of a location
  */
-    private ParseGeoPoint geoPointFromLocation(Location loc) {
-        return new ParseGeoPoint(loc.getLatitude(), loc.getLongitude());
+    private AVGeoPoint geoPointFromLocation(Location loc) {
+        return new AVGeoPoint(loc.getLatitude(), loc.getLongitude());
     }
 
     @Override

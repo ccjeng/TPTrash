@@ -18,4 +18,11 @@ public class Constant {
     public static final String PARSE_APPLICATION_ID = "nxkxfDhpFQBXOReTPFIPhGIaYowmT5uuscj3w3Kb";
     public static final String PARSE_CLIENT_KEY = "oo7CwnSrT3XCjVHuN3r1JBw7rvJzjmYZCRCX9e2U";
     public static final String PARSE_OBJECT_NAME = "TPE041016";
+
+    //LeanCloud
+    public static final String LEANCLOUD_APP_ID = "oAekd4xrtT0XcwbKmt0qRvCj-gzGzoHsz";
+    public static final String LEANCLOUD_APP_KEY = "2NdAJyajI6plU7YvOahHXphP";
+    public static final String LEANCLOUD_OBJECT_NAME = "TPE";
+
+
 }
