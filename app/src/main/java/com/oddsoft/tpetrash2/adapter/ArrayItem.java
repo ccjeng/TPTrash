@@ -12,18 +12,16 @@ package com.oddsoft.tpetrash2.adapter;
 *
 * */
 
-import com.oddsoft.tpetrash2.Application;
+import com.avos.avoscloud.AVClassName;
+import com.avos.avoscloud.AVGeoPoint;
+import com.avos.avoscloud.AVObject;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
-import com.parse.ParseClassName;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import java.text.DecimalFormat;
 
-@ParseClassName(Constant.PARSE_OBJECT_NAME)
-public class ArrayItem extends ParseObject {
+@AVClassName(Constant.LEANCLOUD_OBJECT_NAME)
+public class ArrayItem extends AVObject {
 
     public String getAddress() {
 
@@ -331,11 +329,13 @@ public class ArrayItem extends ParseObject {
 
     }
 
-    public ParseGeoPoint getLocation() {
-        return getParseGeoPoint("location");
+
+    public AVGeoPoint getLocation() {
+        return getAVGeoPoint("location");
     }
 
-    public String getDistance(ParseGeoPoint current) {
+
+    public String getDistance(AVGeoPoint current) {
 
         Double distance = getLocation().distanceInKilometersTo(current);
         String strDistance = "";
@@ -354,7 +354,12 @@ public class ArrayItem extends ParseObject {
         return strDistance + unit;
     }
 
+    public static final Creator CREATOR = AVObjectCreator.instance;
+
+    /*
     public static ParseQuery<ArrayItem> getQuery() {
         return ParseQuery.getQuery(ArrayItem.class);
     }
+*/
+
 }
