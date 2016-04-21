@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -19,6 +18,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -30,7 +32,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +57,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.Application;
 import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.adapter.ArrayItemAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
@@ -75,6 +77,8 @@ public class MainActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    public static final String INTENT_EXTRA_ITEM = "intentItem";
+
     private static int distance;
     private static int hour;
     private static int currentHour;
@@ -86,8 +90,8 @@ public class MainActivity extends AppCompatActivity
     @Bind(R.id.sort_spinner)
     Spinner sortSpinner;
 
-    @Bind(R.id.trashList)
-    ListView trashListView;
+    @Bind(R.id.recyclerView)
+    RecyclerView recyclerView;
 
     @Bind(R.id.navigation)
     NavigationView navigation;
@@ -144,6 +148,8 @@ public class MainActivity extends AppCompatActivity
     private static final int DIALOG_WELCOME = 1;
     private static final int DIALOG_UPDATE = 2;
 
+    private ArrayItemAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,8 +158,6 @@ public class MainActivity extends AppCompatActivity
 
         ga = new Analytics();
         ga.trackerPage(this);
-
-      //  ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
         getPref();
 
@@ -191,12 +195,12 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(
                 this, R.array.hour_spinnner_name,
                 android.R.layout.simple_spinner_item);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        hourSpinner.setAdapter(adapter);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        hourSpinner.setAdapter(arrayAdapter);
         hourSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -222,6 +226,11 @@ public class MainActivity extends AppCompatActivity
         if (Utils.newVersionInstalled(this)) {
             this.showDialog(DIALOG_UPDATE);
         }
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
 
         if (isNetworkConnected()) {
             // 建立Google API用戶端物件
@@ -393,21 +402,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
     private void parseQuery(final int hour, final String sort) {
 
         myLoc = (currentLocation == null) ? lastLocation : currentLocation;
-
-
 
 
 /*
@@ -438,124 +435,40 @@ public class MainActivity extends AppCompatActivity
                         .whereWithinKilometers("location", userLocation, distance)
                         .setLimit(100);
 
+                progressWheel.setVisibility(View.VISIBLE);
+
                 query.findInBackground(new FindCallback<ArrayItem>() {
                     public void done(List<ArrayItem> avObjects, AVException e) {
+
+                        progressWheel.setVisibility(View.GONE);
+
                         if (e == null) {
-                            for(ArrayItem i: avObjects) {
-                                Log.d(TAG, i.getAddress());
-                            }
-                            Log.d("成功", "查询到" + avObjects.size() + " 条符合条件的数据");
+
+                            adapter = new ArrayItemAdapter(MainActivity.this, avObjects, currentHour, myLoc);
+
+                            recyclerView.setAdapter(adapter);
+
+                            adapter.setOnItemClickListener(new ArrayItemAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(ArrayItem item) {
+                                    Log.d(TAG, item.getAddress());
+                                    goIntent(item);
+                                }
+                            });
+
+                            Log.d(TAG, "查询到" + avObjects.size() + " 条符合条件的数据");
                         } else {
-                            Log.d("失败", "查询错误: " + e.getMessage());
+                            Log.d(TAG, "查询错误: " + e.getMessage());
                         }
+
+
                     }
                 });
 
-                // Set up a customized query
-                /*
-                ParseQueryAdapter.QueryFactory<ArrayItem> factory =
-                        new ParseQueryAdapter.QueryFactory<ArrayItem>() {
-                            public ParseQuery<ArrayItem> create() {
-
-                                if (Application.APPDEBUG) {
-                                    Log.d(TAG, "hour = " + strHour);
-                                    Log.d(TAG, "weekTag = " + weekTag);
-                                }
-
-                                ParseQuery<ArrayItem> finalQuery = ArrayItem.getQuery();
-
-                                if (sort.equals("TIME")) {
-                                    finalQuery.orderByAscending("time");
-                                }
-                                finalQuery.whereEqualTo(weekTag,"Y");
-                                finalQuery.whereEqualTo("hour", strHour);
-                                finalQuery.whereWithinKilometers("location"
-                                        , geoPointFromLocation(myLoc)
-                                        , distance
-                                );
-
-                                finalQuery.setLimit(100);
-
-                                return finalQuery;
-                            }
-                        };
-*/
                 // Set up the query adapter
                 //todo change to recyclerview + cardview
                 /*
                 trashQueryAdapter = new ParseQueryAdapter<ArrayItem>(this, factory) {
-                    @Override
-                    public View getItemView(ArrayItem trash, View view, ViewGroup parent) {
-                        if (view == null) {
-                            view = View.inflate(getContext(), R.layout.trash_item, null);
-                        }
-
-                        RelativeLayout row = (RelativeLayout) view.findViewById(R.id.row);
-                        TextView statusView = (TextView) view.findViewById(R.id.status_view);
-                        TextView timeView = (TextView) view.findViewById(R.id.time_view);
-                        TextView addressView = (TextView) view.findViewById(R.id.address_view);
-                        TextView distanceView = (TextView) view.findViewById(R.id.distance_view);
-
-                        TextView garbageView = (TextView) view.findViewById(R.id.garbage_view);
-                        TextView foodView = (TextView) view.findViewById(R.id.food_view);
-                        TextView recyclingView = (TextView) view.findViewById(R.id.recycling_view);
-
-                        timeView.setText(trash.getCarTime());
-                        distanceView.setText(trash.getDistance(geoPointFromLocation(myLoc)));
-                        addressView.setText(trash.getAddress());
-
-                        //Log.d(TAG, trash.getCarTime() + Time.getCurrentHHMM() + " # " + trash.getCarStartTime() + " # " + trash.getCarEndTime());
-                        if (Integer.valueOf(trash.getCarHour()).equals(currentHour)) {
-
-                            if ((trash.getCarStartTime() <= Time.getCurrentHHMM()) && (Time.getCurrentHHMM() <= trash.getCarEndTime())) {
-                                //within time 執行勤務中
-                                statusView.setText("執行勤務中");
-                                statusView.setVisibility(View.VISIBLE);
-                                row.setBackgroundColor(getResources().getColor(R.color.md_red_50));
-
-                            } else if (Time.getCurrentHHMM() > trash.getCarEndTime()) {
-                                statusView.setText("已結束勤務");
-                                statusView.setVisibility(View.VISIBLE);
-                                row.setBackgroundColor(getResources().getColor(R.color.lightyellow));
-                            } else {
-                                statusView.setVisibility(View.GONE);
-                                row.setBackgroundColor(getResources().getColor(R.color.write));
-                            }
-                        }
-                        else {
-                            statusView.setVisibility(View.GONE);
-                            row.setBackgroundColor(getResources().getColor(R.color.write));
-                        }
-
-                        if (trash.checkTodayAvailableGarbage()) {
-                            garbageView.setText("[收一般垃圾]");
-                            garbageView.setTextColor(getResources().getColor(R.color.green));
-
-                        } else {
-                            garbageView.setText("[不收一般垃圾]");
-                            garbageView.setTextColor(getResources().getColor(R.color.red));
-                        }
-
-                        if (trash.checkTodayAvailableFood()) {
-                            foodView.setText(" [收廚餘]");
-                            foodView.setTextColor(getResources().getColor(R.color.green));
-                        } else {
-                            foodView.setText(" [不收廚餘]");
-                            foodView.setTextColor(getResources().getColor(R.color.red));
-                        }
-
-                        if (trash.checkTodayAvailableRecycling()) {
-                            recyclingView.setText(" [收資源回收]");
-                            recyclingView.setTextColor(getResources().getColor(R.color.green));
-                        } else {
-                            recyclingView.setText(" [不收資源回收]");
-                            recyclingView.setTextColor(getResources().getColor(R.color.red));
-                        }
-
-
-                        return view;
-                    }
-                };
 
                 trashQueryAdapter.setPaginationEnabled(false);
                 trashQueryAdapter.addOnQueryLoadListener(new ParseQueryAdapter.OnQueryLoadListener<ArrayItem>() {
@@ -752,6 +665,16 @@ public class MainActivity extends AppCompatActivity
 
         Intent intent = new Intent();
         intent.setClass(this, InfoActivity.class);
+
+        /*intent.putExtra(INTENT_EXTRA_ITEM, item);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("fromLat", String.valueOf(myLoc.getLatitude()));
+        bundle.putString("fromLng", String.valueOf(myLoc.getLongitude()));
+
+        intent.putExtras(bundle);
+        */
+
         Bundle bundle = new Bundle();
 
         bundle.putBoolean("realtime", false);
@@ -773,7 +696,7 @@ public class MainActivity extends AppCompatActivity
 
         intent.putExtras(bundle);
 
-        startActivityForResult(intent, 0);
+        startActivity(intent);
 
     }
 

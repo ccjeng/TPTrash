@@ -20,15 +20,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVQuery;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,14 +47,11 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.Application;
 import com.oddsoft.tpetrash2.R;
+import com.oddsoft.tpetrash2.adapter.ArrayItem;
 import com.oddsoft.tpetrash2.adapter.RealtimeGson;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -68,7 +67,7 @@ public class InfoActivity extends AppCompatActivity
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = Application.class.getSimpleName();
+    private static final String TAG = InfoActivity.class.getSimpleName();
 
     private LocationRequest locationRequest;
     private GoogleApiClient locationClient;
@@ -98,6 +97,8 @@ public class InfoActivity extends AppCompatActivity
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+
+    private ArrayItem item;
 
     private String strFrom = "";
     private String strFromLat = "";
@@ -141,16 +142,13 @@ public class InfoActivity extends AppCompatActivity
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        toolbar.setNavigationIcon(new IconicsDrawable(this)
-                .icon(CommunityMaterial.Icon.cmd_keyboard_backspace)
-                .color(Color.WHITE)
-                .actionBar());
-
         configGoogleApiClient();
         configLocationRequest();
+
         if (!locationClient.isConnected()) {
             locationClient.connect();
         }
+
 
         Bundle bundle = this.getIntent().getExtras();
 
@@ -303,9 +301,7 @@ public class InfoActivity extends AppCompatActivity
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
-    /*
-    * Called when the Activity is restarted, even before it becomes visible.
-    */
+
     @Override
     public void onStart() {
         super.onStart();
@@ -413,7 +409,9 @@ public class InfoActivity extends AppCompatActivity
     }
 
     private void drawLineCar(){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(Constant.PARSE_OBJECT_NAME);
+
+        AVQuery<ArrayItem> query = AVQuery.getQuery(ArrayItem.class);
+
         query.whereEqualTo("line", lineName);
         query.whereNotEqualTo("address", address);
 
@@ -421,30 +419,23 @@ public class InfoActivity extends AppCompatActivity
             query.whereEqualTo("carno", carNo);
         }
 
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> items, ParseException e) {
-                if (e == null) {
+        query.findInBackground(new com.avos.avoscloud.FindCallback<ArrayItem>() {
+            @Override
+            public void done(List<ArrayItem> item, AVException e) {
+                for(ArrayItem i: item) {
+                    //Marker
+                    MarkerOptions markerOption = new MarkerOptions();
+                    markerOption.position(new LatLng(i.getLocation().getLatitude()
+                            , i.getLocation().getLongitude()));
+                    markerOption.title(i.getAddress())
+                            .snippet(i.getCarTime());
+                    markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
 
-                    int i = 0;
-
-                    for (i = 0; i < items.size(); i++) {
-                        //Marker
-                        MarkerOptions markerOption = new MarkerOptions();
-                        markerOption.position(new LatLng(items.get(i).getParseGeoPoint("location").getLatitude()
-                                , items.get(i).getParseGeoPoint("location").getLongitude()));
-                        markerOption.title(items.get(i).get("address").toString())
-                                .snippet(items.get(i).get("time").toString() + " [" + items.get(i).get("carno").toString() + "]");
-                        markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
-
-                        markerCar = map.addMarker(markerOption);
-
-                    }
-
-                } else {
-                    Log.d(TAG, "Error: " + e.getMessage());
+                    markerCar = map.addMarker(markerOption);
                 }
             }
         });
+
     }
 
     private void drawRealTimeCar(Double lat, Double lng, String time, String address) {

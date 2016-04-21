@@ -10,11 +10,14 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
+import android.location.Location;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.avos.avoscloud.AVGeoPoint;
 
 public class Utils {
     public static final String TAG = "Utils";
@@ -238,5 +241,11 @@ public class Utils {
         snackbar.show();
 
     }
+
+
+    public static AVGeoPoint geoPointFromLocation(Location loc) {
+        return new AVGeoPoint(loc.getLatitude(), loc.getLongitude());
+    }
+
 
 }
