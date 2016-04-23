@@ -1,7 +1,5 @@
 package com.oddsoft.tpetrash2.utils;
 
-import android.util.Log;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -28,31 +26,29 @@ public class Time {
     }
 
 
-    public static String getDayOfWeekName() {
-        Calendar calendar = Calendar.getInstance();
-        dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+    public static String getDayOfWeekName(int dayOfWeek) {
 
         String dayOfWeekName = "";
         switch(dayOfWeek){
-            case Calendar.SUNDAY:
+            case 0:
                 dayOfWeekName = "星期日";
                 break;
-            case Calendar.MONDAY:
+            case 1:
                 dayOfWeekName = "星期一";
                 break;
-            case Calendar.TUESDAY:
+            case 2:
                 dayOfWeekName = "星期二";
                 break;
-            case Calendar.WEDNESDAY:
+            case 3:
                 dayOfWeekName = "星期三";
                 break;
-            case Calendar.THURSDAY:
+            case 4:
                 dayOfWeekName = "星期四";
                 break;
-            case Calendar.FRIDAY:
+            case 5:
                 dayOfWeekName = "星期五";
                 break;
-            case Calendar.SATURDAY:
+            case 6:
                 dayOfWeekName = "星期六";
         }
         return dayOfWeekName;

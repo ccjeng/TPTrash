@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".view.MainActivity">
+    tools:context=".view.activity.MainActivity">
 
     <include
         android:id="@+id/toolbar"
@@ -21,97 +21,64 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/write"
-        tools:context=".view.MainActivity">
+        tools:context=".view.activity.MainActivity">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_gravity="center_horizontal"/>
 
-            <LinearLayout
-                android:id="@+id/spinner_layout"
-                android:layout_width="fill_parent"
+            <com.mikepenz.iconics.view.IconicsButton
+                android:id="@+id/btn_lbs"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TableLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:stretchColumns="1">
-                    <TableRow>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:text="@string/hour_spinner_prompt"
-                            android:textColor="#ff2460ff"
-                            android:background="@color/write"
-                            android:textSize="18dp" />
-                        <Spinner
-                            android:id="@+id/hour_spinner"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:prompt="@string/hour_spinner_prompt"
-                            android:background="@color/write"
-                            android:textColor="#ff2460ff" />
-                    </TableRow>
-                    <TableRow>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:text="@string/pref_sorting"
-                            android:textColor="#ff2460ff"
-                            android:background="@color/write"
-                            android:textSize="18dp" />
-                        <Spinner
-                            android:id="@+id/sort_spinner"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:prompt="@string/pref_sorting"
-                            android:background="@color/write"
-                            android:textColor="#ff2460ff" />
-                    </TableRow>
-                </TableLayout>
-            </LinearLayout>
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:minLines="2"
+                android:textColor="@color/black"
+                android:background="@color/write"
+                android:padding="8dp"
+                android:scaleType="fitXY"
+                android:text="{faw-map-marker}  找附近的垃圾車"/>
 
-            <com.pnikosis.materialishprogress.ProgressWheel
-                android:id="@+id/progress_wheel"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                wheel:matProg_barColor="@color/color_progress"
-                wheel:matProg_progressIndeterminate="true"
-                android:visibility="gone"/>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_gravity="center_horizontal"/>
 
-            <LinearLayout
-                android:id="@+id/home_layout"
-                android:layout_width="fill_parent"
+            <com.mikepenz.iconics.view.IconicsButton
+                android:id="@+id/btn_query"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/footerLayout"
-                android:layout_below="@+id/spinner_layout"
-                android:orientation="vertical">
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:minLines="2"
+                android:textColor="@color/black"
+                android:background="@color/write"
+                android:padding="8dp"
+                android:scaleType="fitXY"
+                android:text="{faw-search}  依行政區查詢"/>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_gravity="center_horizontal"/>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/footerLayout"
-                android:layout_width="fill_parent"
+            <com.mikepenz.iconics.view.IconicsButton
+                android:id="@+id/btn_recycle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:gravity="bottom"
-                android:orientation="horizontal">
-            </LinearLayout>
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:minLines="2"
+                android:textColor="@color/black"
+                android:background="@color/write"
+                android:padding="8dp"
+                android:scaleType="fitXY"
+                android:text="{faw_recycle}  垃圾分類小幫手"/>
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <android.support.design.widget.NavigationView
             android:id="@+id/navigation"

@@ -8,8 +8,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
-import com.oddsoft.tpetrash2.Application;
-import com.oddsoft.tpetrash2.view.MainActivity;
+import com.oddsoft.tpetrash2.view.base.Application;
+import com.oddsoft.tpetrash2.view.activity.MainActivity;
 import com.oddsoft.tpetrash2.R;
 import com.parse.ParseAnalytics;
 import com.parse.ParsePushBroadcastReceiver;

@@ -2,7 +2,7 @@ package com.oddsoft.tpetrash2.adapter;
 
 import android.util.Log;
 
-import com.oddsoft.tpetrash2.Application;
+import com.oddsoft.tpetrash2.view.base.Application;
 
 import org.json.JSONArray;
 import org.json.JSONException;

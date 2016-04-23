@@ -1,20 +1,19 @@
 <resources>
 
-    <!-- Base application theme, ... -->
+    <!-- Base application theme, ...
     <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/ActionBar</item>
 
-    </style>
+    </style> -->
 
-    <!-- Application theme. -->
+    <!-- Application theme.
     <style name="AppTheme" parent="AppBaseTheme">
-        <!-- ... -->
-    </style>
+    </style> -->
 
+    <!--
     <style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:titleTextStyle">@style/ActionBar.TitleTextStyle</item>
         <item name="android:background">@color/color_primary</item>
-        <!--hide home icon-->
         <item name="android:icon">@android:color/transparent</item>
     </style>
 
@@ -26,4 +25,5 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+-->
 </resources>

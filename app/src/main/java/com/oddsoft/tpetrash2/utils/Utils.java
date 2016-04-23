@@ -5,12 +5,15 @@ package com.oddsoft.tpetrash2.utils;
  */
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -183,10 +186,10 @@ public class Utils {
     }
 
 
-    public static String getWeekTag(){
+    public static String getWeekTag(int today){
         String tag = "";
 
-        switch (Time.getDayOfWeekNumber()) {
+        switch (String.valueOf(today)) {
             case "1":
                 tag = "mon";
                 break;
@@ -246,6 +249,17 @@ public class Utils {
     public static AVGeoPoint geoPointFromLocation(Location loc) {
         return new AVGeoPoint(loc.getLatitude(), loc.getLongitude());
     }
+
+
+    public static boolean isNetworkConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
+
 
 
 }

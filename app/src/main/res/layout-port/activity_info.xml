@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/write"
-    tools:context=".view.InfoActivity">
+    tools:context=".view.activity.InfoActivity">
 
     <include
         android:id="@+id/toolbar"

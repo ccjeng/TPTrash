@@ -16,7 +16,6 @@ import com.avos.avoscloud.AVClassName;
 import com.avos.avoscloud.AVGeoPoint;
 import com.avos.avoscloud.AVObject;
 import com.oddsoft.tpetrash2.utils.Constant;
-import com.oddsoft.tpetrash2.utils.Time;
 
 import java.text.DecimalFormat;
 
@@ -202,9 +201,9 @@ public class ArrayItem extends AVObject {
     }
 
     //判斷今天要不要收廚餘
-    public Boolean checkTodayAvailableFood() {
+    public Boolean checkTodayAvailableFood(String day) {
         Boolean result = false;
-        switch (Time.getDayOfWeekNumber()) {
+        switch (day) {
             case "1":
                 result = this.getFood1().equals("Y") ? true : false;
                 break;
@@ -232,9 +231,9 @@ public class ArrayItem extends AVObject {
     }
 
     //判斷今天要不要收資源回收
-    public Boolean checkTodayAvailableRecycling() {
+    public Boolean checkTodayAvailableRecycling(String day) {
         Boolean result = false;
-        switch (Time.getDayOfWeekNumber()) {
+        switch (day) {
             case "1":
                 result = this.getRecycling1().equals("Y") ? true : false;
                 break;
@@ -261,9 +260,9 @@ public class ArrayItem extends AVObject {
     }
 
     //判斷今天要不要收一般垃圾
-    public Boolean checkTodayAvailableGarbage() {
+    public Boolean checkTodayAvailableGarbage(String day) {
         Boolean result = false;
-        switch (Time.getDayOfWeekNumber()) {
+        switch (day) {
             case "1":
                 result = this.getGarbage1().equals("Y") ? true : false;
                 break;
@@ -289,26 +288,26 @@ public class ArrayItem extends AVObject {
         return result;
     }
 
-    public String getMemo() {
+    public String getMemo(String day) {
         String memo = getString("memo");
         if (this.getCity().equals("Taipei")) {
 
-            switch (Time.getDayOfWeekNumber()) {
+            switch (day) {
                 case "1":
                 case "5":
                     if (memo.equals("")) {
-                        memo = "今天資源回收有收：平面類：紙類 舊衣類 乾淨塑膠袋";
+                        memo = "資源回收有收：平面類：紙類 舊衣類 乾淨塑膠袋";
                     } else {
-                        memo = memo + ", 今天資源回收有收：平面類：紙類 舊衣類 乾淨塑膠袋";
+                        memo = memo + ", 資源回收有收：平面類：紙類 舊衣類 乾淨塑膠袋";
                     }
                     break;
                 case "2":
                 case "4":
                 case "6":
                     if (memo.equals("")) {
-                        memo = "今天資源回收有收：乾淨保麗龍, 一般類（瓶罐、容器、小家電等)";
+                        memo = "資源回收有收：乾淨保麗龍, 一般類（瓶罐、容器、小家電等)";
                     } else {
-                        memo = memo + ", 今天資源回收有收：乾淨保麗龍, 一般類（瓶罐、容器、小家電等)";
+                        memo = memo + ", 資源回收有收：乾淨保麗龍, 一般類（瓶罐、容器、小家電等)";
                     }
                     break;
             }

@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.oddsoft.tpetrash2.Application;
+import com.oddsoft.tpetrash2.view.base.Application;
 
 /**
  * Created by andycheng on 2015/6/28.

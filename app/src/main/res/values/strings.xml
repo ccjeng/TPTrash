@@ -4,6 +4,8 @@
     <string name="app_name">台北倒垃圾</string>
     <string name="about">關於</string>
     <string name="recycle">垃圾分類小幫手</string>
+    <string name="lbs">找附近的垃圾車</string>
+    <string name="query">依行政區查詢</string>
     <string name="newtaipeirealtime">新北市垃圾車即時資訊</string>
     <string name="action_realtime">新北市即時資訊</string>
     <string name="action_suggest">建議與評價</string>
@@ -17,7 +19,7 @@
 
     <string name="network_error">無法連線，請檢查手機是否正常連網</string>
     <string name="location_error">目前無法定位座標，請檢查定位服務是否開啟</string>
-    <string name="data_not_found">附近沒有垃圾車</string>
+    <string name="data_not_found">該時段沒有垃圾車</string>
 
     <string name="yes_label">好</string>
     <string name="no_label">不要</string>
@@ -53,7 +55,27 @@
         <item>DIST</item>
     </string-array>
 
-    <string name="hour_spinner_prompt">依抵達時間查詢</string>
+
+    <string name="day_spinner_prompt">星期幾</string>
+    <string-array name="day_spinnner_name">
+        <item>星期一</item>
+        <item>星期二</item>
+        <item>星期三</item>
+        <item>星期四</item>
+        <item>星期五</item>
+        <item>星期六</item>
+        <item>星期日</item>
+    </string-array>
+    <string-array name="day_spinnner_code">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>0</item>
+    </string-array>
+    <string name="hour_spinner_prompt">抵達時間</string>
     <string-array name="hour_spinnner_name">
         <item>請選擇</item>
         <item>早上6點</item>
@@ -99,7 +121,52 @@
         <item>24</item>
     </string-array>
 
-    <string name="license"><Data><![CDATA[Copyright (c) 2015 ccjeng@google.com<br/><br/>原始資料來源:
+    <string-array name="region_spinnner_name">
+        <item>請選擇</item>
+        <item>台北市中正區</item>
+        <item>台北市大同區</item>
+        <item>台北市中山區</item>
+        <item>台北市松山區</item>
+        <item>台北市大安區</item>
+        <item>台北市萬華區</item>
+        <item>台北市信義區</item>
+        <item>台北市士林區</item>
+        <item>台北市北投區</item>
+        <item>台北市內湖區</item>
+        <item>台北市南港區</item>
+        <item>台北市文山區</item>
+        <item>新北市八里區</item>
+        <item>新北市三芝區</item>
+        <item>新北市三重區</item>
+        <item>新北市三峽區</item>
+        <item>新北市土城區</item>
+        <item>新北市中和區</item>
+        <item>新北市五股區</item>
+        <item>新北市平溪區</item>
+        <item>新北市永和區</item>
+        <item>新北市石門區</item>
+        <item>新北市石碇區</item>
+        <item>新北市汐止區</item>
+        <item>新北市坪林區</item>
+        <item>新北市林口區</item>
+        <item>新北市板橋區</item>
+        <item>新北市金山區</item>
+        <item>新北市泰山區</item>
+        <item>新北市烏來區</item>
+        <item>新北市貢寮區</item>
+        <item>新北市淡水區</item>
+        <item>新北市深坑區</item>
+        <item>新北市新店區</item>
+        <item>新北市新莊區</item>
+        <item>新北市瑞芳區</item>
+        <item>新北市萬里區</item>
+        <item>新北市樹林區</item>
+        <item>新北市雙溪區</item>
+        <item>新北市蘆洲區</item>
+        <item>新北市鶯歌區</item>
+    </string-array>
+
+    <string name="license"><Data><![CDATA[Copyright (c) 2016 ccjeng@google.com<br/><br/>原始資料來源:
     <br/>台北市政府資料開放平台
     <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=c2a7d447-d4ef-4730-a3e6-b36d3f5dd995>台北市垃圾清運路線</a>
     <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=74643872-ee76-4727-bd02-d73b536eaad7>臺北市資源回收分類方式</a>
