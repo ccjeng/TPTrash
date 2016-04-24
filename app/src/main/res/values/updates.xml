@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>3.7.3\n更新資料</item>
+    	<item>4.0.0\n
+			-增加「依行政區域查詢」
+			-增加「日期」篩選條件
+			-改善資料查詢效能
+			-移除推送服務(未來改以FB粉絲團通知)\n
+			-移除推送服務相關權限
+		</item>
 </string-array>
 </resources>

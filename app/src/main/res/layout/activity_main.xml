@@ -24,6 +24,8 @@
         tools:context=".view.activity.MainActivity">
 
         <LinearLayout
+            android:id="@+id/home_layout"
+            android:layout_above="@+id/footerLayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
@@ -78,6 +80,17 @@
                 android:scaleType="fitXY"
                 android:text="{faw_recycle}  垃圾分類小幫手"/>
 
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/footerLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="bottom"
+            android:orientation="horizontal">
         </LinearLayout>
 
         <android.support.design.widget.NavigationView
