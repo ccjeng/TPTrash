@@ -6,20 +6,13 @@ package com.oddsoft.tpetrash2.utils;
 public class Constant {
 
     //Admob
-    public static final String ADMOB_TEST_DEVICE_ID = "DF9E888CAA233DE54A7FD15B3B1A1522"; //5.0
-    //public static final String ADMOB_TEST_DEVICE_ID = "1B583A23DC5020F5F1C46451CBF42359"; //4.1
+    //public static final String ADMOB_TEST_DEVICE_ID = "DF9E888CAA233DE54A7FD15B3B1A1522"; //5.0
+    public static final String ADMOB_TEST_DEVICE_ID = "1B583A23DC5020F5F1C46451CBF42359"; //4.1
     public static final String ADMOB_UNIT_ID_MAIN = "ca-app-pub-6914084100751028/2358078814";
     public static final String ADMOB_UNIT_ID_LBS = "ca-app-pub-6914084100751028/1776974015";
     public static final String ADMOB_UNIT_ID_INFO = "ca-app-pub-6914084100751028/8561866412";
     public static final String ADMOB_UNIT_ID_QUERY = "ca-app-pub-6914084100751028/9359968412";
     public static final String ADMOB_UNIT_ID_RECYCLE =  "ca-app-pub-6914084100751028/7743634415";
-
-
-
-    //Parse
-    public static final String PARSE_APPLICATION_ID = "nxkxfDhpFQBXOReTPFIPhGIaYowmT5uuscj3w3Kb";
-    public static final String PARSE_CLIENT_KEY = "oo7CwnSrT3XCjVHuN3r1JBw7rvJzjmYZCRCX9e2U";
-    public static final String PARSE_OBJECT_NAME = "TPE041016";
 
     //LeanCloud
     public static final String LEANCLOUD_APP_ID = "oAekd4xrtT0XcwbKmt0qRvCj-gzGzoHsz";
