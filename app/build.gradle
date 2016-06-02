@@ -7,8 +7,8 @@ android {
         applicationId 'com.oddsoft.tpetrash2'
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 47
-        versionName '4.0.1.052716TT'
+        versionCode 48
+        versionName '4.0.2.060216TT'
     }
     buildTypes {
         release {
@@ -34,10 +34,10 @@ dependencies {
     compile files('libs/AudienceNetwork.jar')
     compile files('libs/FacebookAdapter.jar')
     compile project(':volley')
-    compile 'com.google.android.gms:play-services-ads:9.0.0'
-    compile 'com.google.android.gms:play-services-maps:9.0.0'
-    compile 'com.google.android.gms:play-services-analytics:9.0.0'
-    compile 'com.google.android.gms:play-services-location:9.0.0'
+    compile 'com.google.android.gms:play-services-ads:9.0.1'
+    compile 'com.google.android.gms:play-services-maps:9.0.1'
+    compile 'com.google.android.gms:play-services-analytics:9.0.1'
+    compile 'com.google.android.gms:play-services-location:9.0.1'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.jakewharton:butterknife:7.0.1'
