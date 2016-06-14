@@ -1,5 +1,7 @@
 package com.oddsoft.tpetrash2.utils;
 
+import com.oddsoft.tpetrash2.BuildConfig;
+
 /**
  * Created by andycheng on 2016/2/22.
  */
@@ -8,15 +10,15 @@ public class Constant {
     //Admob
     public static final String ADMOB_TEST_DEVICE_ID = "3C8B080F4F918474804E2685BA46E2B3"; //5.0
     //public static final String ADMOB_TEST_DEVICE_ID = "1B583A23DC5020F5F1C46451CBF42359"; //4.1
-    public static final String ADMOB_UNIT_ID_MAIN = "ca-app-pub-6914084100751028/2358078814";
-    public static final String ADMOB_UNIT_ID_LBS = "ca-app-pub-6914084100751028/1776974015";
-    public static final String ADMOB_UNIT_ID_INFO = "ca-app-pub-6914084100751028/8561866412";
-    public static final String ADMOB_UNIT_ID_QUERY = "ca-app-pub-6914084100751028/9359968412";
-    public static final String ADMOB_UNIT_ID_RECYCLE =  "ca-app-pub-6914084100751028/7743634415";
+    public static final String ADMOB_UNIT_ID_MAIN = BuildConfig.ADMOB_UNIT_ID_MAIN;
+    public static final String ADMOB_UNIT_ID_LBS = BuildConfig.ADMOB_UNIT_ID_LBS;
+    public static final String ADMOB_UNIT_ID_INFO = BuildConfig.ADMOB_UNIT_ID_INFO;
+    public static final String ADMOB_UNIT_ID_QUERY = BuildConfig.ADMOB_UNIT_ID_QUERY;
+    public static final String ADMOB_UNIT_ID_RECYCLE =  BuildConfig.ADMOB_UNIT_ID_RECYCLE;
 
     //LeanCloud
-    public static final String LEANCLOUD_APP_ID = "oAekd4xrtT0XcwbKmt0qRvCj-gzGzoHsz";
-    public static final String LEANCLOUD_APP_KEY = "2NdAJyajI6plU7YvOahHXphP";
+    public static final String LEANCLOUD_APP_ID = BuildConfig.LEANCLOUD_APP_ID;
+    public static final String LEANCLOUD_APP_KEY = BuildConfig.LEANCLOUD_APP_KEY;
     public static final String LEANCLOUD_OBJECT_NAME = "TPE";
 
 
