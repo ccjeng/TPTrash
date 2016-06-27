@@ -15,11 +15,6 @@ import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
 import com.google.android.gms.ads.AdRequest;
@@ -41,24 +36,30 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.adapter.ArrayItem;
-import com.oddsoft.tpetrash2.adapter.RealtimeGson;
+import com.oddsoft.tpetrash2.controller.NewTaipeiOpenDataService;
+import com.oddsoft.tpetrash2.model.RealtimeCar;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.view.base.Application;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class InfoActivity extends AppCompatActivity
@@ -220,8 +221,7 @@ public class InfoActivity extends AppCompatActivity
 
         //show realtime car
         if (!lineid.equals("")) {
-            //query lineid from realtime data set, and draw it on the map.
-            queryRealtimeJson(lineid);
+            queryRealtimeCar(lineid);
         }
 
 
@@ -457,32 +457,53 @@ public class InfoActivity extends AppCompatActivity
     }
 
 
-    private void queryRealtimeJson(final String lindID) {
+    private void queryRealtimeCar(final String lindID) {
 
-        RequestQueue mQueue = Volley.newRequestQueue(this);
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        if (Application.APPDEBUG) {
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        } else {
+            logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+        }
 
-        String url = "http://data.ntpc.gov.tw/od/data/api/28AB4122-60E1-4065-98E5-ABCCB69AACA6?$format=json";
+        OkHttpClient okhttpClient = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
 
-        StringRequest stringRequest = new StringRequest(url,
-                new Response.Listener<String>() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constant.NEWTAIPEI_OPENDATA)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okhttpClient)
+                .build();
+
+        NewTaipeiOpenDataService service = retrofit.create(NewTaipeiOpenDataService.class);
+
+        service.getRealTimeCar()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ArrayList<RealtimeCar>>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onCompleted() {
 
-                        Gson gson = new Gson();
+                    }
 
-                        Type listType = new TypeToken<ArrayList<RealtimeGson>>() {
-                        }.getType();
-                        ArrayList<RealtimeGson> jsonArr = gson.fromJson(response, listType);
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("Error", e.getMessage());
+                    }
 
-                        for (RealtimeGson obj : jsonArr) {
-                            Log.d(TAG, obj.getLineid() +'-' + obj.getLocation());
+                    @Override
+                    public void onNext(ArrayList<RealtimeCar> realtimeCars) {
+                        for(RealtimeCar car: realtimeCars) {
+                            //Log.d(TAG, car.getLocation());
 
-                            if (obj.getLineid().equals(lindID)) {
+                            if (car.getLineid().equals(lindID)) {
 
                                 try {
                                     Geocoder geocoder = new Geocoder(InfoActivity.this, new Locale("zh", "TW"));
 
-                                    String address = obj.getLocation();
+                                    String address = car.getLocation();
 
                                     List<Address> addressList = geocoder.getFromLocationName(address, 1);
 
@@ -490,7 +511,7 @@ public class InfoActivity extends AppCompatActivity
                                     Double lng = addressList.get(0).getLongitude();
 
                                     if (lat > 0) {
-                                        drawRealTimeCar(lat, lng, obj.getTime(), "[" +obj.getCar() +"] " + obj.getLocation());
+                                        drawRealTimeCar(lat, lng, car.getTime(), "[" +car.getCar() +"] " + car.getLocation());
                                     }
 
                                 } catch (Exception e) {
@@ -500,17 +521,8 @@ public class InfoActivity extends AppCompatActivity
                             }
                         }
 
-
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, error.getMessage(), error);
-            }
-        });
-
-        mQueue.add(stringRequest);
-
+                });
 
     }
 
