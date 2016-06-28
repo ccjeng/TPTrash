@@ -6,6 +6,8 @@
     <string name="recycle">垃圾分類小幫手</string>
     <string name="lbs">找附近的垃圾車</string>
     <string name="query">依行政區查詢</string>
+    <string name="tpfix">台北市資源回收及廚餘限時收受點</string>
+    <string name="npfix">新北市定點清運查詢</string>
     <string name="newtaipeirealtime">新北市垃圾車即時資訊</string>
     <string name="action_realtime">新北市即時資訊</string>
     <string name="action_suggest">建議與評價</string>

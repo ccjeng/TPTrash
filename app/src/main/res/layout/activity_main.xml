@@ -78,7 +78,41 @@
                 android:background="@color/write"
                 android:padding="8dp"
                 android:scaleType="fitXY"
-                android:text="{faw_recycle}  垃圾分類小幫手"/>
+                android:text="{faw-recycle}  垃圾分類小幫手"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <com.mikepenz.iconics.view.IconicsButton
+                android:id="@+id/btn_tpfix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:minLines="2"
+                android:textColor="@color/black"
+                android:background="@color/write"
+                android:padding="8dp"
+                android:scaleType="fitXY"
+                android:text="{faw-question-circle}  台北市資源回收及廚餘限時收受點"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <com.mikepenz.iconics.view.IconicsButton
+                android:id="@+id/btn_npfix"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:minLines="2"
+                android:textColor="@color/black"
+                android:background="@color/write"
+                android:padding="8dp"
+                android:scaleType="fitXY"
+                android:text="{faw-question-circle}  新北市定點清運查詢"/>
 
         </LinearLayout>
 

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,15 +21,11 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -63,14 +59,15 @@ import rx.schedulers.Schedulers;
 
 
 public class InfoActivity extends AppCompatActivity
-        implements LocationListener,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        implements// LocationListener,
+       // GoogleApiClient.ConnectionCallbacks,
+       // GoogleApiClient.OnConnectionFailedListener,
+        OnMapReadyCallback {
 
     private static final String TAG = InfoActivity.class.getSimpleName();
 
-    private LocationRequest locationRequest;
-    private GoogleApiClient locationClient;
+  //  private LocationRequest locationRequest;
+  //  private GoogleApiClient locationClient;
 
     // Update interval
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
@@ -120,7 +117,7 @@ public class InfoActivity extends AppCompatActivity
     private Boolean recycling;
 
     // Map fragment
-    private GoogleMap map;
+    private MapFragment mapFragment;
     private Analytics ga;
 
     private Polyline line;
@@ -141,14 +138,6 @@ public class InfoActivity extends AppCompatActivity
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        configGoogleApiClient();
-        configLocationRequest();
-
-        if (!locationClient.isConnected()) {
-            locationClient.connect();
-        }
-
 
         Bundle bundle = this.getIntent().getExtras();
 
@@ -172,7 +161,9 @@ public class InfoActivity extends AppCompatActivity
         recycling = bundle.getBoolean("recycling");
 
         memoView.setText(memo);
-
+        if (memo.equals("")) {
+            memoView.setVisibility(View.GONE);
+        }
         //set toolbar title
         getSupportActionBar().setTitle(time);
 
@@ -209,7 +200,21 @@ public class InfoActivity extends AppCompatActivity
         }
 
         // Set up the map fragment
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment)).getMap();
+        mapFragment = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment));
+        mapFragment.getMapAsync(this);
+
+
+
+
+
+        adView();
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+
+       // map = gmap;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.getUiSettings().setZoomControlsEnabled(true);
 
@@ -218,12 +223,6 @@ public class InfoActivity extends AppCompatActivity
                         , Double.valueOf(strToLng)), 17);
         map.animateCamera(center);
         map.setMyLocationEnabled(true);
-
-        //show realtime car
-        if (!lineid.equals("")) {
-            queryRealtimeCar(lineid);
-        }
-
 
         //Marker
         MarkerOptions markerOpt = new MarkerOptions();
@@ -246,11 +245,14 @@ public class InfoActivity extends AppCompatActivity
             line = map.addPolyline(polylineOpt);
         }
 
+        drawLineCar(map);
 
-        drawLineCar();
-        adView();
+        //show realtime car
+        if (!lineid.equals("")) {
+            queryRealtimeCar(lineid, map);
+        }
+
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -295,11 +297,6 @@ public class InfoActivity extends AppCompatActivity
 
     @Override
     public void onStop() {
-        if (locationClient != null) {
-            if (locationClient.isConnected()) {
-                locationClient.disconnect();
-            }
-        }
         super.onStop();
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
@@ -308,9 +305,6 @@ public class InfoActivity extends AppCompatActivity
     @Override
     public void onStart() {
         super.onStart();
-        if (locationClient != null) {
-            locationClient.connect();
-        }
         GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
@@ -320,13 +314,6 @@ public class InfoActivity extends AppCompatActivity
 
         if (adView != null)
             adView.pause();
-
-        if (locationClient != null) {
-            if (locationClient.isConnected()) {
-                LocationServices.FusedLocationApi.removeLocationUpdates(
-                        locationClient, this);
-            }
-        }
     }
 
     @Override
@@ -336,11 +323,6 @@ public class InfoActivity extends AppCompatActivity
         if (adView != null)
             adView.resume();
 
-        if (locationClient != null) {
-            if (!locationClient.isConnected()) {
-                locationClient.connect();
-            }
-        }
     }
 
     @Override
@@ -351,69 +333,7 @@ public class InfoActivity extends AppCompatActivity
             adView.destroy();
     }
 
-    // 建立Google API用戶端物件
-    private synchronized void configGoogleApiClient() {
-        // Create a new location client, using the enclosing class to handle callbacks.
-        locationClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-    }
-
-    private void configLocationRequest() {
-        // Create a new global location parameters object
-        locationRequest = LocationRequest.create();
-
-        // Set the update interval
-        locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
-
-        // Use low power
-        locationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
-
-        // Set the interval ceiling to one minute
-        locationRequest.setFastestInterval(FAST_INTERVAL_CEILING_IN_MILLISECONDS);
-    }
-
-    @Override
-    public void onLocationChanged(Location l2) {
-
-        if (!strFromLat.equals("")) {
-            strFromLat = Double.toString(l2.getLatitude());
-            strFromLng = Double.toString(l2.getLongitude());
-            strFrom = strFromLat + "," + strFromLng;
-
-            line.remove();
-
-            PolylineOptions polylineOpt = new PolylineOptions();
-
-            LatLng from = new LatLng(l2.getLatitude(), l2.getLongitude());
-            LatLng to = new LatLng(Double.valueOf(strToLat), Double.valueOf(strToLng));
-
-            polylineOpt.add(from, to).color(Color.BLUE).width(5);
-
-            line = map.addPolyline(polylineOpt);
-        }
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.i(TAG, "GoogleApiClient connection has been connected");
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                locationClient, locationRequest, this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.i(TAG, "GoogleApiClient connection has been suspend");
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.i(TAG, "GoogleApiClient connection failed");
-    }
-
-    private void drawLineCar(){
+    private void drawLineCar(final GoogleMap gmap){
 
         AVQuery<ArrayItem> query = AVQuery.getQuery(ArrayItem.class);
 
@@ -436,14 +356,14 @@ public class InfoActivity extends AppCompatActivity
                             .snippet(i.getCarTime());
                     markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
 
-                    markerCar = map.addMarker(markerOption);
+                    markerCar = gmap.addMarker(markerOption);
                 }
             }
         });
 
     }
 
-    private void drawRealTimeCar(Double lat, Double lng, String time, String address) {
+    private void drawRealTimeCar(GoogleMap gmap, Double lat, Double lng, String time, String address) {
 
         //Marker
         MarkerOptions markerOption = new MarkerOptions();
@@ -452,12 +372,12 @@ public class InfoActivity extends AppCompatActivity
         markerOption.snippet(time);
         markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
 
-        map.addMarker(markerOption);
+        gmap.addMarker(markerOption);
 
     }
 
 
-    private void queryRealtimeCar(final String lindID) {
+    private void queryRealtimeCar(final String lindID, final GoogleMap gmap) {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         if (Application.APPDEBUG) {
@@ -511,7 +431,7 @@ public class InfoActivity extends AppCompatActivity
                                     Double lng = addressList.get(0).getLongitude();
 
                                     if (lat > 0) {
-                                        drawRealTimeCar(lat, lng, car.getTime(), "[" +car.getCar() +"] " + car.getLocation());
+                                        drawRealTimeCar(gmap, lat, lng, car.getTime(), "[" +car.getCar() +"] " + car.getLocation());
                                     }
 
                                 } catch (Exception e) {

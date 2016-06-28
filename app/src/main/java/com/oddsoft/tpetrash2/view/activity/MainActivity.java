@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity {
 
         initActionBar();
         initDrawer();
-        adView();
+        //adView();
 
         if (Utils.isNewInstallation(this)) {
             this.showDialog(DIALOG_WELCOME);
@@ -100,6 +100,16 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.btn_recycle)
     public void gotoRecycleActivity(){
+        startActivity(new Intent(MainActivity.this, RecycleActivity.class));
+    }
+
+    @OnClick(R.id.btn_tpfix)
+    public void gotoTaipeiFixActivity(){
+        startActivity(new Intent(MainActivity.this, RecycleActivity.class));
+    }
+
+    @OnClick(R.id.btn_npfix)
+    public void gotoNewTaipeiFixActivity(){
         startActivity(new Intent(MainActivity.this, RecycleActivity.class));
     }
 
