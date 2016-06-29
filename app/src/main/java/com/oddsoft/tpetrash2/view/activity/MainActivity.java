@@ -15,13 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -29,9 +23,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.adapter.ArrayItemAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
-import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Utils;
-import com.oddsoft.tpetrash2.view.base.Application;
 import com.oddsoft.tpetrash2.view.base.BaseActivity;
 
 import butterknife.Bind;
@@ -48,15 +40,11 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.drawerlayout)
     DrawerLayout drawerLayout;
 
-    private AdView adView;
     private ActionBar actionbar;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
-    @Bind(R.id.btn_recycle)
-    Button btn_recycle;
 
     private Analytics ga;
 
@@ -76,7 +64,6 @@ public class MainActivity extends BaseActivity {
 
         initActionBar();
         initDrawer();
-        //adView();
 
         if (Utils.isNewInstallation(this)) {
             this.showDialog(DIALOG_WELCOME);
@@ -105,12 +92,12 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.btn_tpfix)
     public void gotoTaipeiFixActivity(){
-        startActivity(new Intent(MainActivity.this, RecycleActivity.class));
+        startActivity(new Intent(MainActivity.this, TPFixActivity.class));
     }
 
-    @OnClick(R.id.btn_npfix)
+    @OnClick(R.id.btn_ntfix)
     public void gotoNewTaipeiFixActivity(){
-        startActivity(new Intent(MainActivity.this, RecycleActivity.class));
+        startActivity(new Intent(MainActivity.this, NTFixActivity.class));
     }
 
     private void initActionBar() {
@@ -164,12 +151,6 @@ public class MainActivity extends BaseActivity {
         });
 
         //change navigation drawer item icons
-        /*
-        navigation.getMenu().findItem(R.id.navRecycle).setIcon(new IconicsDrawable(this)
-                .icon(FontAwesome.Icon.faw_recycle)
-                .color(Color.GRAY)
-                .sizeDp(24));
-*/
         navigation.getMenu().findItem(R.id.navSetting).setIcon(new IconicsDrawable(this)
                 .icon(FontAwesome.Icon.faw_cog)
                 .color(Color.GRAY)
@@ -215,32 +196,6 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    private void adView() {
-
-        LinearLayout adBannerLayout = (LinearLayout) findViewById(R.id.footerLayout);
-
-        adView = new AdView(this);
-        adView.setAdUnitId(Constant.ADMOB_UNIT_ID_MAIN);
-        adView.setAdSize(AdSize.SMART_BANNER);
-        adBannerLayout.addView(adView);
-
-        AdRequest adRequest;
-
-        if (Application.APPDEBUG) {
-            //Test Mode
-            adRequest = new AdRequest.Builder()
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                    .addTestDevice(Constant.ADMOB_TEST_DEVICE_ID)
-                    .build();
-        } else {
-
-            adRequest = new AdRequest.Builder().build();
-
-        }
-        adView.loadAd(adRequest);
-
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -257,21 +212,6 @@ public class MainActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onStop() {
-
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
-
 
 
     protected final Dialog onCreateDialog(final int id) {

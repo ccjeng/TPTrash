@@ -23,7 +23,6 @@ import com.avos.avoscloud.FindCallback;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.adapter.ArrayItem;
 import com.oddsoft.tpetrash2.adapter.ArrayItemAdapter;
@@ -320,18 +319,6 @@ public class QueryActivity extends BaseActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override

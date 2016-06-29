@@ -6,7 +6,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -20,7 +19,6 @@ import com.avos.avoscloud.AVQuery;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -41,6 +39,7 @@ import com.oddsoft.tpetrash2.model.RealtimeCar;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.view.base.Application;
+import com.oddsoft.tpetrash2.view.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,21 +57,10 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class InfoActivity extends AppCompatActivity
-        implements// LocationListener,
-       // GoogleApiClient.ConnectionCallbacks,
-       // GoogleApiClient.OnConnectionFailedListener,
-        OnMapReadyCallback {
+public class InfoActivity extends BaseActivity
+        implements OnMapReadyCallback {
 
     private static final String TAG = InfoActivity.class.getSimpleName();
-
-  //  private LocationRequest locationRequest;
-  //  private GoogleApiClient locationClient;
-
-    // Update interval
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
-    // A fast interval ceiling
-    private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = 1000;
 
     @Bind(R.id.garbageView)
     TextView garbageView;
@@ -204,9 +192,6 @@ public class InfoActivity extends AppCompatActivity
         mapFragment.getMapAsync(this);
 
 
-
-
-
         adView();
     }
 
@@ -214,7 +199,6 @@ public class InfoActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap map) {
 
-       // map = gmap;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.getUiSettings().setZoomControlsEnabled(true);
 
@@ -295,18 +279,6 @@ public class InfoActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
-    }
 
     @Override
     protected void onPause() {

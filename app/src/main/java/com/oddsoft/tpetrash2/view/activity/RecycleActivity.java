@@ -1,7 +1,6 @@
 package com.oddsoft.tpetrash2.view.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,7 +13,6 @@ import android.widget.ListView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.adapter.RecycleItem;
 import com.oddsoft.tpetrash2.adapter.RecycleListAdapter;
@@ -22,6 +20,7 @@ import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Utils;
 import com.oddsoft.tpetrash2.view.base.Application;
+import com.oddsoft.tpetrash2.view.base.BaseActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +36,7 @@ import butterknife.ButterKnife;
 /**
  * Created by andycheng on 2015/7/10.
  */
-public class RecycleActivity extends AppCompatActivity {
+public class RecycleActivity extends BaseActivity {
 
     @Bind(R.id.searchText)
     AutoCompleteTextView searchText;
@@ -174,18 +173,6 @@ public class RecycleActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
 

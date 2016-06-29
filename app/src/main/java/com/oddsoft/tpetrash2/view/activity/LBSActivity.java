@@ -28,7 +28,6 @@ import com.avos.avoscloud.FindCallback;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -425,7 +424,6 @@ public class LBSActivity extends BaseActivity
             }
         }
         super.onStop();
-        GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
     @Override
@@ -435,7 +433,6 @@ public class LBSActivity extends BaseActivity
         if (locationClient != null) {
             locationClient.connect();
         }
-        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override

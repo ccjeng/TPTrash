@@ -61,6 +61,15 @@
         <activity
             android:name=".view.activity.QueryActivity"
             android:label="@string/query"/>
+
+        <activity
+            android:name=".view.activity.TPFixActivity"
+            android:label="@string/tpfix"/>
+
+        <activity
+            android:name=".view.activity.NTFixActivity"
+            android:label="@string/ntfix"/>
+
         <activity
             android:name="com.vpadn.widget.VpadnActivity"
             android:configChanges="orientation|keyboardHidden|navigation|keyboard|screenLayout|uiMode|screenSize|smallestScreenSize"
