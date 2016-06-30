@@ -22,6 +22,8 @@ public class Constant {
     public static final String LEANCLOUD_OBJECT_NAME = "TPE";
 
     public static final String NEWTAIPEI_OPENDATA = "http://data.ntpc.gov.tw/od/data/";
+    public static final String TAIPEI_OPENDATA = "http://data.taipei/opendata/datalist/";
+
 
 
 }
