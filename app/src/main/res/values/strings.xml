@@ -6,7 +6,7 @@
     <string name="recycle">垃圾分類小幫手</string>
     <string name="lbs">找附近的垃圾車</string>
     <string name="query">依行政區查詢</string>
-    <string name="tpfix">台北市回收及廚餘限時收受點</string>
+    <string name="tpfix">台北市資源回收及廚餘限時收受點</string>
     <string name="ntfix">新北市定點清運查詢</string>
     <string name="newtaipeirealtime">新北市垃圾車即時資訊</string>
     <string name="action_realtime">新北市即時資訊</string>
@@ -172,6 +172,7 @@
     <br/>台北市政府資料開放平台
     <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=c2a7d447-d4ef-4730-a3e6-b36d3f5dd995>台北市垃圾清運路線</a>
     <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=74643872-ee76-4727-bd02-d73b536eaad7>臺北市資源回收分類方式</a>
+    <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=1acf38f3-1509-4cb1-898a-9b1d4f31a3af>臺北市垃圾資源回收、廚餘回收限時收受點</a>
     <br/><br/>新北市政府資料開放平台
     <br/><a href=http://data.ntpc.gov.tw/od/detail?oid=EDC3AD26-8AE7-4916-A00B-BC6048D19BF8>新北市垃圾車路線</a>
     <br/><a href=http://data.ntpc.gov.tw/od/detail?oid=28AB4122-60E1-4065-98E5-ABCCB69AACA6>新北市垃圾車即時位置</a>

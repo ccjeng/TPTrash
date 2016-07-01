@@ -1,6 +1,9 @@
 package com.oddsoft.tpetrash2.view.activity;
 
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -10,6 +13,11 @@ import android.widget.RelativeLayout;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -21,6 +29,7 @@ import com.oddsoft.tpetrash2.controller.TaipeiOpenDataService;
 import com.oddsoft.tpetrash2.model.TPFix.TPFix;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
+import com.oddsoft.tpetrash2.utils.Utils;
 import com.oddsoft.tpetrash2.view.base.Application;
 import com.oddsoft.tpetrash2.view.base.BaseActivity;
 
@@ -35,17 +44,28 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class TPFixActivity extends BaseActivity implements OnMapReadyCallback {
+public class TPFixActivity extends BaseActivity
+        implements OnMapReadyCallback
+        , GoogleApiClient.ConnectionCallbacks
+        , GoogleApiClient.OnConnectionFailedListener{
 
     private static final String TAG = TPFixActivity.class.getSimpleName();
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.coordinatorlayout)
+    RelativeLayout coordinatorlayout;
 
     MapFragment mapFragment;
 
     private Analytics ga;
     private AdView adView;
+    private Location currentLocation;
+    private GoogleApiClient locationClient;
+    private LocationRequest locationRequest;
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
+    private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +80,20 @@ public class TPFixActivity extends BaseActivity implements OnMapReadyCallback {
         adView();
 
         mapFragment = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment));
-        mapFragment.getMapAsync(this);
+
+        if (Utils.isNetworkConnected(this)) {
+            configGoogleApiClient();
+            configLocationRequest();
+
+            if (!locationClient.isConnected()) {
+                locationClient.connect();
+            }
+
+
+        } else {
+            Utils.showSnackBar(coordinatorlayout, getString(R.string.network_error), Utils.Mode.ERROR);
+
+        }
 
     }
 
@@ -136,14 +169,12 @@ public class TPFixActivity extends BaseActivity implements OnMapReadyCallback {
                     @Override
                     public void onNext(TPFix tpFixs) {
 
-                        //Log.d(TAG, "size = "+tpFixs.getResult().getResults().size());
-
                         for(int i=0; i<tpFixs.getResult().getResults().size(); i++){
-                            //Log.d(TAG, i + " - " + tpFixs.getResult().getResults().get(i).getAddress());
 
                             String team = tpFixs.getResult().getResults().get(i).getBranch();
                             String address = tpFixs.getResult().getResults().get(i).getAddress();
                             String memo = tpFixs.getResult().getResults().get(i).getMemo();
+                            String phone = tpFixs.getResult().getResults().get(i).getPhone();
                             Double lat = Double.valueOf(tpFixs.getResult().getResults().get(i).getLat());
                             Double lng = Double.valueOf(tpFixs.getResult().getResults().get(i).getLng());
 
@@ -151,7 +182,7 @@ public class TPFixActivity extends BaseActivity implements OnMapReadyCallback {
                             MarkerOptions markerOption = new MarkerOptions();
                             markerOption.position(new LatLng(lat, lng));
                             markerOption.title(team + " - " + address);
-                            markerOption.snippet(memo);
+                            markerOption.snippet(memo + " " + phone);
                             markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
 
                             gmap.addMarker(markerOption);
@@ -167,14 +198,20 @@ public class TPFixActivity extends BaseActivity implements OnMapReadyCallback {
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.getUiSettings().setZoomControlsEnabled(true);
         map.setMyLocationEnabled(true);
-
         drawLocation(map);
+
+        if (currentLocation != null) {
+            LatLng myLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 14));
+
+        } else {
+            Utils.showSnackBar(coordinatorlayout, getString(R.string.location_error), Utils.Mode.ERROR);
+        }
     }
     
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -190,11 +227,20 @@ public class TPFixActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (locationClient != null) {
+            locationClient.connect();
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
 
         if (adView != null)
             adView.pause();
+
     }
 
     @Override
@@ -204,6 +250,21 @@ public class TPFixActivity extends BaseActivity implements OnMapReadyCallback {
         if (adView != null)
             adView.resume();
 
+        if (locationClient != null) {
+            if (!locationClient.isConnected()) {
+                locationClient.connect();
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        if (locationClient != null) {
+            if (locationClient.isConnected()) {
+                locationClient.disconnect();
+            }
+        }
+        super.onStop();
     }
 
     @Override
@@ -214,4 +275,44 @@ public class TPFixActivity extends BaseActivity implements OnMapReadyCallback {
             adView.destroy();
     }
 
+    private synchronized void configGoogleApiClient() {
+        // Create a new location client, using the enclosing class to handle callbacks.
+        locationClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+    }
+
+    private void configLocationRequest() {
+        // Create a new global location parameters object
+        locationRequest = LocationRequest.create();
+
+        // Set the update interval
+        locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+
+        // Use low power
+        locationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+
+        // Set the interval ceiling to one minute
+        locationRequest.setFastestInterval(FAST_INTERVAL_CEILING_IN_MILLISECONDS);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        currentLocation = LocationServices.FusedLocationApi.getLastLocation(locationClient);
+
+        mapFragment.getMapAsync(this);
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 }

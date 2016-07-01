@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>4.0.3\n
-			-更新資料
+    	<item>4.1.0\n
+			修正\n
+			-改善地圖載入效能\n
+			\n
+			新功能\n
+			-台北市資源回收及廚餘限時收受點\n
+			-新北市定點清運查詢
 		</item>
 </string-array>
 </resources>
