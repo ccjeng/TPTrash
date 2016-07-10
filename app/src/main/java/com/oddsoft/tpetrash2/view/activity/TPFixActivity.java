@@ -25,13 +25,18 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.oddsoft.tpetrash2.R;
+import com.oddsoft.tpetrash2.controller.NewTaipeiOpenDataService;
 import com.oddsoft.tpetrash2.controller.TaipeiOpenDataService;
+import com.oddsoft.tpetrash2.model.NPRecycle;
 import com.oddsoft.tpetrash2.model.TPFix.TPFix;
+import com.oddsoft.tpetrash2.model.TPFood.TPFood;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Utils;
 import com.oddsoft.tpetrash2.view.base.Application;
 import com.oddsoft.tpetrash2.view.base.BaseActivity;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -66,6 +71,7 @@ public class TPFixActivity extends BaseActivity
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 5000;
     private static final long FAST_INTERVAL_CEILING_IN_MILLISECONDS = 1000;
+    private String mapType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,10 @@ public class TPFixActivity extends BaseActivity
 
         ga = new Analytics();
         ga.trackerPage(this);
+
+        Bundle bundle = this.getIntent().getExtras();
+
+        mapType = bundle.getString("mapType");
 
         initActionBar();
         adView();
@@ -99,8 +109,24 @@ public class TPFixActivity extends BaseActivity
 
     private void initActionBar() {
         setSupportActionBar(toolbar);
+
+        String title = "";
+        switch (mapType) {
+            case "tpfix":  //台北市資源回收及廚餘限時收受點
+                title = getString(R.string.tpfix);
+                break;
+            case "tpfood": //台北市週三、週日廚餘專用限時收受點
+                title = getString(R.string.tpfood);
+                break;
+            case "ntrecycle": //新北市黃金資收站設置資訊
+                title = getString(R.string.ntrecycle);
+                break;
+         }
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            getSupportActionBar().setTitle(title);
+
         }
     }
 
@@ -131,7 +157,7 @@ public class TPFixActivity extends BaseActivity
     }
 
 
-    private void drawLocation(final GoogleMap gmap) {
+    private void drawLocationTPFix(final GoogleMap gmap) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         if (Application.APPDEBUG) {
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -192,13 +218,155 @@ public class TPFixActivity extends BaseActivity
 
     }
 
+
+    private void drawLocationTPFood(final GoogleMap gmap) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        if (Application.APPDEBUG) {
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        } else {
+            logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+        }
+
+        OkHttpClient okhttpClient = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constant.TAIPEI_OPENDATA)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okhttpClient)
+                .build();
+
+        TaipeiOpenDataService service = retrofit.create(TaipeiOpenDataService.class);
+
+        service.getTaipeiFoodLocation()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<TPFood>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("Error", e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(TPFood tpFoods) {
+
+                        for(int i=0; i<tpFoods.getResult().getResults().size(); i++){
+
+                            String team = tpFoods.getResult().getResults().get(i).getBranch();
+                            String address = tpFoods.getResult().getResults().get(i).getAddress();
+                            String memo = tpFoods.getResult().getResults().get(i).getMemo();
+                            Double lat = Double.valueOf(tpFoods.getResult().getResults().get(i).getLat());
+                            Double lng = Double.valueOf(tpFoods.getResult().getResults().get(i).getLng());
+
+                            //Marker
+                            MarkerOptions markerOption = new MarkerOptions();
+                            markerOption.position(new LatLng(lat, lng));
+                            markerOption.title(team + " - " + address);
+
+                            if (memo.length()>0)
+                                markerOption.snippet(memo);
+                            markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
+
+                            gmap.addMarker(markerOption);
+                        }
+                    }
+                });
+
+    }
+
+
+    private void drawLocationNTRecycle(final GoogleMap gmap) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        if (Application.APPDEBUG) {
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        } else {
+            logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+        }
+
+        OkHttpClient okhttpClient = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constant.NEWTAIPEI_OPENDATA)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okhttpClient)
+                .build();
+
+        NewTaipeiOpenDataService service = retrofit.create(NewTaipeiOpenDataService.class);
+
+        service.getNewTaipeiRecycleLocation()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ArrayList<NPRecycle>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("Error", e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<NPRecycle> items) {
+                        for(NPRecycle item: items) {
+
+                            String recycle_address = item.getRecycleAddress();
+                            String address = item.getAddress();
+                            String no = item.getNo();
+                            String name = item.getName();
+                            String village = item.getVillage();
+                            String tel = item.getTel();
+                            String open_time = item.getOpenTime();
+                            String state = item.getState();
+                            Double lat = Double.valueOf(item.getWgs84aY());
+                            Double lng = Double.valueOf(item.getWgs84aX());
+
+                            //Marker
+                            MarkerOptions markerOption = new MarkerOptions();
+                            markerOption.position(new LatLng(lat, lng));
+                            markerOption.title(village + " " + recycle_address);
+                            markerOption.snippet(open_time + " "+ state + " " + tel);
+                            markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
+
+                            gmap.addMarker(markerOption);
+
+                        }
+
+                    }
+                });
+    }
+
     @Override
     public void onMapReady(GoogleMap map) {
 
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.getUiSettings().setZoomControlsEnabled(true);
         map.setMyLocationEnabled(true);
-        drawLocation(map);
+
+        switch (mapType) {
+            case "tpfix":  //台北市資源回收及廚餘限時收受點
+                drawLocationTPFix(map);
+                break;
+            case "tpfood": //台北市週三、週日廚餘專用限時收受點
+                drawLocationTPFood(map);
+                break;
+            case "ntrecycle": //新北市黃金資收站設置資訊
+                drawLocationNTRecycle(map);
+                break;
+        }
+
+
 
         if (currentLocation != null) {
             LatLng myLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());

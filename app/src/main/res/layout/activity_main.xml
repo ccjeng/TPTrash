@@ -23,12 +23,19 @@
         android:background="@color/write"
         tools:context=".view.activity.MainActivity">
 
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView">
+
         <LinearLayout
             android:id="@+id/home_layout"
             android:layout_above="@+id/footerLayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
@@ -95,7 +102,24 @@
                 android:background="@color/write"
                 android:padding="8dp"
                 android:scaleType="fitXY"
-                android:text="{faw-question-circle}  台北市資源回收及廚餘限時收受點"/>
+                android:text="{faw-map-marker}  台北市資源回收及廚餘限時收受點"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <com.mikepenz.iconics.view.IconicsButton
+                android:id="@+id/btn_tpfood"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:minLines="2"
+                android:textColor="@color/black"
+                android:background="@color/write"
+                android:padding="8dp"
+                android:scaleType="fitXY"
+                android:text="{faw-map-marker}  台北市週三、週日廚餘專用限時收受點"/>
 
             <Space
                 android:layout_width="match_parent"
@@ -114,8 +138,25 @@
                 android:scaleType="fitXY"
                 android:text="{faw-question-circle}  新北市定點清運查詢"/>
 
-        </LinearLayout>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_gravity="center_horizontal"/>
 
+            <com.mikepenz.iconics.view.IconicsButton
+                android:id="@+id/btn_ntrecycle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:minLines="2"
+                android:textColor="@color/black"
+                android:background="@color/write"
+                android:padding="8dp"
+                android:scaleType="fitXY"
+                android:text="{faw-map-marker}  新北市黃金資收站設置資訊"/>
+
+        </LinearLayout>
+    </ScrollView>
 
         <LinearLayout
             android:id="@+id/footerLayout"
@@ -139,4 +180,5 @@
             app:menu="@menu/nav_drawer_items" />
 
     </android.support.v4.widget.DrawerLayout>
+
 </LinearLayout>

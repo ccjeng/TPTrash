@@ -92,7 +92,31 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.btn_tpfix)
     public void gotoTaipeiFixActivity(){
-        startActivity(new Intent(MainActivity.this, TPFixActivity.class));
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, TPFixActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("mapType", "tpfix");
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.btn_tpfood)
+    public void gotoTaipeiFoodActivity(){
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, TPFixActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("mapType", "tpfood");
+        intent.putExtras(bundle);
+        startActivity(intent);    }
+
+    @OnClick(R.id.btn_ntrecycle)
+    public void gotoNewTaipeiRecycleActivity(){
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, TPFixActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("mapType", "ntrecycle");
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @OnClick(R.id.btn_ntfix)
