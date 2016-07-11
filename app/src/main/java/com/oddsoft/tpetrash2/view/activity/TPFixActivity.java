@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.oddsoft.tpetrash2.R;
+import com.oddsoft.tpetrash2.adapter.CustomInfoWindowAdapter;
 import com.oddsoft.tpetrash2.controller.NewTaipeiOpenDataService;
 import com.oddsoft.tpetrash2.controller.TaipeiOpenDataService;
 import com.oddsoft.tpetrash2.model.NPRecycle;
@@ -207,9 +208,12 @@ public class TPFixActivity extends BaseActivity
                             //Marker
                             MarkerOptions markerOption = new MarkerOptions();
                             markerOption.position(new LatLng(lat, lng));
-                            markerOption.title(team + " - " + address);
-                            markerOption.snippet(memo + " " + phone);
+                            markerOption.title(team + "\n" + address);
+                            markerOption.snippet(memo + "\n" + phone);
                             markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
+
+                            CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(TPFixActivity.this);
+                            gmap.setInfoWindowAdapter(adapter);
 
                             gmap.addMarker(markerOption);
                         }
@@ -268,11 +272,12 @@ public class TPFixActivity extends BaseActivity
                             //Marker
                             MarkerOptions markerOption = new MarkerOptions();
                             markerOption.position(new LatLng(lat, lng));
-                            markerOption.title(team + " - " + address);
-
-                            if (memo.length()>0)
-                                markerOption.snippet(memo);
+                            markerOption.title(team + "\n" + address);
+                            markerOption.snippet(memo);
                             markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
+
+                            CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(TPFixActivity.this);
+                            gmap.setInfoWindowAdapter(adapter);
 
                             gmap.addMarker(markerOption);
                         }
@@ -336,9 +341,13 @@ public class TPFixActivity extends BaseActivity
                             MarkerOptions markerOption = new MarkerOptions();
                             markerOption.position(new LatLng(lat, lng));
                             markerOption.title(village + " " + recycle_address);
-                            markerOption.snippet(open_time + " "+ state + " " + tel);
+                            markerOption.snippet(open_time + " \n"+ state + " \n電話 : " + tel +
+                                    "\n里長姓名 : " + name + "\n里辦地址 : " +address);
+
                             markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
 
+                            CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(TPFixActivity.this);
+                            gmap.setInfoWindowAdapter(adapter);
                             gmap.addMarker(markerOption);
 
                         }
