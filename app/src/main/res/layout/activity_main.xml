@@ -51,7 +51,7 @@
                 android:background="@color/write"
                 android:padding="8dp"
                 android:scaleType="fitXY"
-                android:text="{faw-map-marker}  找附近的垃圾車"/>
+                android:text="{faw-map-marker}  垃圾車班表 依距離查詢"/>
 
             <Space
                 android:layout_width="match_parent"
@@ -68,7 +68,7 @@
                 android:background="@color/write"
                 android:padding="8dp"
                 android:scaleType="fitXY"
-                android:text="{faw-search}  依行政區查詢"/>
+                android:text="{faw-search}  垃圾車班表 依行政區查詢"/>
 
             <Space
                 android:layout_width="match_parent"
@@ -102,7 +102,7 @@
                 android:background="@color/write"
                 android:padding="8dp"
                 android:scaleType="fitXY"
-                android:text="{faw-map-marker}  台北市資源回收及廚餘限時收受點"/>
+                android:text="{faw-map-marker}  台北市資源回收及\n廚餘限時收受點"/>
 
             <Space
                 android:layout_width="match_parent"
@@ -119,7 +119,7 @@
                 android:background="@color/write"
                 android:padding="8dp"
                 android:scaleType="fitXY"
-                android:text="{faw-map-marker}  台北市週三、週日廚餘專用限時收受點"/>
+                android:text="{faw-map-marker}  台北市週三、週日\n廚餘專用限時收受點"/>
 
             <Space
                 android:layout_width="match_parent"

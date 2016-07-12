@@ -4,8 +4,8 @@
     <string name="app_name">台北倒垃圾</string>
     <string name="about">關於</string>
     <string name="recycle">垃圾分類小幫手</string>
-    <string name="lbs">找附近的垃圾車</string>
-    <string name="query">依行政區查詢</string>
+    <string name="lbs">垃圾車班表 依距離查詢</string>
+    <string name="query">垃圾車班表 依行政區查詢</string>
     <string name="tpfix">台北市垃圾資源回收、廚餘回收限時收受點</string>
     <string name="tpfood">台北市週三、週日廚餘專用限時收受點</string>
     <string name="ntfix">新北市定點清運查詢</string>
@@ -24,6 +24,7 @@
     <string name="network_error">無法連線，請檢查手機是否正常連網</string>
     <string name="location_error">目前無法定位座標，請檢查定位服務是否開啟</string>
     <string name="data_not_found">該時段沒有垃圾車</string>
+    <string name="data_error">資料錯誤</string>
 
     <string name="yes_label">好</string>
     <string name="no_label">不要</string>
@@ -173,11 +174,14 @@
     <string name="license"><Data><![CDATA[Copyright (c) 2016 ccjeng@google.com<br/><br/>原始資料來源:
     <br/>台北市政府資料開放平台
     <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=c2a7d447-d4ef-4730-a3e6-b36d3f5dd995>台北市垃圾清運路線</a>
-    <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=74643872-ee76-4727-bd02-d73b536eaad7>臺北市資源回收分類方式</a>
-    <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=1acf38f3-1509-4cb1-898a-9b1d4f31a3af>臺北市垃圾資源回收、廚餘回收限時收受點</a>
+    <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=74643872-ee76-4727-bd02-d73b536eaad7>台北市資源回收分類方式</a>
+    <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=1acf38f3-1509-4cb1-898a-9b1d4f31a3af>台北市垃圾資源回收、廚餘回收限時收受點</a>
+    <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=1acf38f3-1509-4cb1-898a-9b1d4f31a3af>台北市週三、週日廚餘專用限時收受點</a>
+
     <br/><br/>新北市政府資料開放平台
     <br/><a href=http://data.ntpc.gov.tw/od/detail?oid=EDC3AD26-8AE7-4916-A00B-BC6048D19BF8>新北市垃圾車路線</a>
     <br/><a href=http://data.ntpc.gov.tw/od/detail?oid=28AB4122-60E1-4065-98E5-ABCCB69AACA6>新北市垃圾車即時位置</a>
+    <br/><a href=http://data.ntpc.gov.tw/od/detail?oid=7E97E0D4-18EA-4BCD-8567-D85DC861CA40>新北市黃金資收站設置資訊</a>
     ]]></Data></string>
 
 

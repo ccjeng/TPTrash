@@ -191,6 +191,7 @@ public class TPFixActivity extends BaseActivity
                     @Override
                     public void onError(Throwable e) {
                         Log.e("Error", e.getMessage());
+                        Utils.showSnackBar(coordinatorlayout, getString(R.string.data_error), Utils.Mode.ERROR);
                     }
 
                     @Override
@@ -256,6 +257,7 @@ public class TPFixActivity extends BaseActivity
                     @Override
                     public void onError(Throwable e) {
                         Log.e("Error", e.getMessage());
+                        Utils.showSnackBar(coordinatorlayout, getString(R.string.data_error), Utils.Mode.ERROR);
                     }
 
                     @Override
@@ -319,7 +321,9 @@ public class TPFixActivity extends BaseActivity
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("Error", e.getMessage());
+                        Log.e(TAG, e.getMessage());
+                        Log.e(TAG, e.toString());
+                        Utils.showSnackBar(coordinatorlayout, getString(R.string.data_error), Utils.Mode.ERROR);
                     }
 
                     @Override
@@ -328,27 +332,31 @@ public class TPFixActivity extends BaseActivity
 
                             String recycle_address = item.getRecycleAddress();
                             String address = item.getAddress();
-                            String no = item.getNo();
                             String name = item.getName();
                             String village = item.getVillage();
                             String tel = item.getTel();
-                            String open_time = item.getOpenTime();
+                            String open_time = item.getOpenTime().replace("\n"," ");
                             String state = item.getState();
-                            Double lat = Double.valueOf(item.getWgs84aY());
-                            Double lng = Double.valueOf(item.getWgs84aX());
 
-                            //Marker
-                            MarkerOptions markerOption = new MarkerOptions();
-                            markerOption.position(new LatLng(lat, lng));
-                            markerOption.title(village + " " + recycle_address);
-                            markerOption.snippet(open_time + " \n"+ state + " \n電話 : " + tel +
-                                    "\n里長姓名 : " + name + "\n里辦地址 : " +address);
+                            Double lat = 0.0;
+                            Double lng = 0.0;
+                            if (!item.getWgs84aY().trim().equals("")) {
+                                lat = Double.valueOf(item.getWgs84aY());
+                                lng = Double.valueOf(item.getWgs84aX());
 
-                            markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
+                                //Marker
+                                MarkerOptions markerOption = new MarkerOptions();
+                                markerOption.position(new LatLng(lat, lng));
+                                markerOption.title(village + " " + recycle_address);
+                                markerOption.snippet(open_time + " \n"+ state + " \n電話 : " + tel +
+                                        "\n里長姓名 : " + name + "\n里辦地址 : " +address);
 
-                            CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(TPFixActivity.this);
-                            gmap.setInfoWindowAdapter(adapter);
-                            gmap.addMarker(markerOption);
+                                markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
+
+                                CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(TPFixActivity.this);
+                                gmap.setInfoWindowAdapter(adapter);
+                                gmap.addMarker(markerOption);
+                            }
 
                         }
 

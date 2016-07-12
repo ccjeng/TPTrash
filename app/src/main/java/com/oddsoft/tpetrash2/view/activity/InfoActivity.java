@@ -34,6 +34,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.adapter.CustomInfoWindowAdapter;
 import com.oddsoft.tpetrash2.controller.NewTaipeiOpenDataService;
 import com.oddsoft.tpetrash2.model.RealtimeCar;
 import com.oddsoft.tpetrash2.utils.Analytics;
@@ -148,10 +149,10 @@ public class InfoActivity extends BaseActivity
         food = bundle.getBoolean("food");
         recycling = bundle.getBoolean("recycling");
 
-        memoView.setText(memo);
-        if (memo.equals("")) {
+        //memoView.setText(memo);
+        //if (memo.equals("")) {
             memoView.setVisibility(View.GONE);
-        }
+        //}
         //set toolbar title
         getSupportActionBar().setTitle(time);
 
@@ -212,9 +213,17 @@ public class InfoActivity extends BaseActivity
         MarkerOptions markerOpt = new MarkerOptions();
         markerOpt.position(new LatLng(Double.valueOf(strToLat), Double.valueOf(strToLng)))
                 .title(address)
-                .snippet(time)
+               // .snippet(time + "\n\n" + memo)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
 
+        if (memo.equals("")) {
+            markerOpt.snippet(time);
+        } else {
+            markerOpt.snippet(time + "\n\n" + memo);
+        }
+
+        CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(InfoActivity.this);
+        map.setInfoWindowAdapter(adapter);
         map.addMarker(markerOpt).showInfoWindow();
 
         //Draw Line
