@@ -4,8 +4,8 @@
     <string name="app_name">台北倒垃圾</string>
     <string name="about">關於</string>
     <string name="recycle">垃圾分類小幫手</string>
-    <string name="lbs">垃圾車班表 依距離查詢</string>
-    <string name="query">垃圾車班表 依行政區查詢</string>
+    <string name="lbs">垃圾車班表\n依距離查詢</string>
+    <string name="query">垃圾車班表\n依行政區查詢</string>
     <string name="tpfix">台北市垃圾資源回收、廚餘回收限時收受點</string>
     <string name="tpfood">台北市週三、週日廚餘專用限時收受點</string>
     <string name="ntfix">新北市定點清運查詢</string>
@@ -187,9 +187,6 @@
 
     <string name="changelog_title">更新記錄</string>
     <string name="welcome_title">歡迎使用台北倒垃圾</string>
-    <string name="welcome_message">
-        資料來源:台北市和新北市政府開放資料\n\n
-        -班表資訊:不定期更新\n
-        -新北即時資訊:三分鐘更新一次\n
+    <string name="welcome_message">免責聲明：本應用之資料來源均為政府公布之開放資料，垃圾車資訊可能因為氣候或交通等外在因素，而與現實狀況略有誤差。
     </string>
 </resources>

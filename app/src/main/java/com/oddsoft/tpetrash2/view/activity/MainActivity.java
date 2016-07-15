@@ -11,6 +11,9 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,14 +24,16 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.R;
-import com.oddsoft.tpetrash2.adapter.ArrayItemAdapter;
+import com.oddsoft.tpetrash2.adapter.MainAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Utils;
 import com.oddsoft.tpetrash2.view.base.BaseActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
 
@@ -39,6 +44,9 @@ public class MainActivity extends BaseActivity {
 
     @Bind(R.id.drawerlayout)
     DrawerLayout drawerLayout;
+
+    @Bind(R.id.recyclerView)
+    RecyclerView recyclerView;
 
     private ActionBar actionbar;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -51,7 +59,9 @@ public class MainActivity extends BaseActivity {
     private static final int DIALOG_WELCOME = 1;
     private static final int DIALOG_UPDATE = 2;
 
-    private ArrayItemAdapter adapter;
+    private MainAdapter adapter;
+
+    //private ArrayItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +74,7 @@ public class MainActivity extends BaseActivity {
 
         initActionBar();
         initDrawer();
+        initRecyclerView();
 
         if (Utils.isNewInstallation(this)) {
             this.showDialog(DIALOG_WELCOME);
@@ -73,55 +84,6 @@ public class MainActivity extends BaseActivity {
         }
 
 
-    }
-
-    @OnClick(R.id.btn_lbs)
-    public void gotoLBSActivity(){
-        startActivity(new Intent(MainActivity.this, LBSActivity.class));
-    }
-
-    @OnClick(R.id.btn_query)
-    public void gotoQueryActivity(){
-        startActivity(new Intent(MainActivity.this, QueryActivity.class));
-    }
-
-    @OnClick(R.id.btn_recycle)
-    public void gotoRecycleActivity(){
-        startActivity(new Intent(MainActivity.this, RecycleActivity.class));
-    }
-
-    @OnClick(R.id.btn_tpfix)
-    public void gotoTaipeiFixActivity(){
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, TPFixActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("mapType", "tpfix");
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
-    @OnClick(R.id.btn_tpfood)
-    public void gotoTaipeiFoodActivity(){
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, TPFixActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("mapType", "tpfood");
-        intent.putExtras(bundle);
-        startActivity(intent);    }
-
-    @OnClick(R.id.btn_ntrecycle)
-    public void gotoNewTaipeiRecycleActivity(){
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, TPFixActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("mapType", "ntrecycle");
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
-    @OnClick(R.id.btn_ntfix)
-    public void gotoNewTaipeiFixActivity(){
-        startActivity(new Intent(MainActivity.this, NTFixActivity.class));
     }
 
     private void initActionBar() {
@@ -220,6 +182,55 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    private void initRecyclerView() {
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        List<String> mainItems = new ArrayList<String>();
+        mainItems.add(getString(R.string.lbs));
+        mainItems.add(getString(R.string.query));
+        mainItems.add(getString(R.string.tpfix));
+        mainItems.add(getString(R.string.ntfix));
+        mainItems.add(getString(R.string.tpfood));
+        mainItems.add(getString(R.string.ntrecycle));
+        mainItems.add(getString(R.string.recycle));
+
+        adapter = new MainAdapter(mainItems);
+
+        adapter.setOnItemClickListener(new MainAdapter.OnItemClickListener(){
+            @Override
+            public void onItemClick(int position, String name) {
+
+                switch (position) {
+                    case 0:
+                        startActivity(new Intent(MainActivity.this, LBSActivity.class));
+                        break;
+                    case 1:
+                        startActivity(new Intent(MainActivity.this, QueryActivity.class));
+                        break;
+                    case 2:
+                        gotoTaipeiFixActivity("tpfix");
+                        break;
+                    case 3:
+                        startActivity(new Intent(MainActivity.this, NTFixActivity.class));
+                        break;
+                    case 4:
+                        gotoTaipeiFixActivity("tpfood");
+                        break;
+                    case 5:
+                        gotoTaipeiFixActivity("ntrecycle");
+                        break;
+                    case 6:
+                        startActivity(new Intent(MainActivity.this, RecycleActivity.class));
+                        break;
+                }
+            }
+
+        });
+
+        recyclerView.setAdapter(adapter);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -269,6 +280,15 @@ public class MainActivity extends BaseActivity {
                 break;
         }
         return builder.create();
+    }
+
+    private void gotoTaipeiFixActivity(String mapType){
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, TPFixActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("mapType", mapType);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
 }

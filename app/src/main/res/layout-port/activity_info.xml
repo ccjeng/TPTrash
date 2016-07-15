@@ -12,56 +12,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
 
-    <TextView
-        android:id="@+id/garbageView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/foodView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/garbageView"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/recyclingView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/foodView"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recyclingView"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/address"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/time"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:visibility="gone"/>
-
-    <TextView
-        android:id="@+id/memo"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/address"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
     <fragment
         android:id="@+id/map_fragment"
         class="com.google.android.gms.maps.MapFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/memo"
+        android:layout_below="@+id/toolbar"
         android:layout_above="@+id/footerLayout"/>
 
     <RelativeLayout

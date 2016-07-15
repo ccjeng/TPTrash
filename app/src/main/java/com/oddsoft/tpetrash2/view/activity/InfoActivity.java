@@ -10,9 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
@@ -63,24 +61,6 @@ public class InfoActivity extends BaseActivity
 
     private static final String TAG = InfoActivity.class.getSimpleName();
 
-    @Bind(R.id.garbageView)
-    TextView garbageView;
-
-    @Bind(R.id.foodView)
-    TextView foodView;
-
-    @Bind(R.id.recyclingView)
-    TextView recyclingView;
-
-    @Bind(R.id.time)
-    TextView timeView;
-
-    @Bind(R.id.address)
-    TextView addressView;
-
-    @Bind(R.id.memo)
-    TextView memoView;
-
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
@@ -113,7 +93,7 @@ public class InfoActivity extends BaseActivity
     private Marker markerCar;
 
     private AdView adView;
-
+    private String todayInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,43 +129,21 @@ public class InfoActivity extends BaseActivity
         food = bundle.getBoolean("food");
         recycling = bundle.getBoolean("recycling");
 
-        //memoView.setText(memo);
-        //if (memo.equals("")) {
-            memoView.setVisibility(View.GONE);
-        //}
         //set toolbar title
         getSupportActionBar().setTitle(time);
 
         String strToday = bundle.getString("day"); //Time.getDayOfWeekName();
 
         if (garbage) {
-            //今天有收一般垃圾
-            garbageView.setText(strToday + "有收一般垃圾");
-            garbageView.setTextColor(getResources().getColor(R.color.green));
-        } else {
-            //今天沒收一般垃圾"
-            garbageView.setText(strToday + "不收一般垃圾");
-            garbageView.setTextColor(getResources().getColor(R.color.red));
+            todayInfo = strToday+"有收一般垃圾\n";
         }
 
         if (food) {
-            //今天有收廚餘
-            foodView.setText(strToday + "有收廚餘");
-            foodView.setTextColor(getResources().getColor(R.color.green));
-        } else {
-            //今天沒收廚餘
-            foodView.setText(strToday + "不收廚餘");
-            foodView.setTextColor(getResources().getColor(R.color.red));
+            todayInfo = todayInfo + strToday+"有收廚餘\n";
         }
 
         if (recycling) {
-            //今天有收資源回收
-            recyclingView.setText(strToday + "有收資源回收");
-            recyclingView.setTextColor(getResources().getColor(R.color.green));
-        } else {
-            //今天沒收資源回收
-            recyclingView.setText(strToday + "不收資源回收");
-            recyclingView.setTextColor(getResources().getColor(R.color.red));
+            todayInfo = todayInfo + strToday+"有收資源回收\n";
         }
 
         // Set up the map fragment
@@ -216,11 +174,7 @@ public class InfoActivity extends BaseActivity
                // .snippet(time + "\n\n" + memo)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
 
-        if (memo.equals("")) {
-            markerOpt.snippet(time);
-        } else {
-            markerOpt.snippet(time + "\n\n" + memo);
-        }
+        markerOpt.snippet(time + "\n\n" + todayInfo + memo);
 
         CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(InfoActivity.this);
         map.setInfoWindowAdapter(adapter);
@@ -355,6 +309,9 @@ public class InfoActivity extends BaseActivity
 
         gmap.addMarker(markerOption);
 
+        CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(InfoActivity.this);
+        gmap.setInfoWindowAdapter(adapter);
+
     }
 
 
@@ -397,7 +354,6 @@ public class InfoActivity extends BaseActivity
                     @Override
                     public void onNext(ArrayList<RealtimeCar> realtimeCars) {
                         for(RealtimeCar car: realtimeCars) {
-                            //Log.d(TAG, car.getLocation());
 
                             if (car.getLineid().equals(lindID)) {
 
@@ -412,7 +368,7 @@ public class InfoActivity extends BaseActivity
                                     Double lng = addressList.get(0).getLongitude();
 
                                     if (lat > 0) {
-                                        drawRealTimeCar(gmap, lat, lng, car.getTime(), "[" +car.getCar() +"] " + car.getLocation());
+                                        drawRealTimeCar(gmap, lat, lng, car.getTime(), "現在位置在" + car.getLocation() + "\n車號[" +car.getCar() +"] ");
                                     }
 
                                 } catch (Exception e) {

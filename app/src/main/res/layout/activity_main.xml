@@ -23,149 +23,20 @@
         android:background="@color/write"
         tools:context=".view.activity.MainActivity">
 
-
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/scrollView">
-
         <LinearLayout
-            android:id="@+id/home_layout"
-            android:layout_above="@+id/footerLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <Space
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_height="wrap_content"/>
 
-            <com.mikepenz.iconics.view.IconicsButton
-                android:id="@+id/btn_lbs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Large"
-                android:minLines="2"
-                android:textColor="@color/black"
-                android:background="@color/write"
-                android:padding="8dp"
-                android:scaleType="fitXY"
-                android:text="{faw-map-marker}  垃圾車班表 依距離查詢"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_gravity="center_horizontal"/>
-
-            <com.mikepenz.iconics.view.IconicsButton
-                android:id="@+id/btn_query"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Large"
-                android:minLines="2"
-                android:textColor="@color/black"
-                android:background="@color/write"
-                android:padding="8dp"
-                android:scaleType="fitXY"
-                android:text="{faw-search}  垃圾車班表 依行政區查詢"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_gravity="center_horizontal"/>
-
-            <com.mikepenz.iconics.view.IconicsButton
-                android:id="@+id/btn_recycle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Large"
-                android:minLines="2"
-                android:textColor="@color/black"
-                android:background="@color/write"
-                android:padding="8dp"
-                android:scaleType="fitXY"
-                android:text="{faw-recycle}  垃圾分類小幫手"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_gravity="center_horizontal"/>
-
-            <com.mikepenz.iconics.view.IconicsButton
-                android:id="@+id/btn_tpfix"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Large"
-                android:minLines="2"
-                android:textColor="@color/black"
-                android:background="@color/write"
-                android:padding="8dp"
-                android:scaleType="fitXY"
-                android:text="{faw-map-marker}  台北市資源回收及\n廚餘限時收受點"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_gravity="center_horizontal"/>
-
-            <com.mikepenz.iconics.view.IconicsButton
-                android:id="@+id/btn_tpfood"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Large"
-                android:minLines="2"
-                android:textColor="@color/black"
-                android:background="@color/write"
-                android:padding="8dp"
-                android:scaleType="fitXY"
-                android:text="{faw-map-marker}  台北市週三、週日\n廚餘專用限時收受點"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_gravity="center_horizontal"/>
-
-            <com.mikepenz.iconics.view.IconicsButton
-                android:id="@+id/btn_ntfix"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Large"
-                android:minLines="2"
-                android:textColor="@color/black"
-                android:background="@color/write"
-                android:padding="8dp"
-                android:scaleType="fitXY"
-                android:text="{faw-question-circle}  新北市定點清運查詢"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_gravity="center_horizontal"/>
-
-            <com.mikepenz.iconics.view.IconicsButton
-                android:id="@+id/btn_ntrecycle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Large"
-                android:minLines="2"
-                android:textColor="@color/black"
-                android:background="@color/write"
-                android:padding="8dp"
-                android:scaleType="fitXY"
-                android:text="{faw-map-marker}  新北市黃金資收站設置資訊"/>
-
-        </LinearLayout>
-    </ScrollView>
-
-        <LinearLayout
-            android:id="@+id/footerLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:gravity="bottom"
-            android:orientation="horizontal">
         </LinearLayout>
 
         <android.support.design.widget.NavigationView

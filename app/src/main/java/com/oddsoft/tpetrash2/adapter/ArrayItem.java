@@ -296,18 +296,18 @@ public class ArrayItem extends AVObject {
                 case "1":
                 case "5":
                     if (memo.equals("")) {
-                        memo = "資源回收有收：平面類：紙類 舊衣類 乾淨塑膠袋";
+                        memo = "資源回收：平面類：紙類 舊衣類 乾淨塑膠袋";
                     } else {
-                        memo = memo + ", 資源回收有收：平面類：紙類 舊衣類 乾淨塑膠袋";
+                        memo = memo + ", 資源回收：平面類：紙類 舊衣類 乾淨塑膠袋";
                     }
                     break;
                 case "2":
                 case "4":
                 case "6":
                     if (memo.equals("")) {
-                        memo = "資源回收有收：乾淨保麗龍, 一般類（瓶罐、容器、小家電等)";
+                        memo = "資源回收：乾淨保麗龍, 一般類（瓶罐、容器、小家電等)";
                     } else {
-                        memo = memo + ", 資源回收有收：乾淨保麗龍, 一般類（瓶罐、容器、小家電等)";
+                        memo = memo + ", 資源回收：乾淨保麗龍, 一般類（瓶罐、容器、小家電等)";
                     }
                     break;
             }
