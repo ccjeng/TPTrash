@@ -23,6 +23,8 @@ public class Constant {
 
     public static final String NEWTAIPEI_OPENDATA = "http://data.ntpc.gov.tw/od/data/";
     public static final String TAIPEI_OPENDATA = "http://data.taipei/opendata/datalist/";
+    public static final String GITHUB_GIST = "https://gist.github.com/ccjeng/c5c66a6971f7b6560e6512125324d6e2/";
+
 
 
 

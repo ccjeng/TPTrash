@@ -302,7 +302,7 @@ public class TPFixActivity extends BaseActivity
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constant.NEWTAIPEI_OPENDATA)
+                .baseUrl(Constant.GITHUB_GIST)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okhttpClient)
