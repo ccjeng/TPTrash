@@ -11,10 +11,10 @@ import rx.Observable;
  */
 public interface TaipeiOpenDataService {
 
-    @GET("apiAccess?scope=resourceAquire&rid=8077ae33-7a3a-462e-8392-0331f795bb09")
+    @GET("raw/TaipeiRecycle.json")
     Observable<TPFix> getTaipeiFixLocation();
 
-    @GET("apiAccess?scope=resourceAquire&rid=6eeb9b45-36ab-48bf-9625-ac04230d1e7a")
+    @GET("raw/TaipeiFood.json")
     Observable<TPFood> getTaipeiFoodLocation();
 
 }
