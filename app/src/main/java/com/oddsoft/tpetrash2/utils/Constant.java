@@ -26,6 +26,4 @@ public class Constant {
     public static final String GITHUB_GIST = "https://gist.github.com/ccjeng/c5c66a6971f7b6560e6512125324d6e2/";
 
 
-
-
 }
