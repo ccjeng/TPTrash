@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>4.2.1\n
-			修正台北市開放資料平台網站當機後，部分功能無法使用的問題
+    	<item>4.2.2\n改善地圖載入速度
 		</item>
 </string-array>
 </resources>

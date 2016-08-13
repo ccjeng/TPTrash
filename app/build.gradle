@@ -7,8 +7,8 @@ android {
         applicationId 'com.oddsoft.tpetrash2'
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 54
-        versionName '4.2.1.072916TT'
+        versionCode 55
+        versionName '4.2.2.081316TT'
     }
     buildTypes {
         release {
@@ -42,11 +42,13 @@ dependencies {
     compile files('libs/vpadn-sdk-obf453-71606102-1606171046-2512837.jar')
     compile files('libs/admob-adapter-1.0.0-1505261651-830485e.jar')
     compile files('libs/FacebookAdapter.jar')
-    compile 'com.facebook.android:audience-network-sdk:4.12.1'
-    compile 'com.google.android.gms:play-services-ads:9.2.1'
-    compile 'com.google.android.gms:play-services-maps:9.2.1'
-    compile 'com.google.android.gms:play-services-analytics:9.2.1'
-    compile 'com.google.android.gms:play-services-location:9.2.1'
+    compile 'com.facebook.android:audience-network-sdk:4.14.1'
+    compile 'com.google.android.gms:play-services-maps:9.4.0'
+    compile 'com.google.android.gms:play-services-analytics:9.4.0'
+    compile 'com.google.android.gms:play-services-location:9.4.0'
+    compile 'com.google.firebase:firebase-core:9.4.0'
+    compile 'com.google.firebase:firebase-ads:9.4.0'
+    compile 'com.google.firebase:firebase-crash:9.4.0'
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:design:24.1.1'
     compile 'com.jakewharton:butterknife:7.0.1'
@@ -62,3 +64,5 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
 }
+
+apply plugin: 'com.google.gms.google-services'
