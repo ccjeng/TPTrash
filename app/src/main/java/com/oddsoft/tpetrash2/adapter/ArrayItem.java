@@ -83,7 +83,7 @@ public class ArrayItem extends AVObject {
             e.printStackTrace();
         }
 
-        return Integer.valueOf(endTime.replace("01:", "25:").replace("：", "").replace(":", "").trim());
+        return Integer.valueOf(endTime.replace("01:", "25:").replace("：", "").replace(":", "").replace(" ","").trim());
     }
 
     public String getCarHour() {
