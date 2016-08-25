@@ -282,16 +282,18 @@ public class InfoActivity extends BaseActivity
         query.findInBackground(new com.avos.avoscloud.FindCallback<ArrayItem>() {
             @Override
             public void done(List<ArrayItem> item, AVException e) {
-                for(ArrayItem i: item) {
-                    //Marker
-                    MarkerOptions markerOption = new MarkerOptions();
-                    markerOption.position(new LatLng(i.getLocation().getLatitude()
-                            , i.getLocation().getLongitude()));
-                    markerOption.title(i.getAddress())
-                            .snippet(i.getCarTime());
-                    markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
+                if (item != null) {
+                    for (ArrayItem i : item) {
+                        //Marker
+                        MarkerOptions markerOption = new MarkerOptions();
+                        markerOption.position(new LatLng(i.getLocation().getLatitude()
+                                , i.getLocation().getLongitude()));
+                        markerOption.title(i.getAddress())
+                                .snippet(i.getCarTime());
+                        markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
 
-                    markerCar = gmap.addMarker(markerOption);
+                        markerCar = gmap.addMarker(markerOption);
+                    }
                 }
             }
         });
