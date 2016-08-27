@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>4.2.2\n改善地圖載入速度
+    	<item>4.2.3\n文字改為「垃圾車班表 找附近的垃圾車」
+			\n\n歡迎加入臉書粉絲專頁
 		</item>
 </string-array>
 </resources>
