@@ -31,12 +31,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.R;
-import com.oddsoft.tpetrash2.adapter.ArrayItem;
-import com.oddsoft.tpetrash2.adapter.CustomInfoWindowAdapter;
+import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.view.adapter.CustomInfoWindowAdapter;
 import com.oddsoft.tpetrash2.controller.NewTaipeiOpenDataService;
 import com.oddsoft.tpetrash2.model.RealtimeCar;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
+import com.oddsoft.tpetrash2.utils.Time;
 import com.oddsoft.tpetrash2.view.base.Application;
 import com.oddsoft.tpetrash2.view.base.BaseActivity;
 
@@ -71,8 +72,8 @@ public class InfoActivity extends BaseActivity
     private String strFromLng = "";
 
     private String strTo = "";
-    private String strToLat = "";
-    private String strToLng = "";
+    private Double toLat;
+    private Double toLng;
 
     private String city;
     private String address;
@@ -110,29 +111,33 @@ public class InfoActivity extends BaseActivity
 
         Bundle bundle = this.getIntent().getExtras();
 
+        item = (ArrayItem) getIntent().getExtras().getSerializable("item");
+
         strFromLat = bundle.getString("fromLat");
         strFromLng = bundle.getString("fromLng");
         strFrom = strFromLat + "," + strFromLng;
+        toLat = item.getLocation().getLatitude();
+        toLng = item.getLocation().getLongitude();
 
-        strToLat = bundle.getString("toLat");
-        strToLng = bundle.getString("toLng");
-        strTo = strToLat + "," + strToLng;
+        strTo = item.getLocation().getLatitude() + "," + item.getLocation().getLongitude();
 
-        city = bundle.getString("city");
-        address = bundle.getString("address");
-        lineName = bundle.getString("line");
-        carNo = bundle.getString("carno");
-        time = bundle.getString("time");
-        memo = bundle.getString("memo");
-        lineid = bundle.getString("lineid");
-        garbage = bundle.getBoolean("garbage");
-        food = bundle.getBoolean("food");
-        recycling = bundle.getBoolean("recycling");
+        city = item.getCity();
+        address = item.getFullAddress();
+        lineName = item.getLine();
+        carNo = item.getCarNo();
+        time = item.getCarTime();
+
+        String selectedDay = bundle.getString("selectedDay");
+        String strToday = Time.getDayOfWeekName(Integer.valueOf(selectedDay));
+
+        memo = item.getMemo(selectedDay);
+        lineid = item.getLineID();
+        garbage = item.checkTodayAvailableGarbage(selectedDay);
+        food = item.checkTodayAvailableFood(selectedDay);
+        recycling = item.checkTodayAvailableRecycling(selectedDay);
 
         //set toolbar title
         getSupportActionBar().setTitle(time);
-
-        String strToday = bundle.getString("day"); //Time.getDayOfWeekName();
 
         if (garbage) {
             todayInfo = strToday+"有收一般垃圾\n";
@@ -162,14 +167,13 @@ public class InfoActivity extends BaseActivity
         map.getUiSettings().setZoomControlsEnabled(true);
 
         CameraUpdate center =
-                CameraUpdateFactory.newLatLngZoom(new LatLng(Double.valueOf(strToLat)
-                        , Double.valueOf(strToLng)), 17);
+                CameraUpdateFactory.newLatLngZoom(new LatLng(toLat, toLng), 17);
         map.animateCamera(center);
         map.setMyLocationEnabled(true);
 
         //Marker
         MarkerOptions markerOpt = new MarkerOptions();
-        markerOpt.position(new LatLng(Double.valueOf(strToLat), Double.valueOf(strToLng)))
+        markerOpt.position(new LatLng(toLat, toLng))
                 .title(address)
                // .snippet(time + "\n\n" + memo)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
@@ -185,7 +189,7 @@ public class InfoActivity extends BaseActivity
 
         if (!strFromLat.equals("")) {
             LatLng from = new LatLng(Double.valueOf(strFromLat), Double.valueOf(strFromLng));
-            LatLng to = new LatLng(Double.valueOf(strToLat), Double.valueOf(strToLng));
+            LatLng to = new LatLng(toLat, toLng);
 
             polylineOpt.add(from, to).color(Color.BLUE).width(5);
 

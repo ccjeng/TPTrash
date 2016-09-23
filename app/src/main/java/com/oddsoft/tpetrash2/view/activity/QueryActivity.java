@@ -2,6 +2,7 @@ package com.oddsoft.tpetrash2.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,8 +25,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.oddsoft.tpetrash2.R;
-import com.oddsoft.tpetrash2.adapter.ArrayItem;
-import com.oddsoft.tpetrash2.adapter.ArrayItemAdapter;
+import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.view.adapter.ArrayItemAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
@@ -351,28 +352,13 @@ public class QueryActivity extends BaseActivity {
         ga.trackEvent(this, "Location", "Region", item.getRegion(), 0);
         ga.trackEvent(this, "Location", "Address", item.getFullAddress(), 0);
 
-        Intent intent = new Intent();
-        intent.setClass(this, InfoActivity.class);
+        Intent intent = new Intent(this, InfoActivity.class);
+        intent.putExtra("item", (Parcelable) item);
 
         Bundle bundle = new Bundle();
-
         bundle.putString("fromLat", "");
         bundle.putString("fromLng", "");
-        bundle.putString("toLat", String.valueOf(item.getLocation().getLatitude()));
-        bundle.putString("toLng", String.valueOf(item.getLocation().getLongitude()));
-
-        bundle.putString("address", item.getFullAddress());
-        bundle.putString("time", item.getCarTime());
-        bundle.putBoolean("garbage", item.checkTodayAvailableGarbage(selectedDay));
-        bundle.putBoolean("food", item.checkTodayAvailableFood(selectedDay));
-        bundle.putBoolean("recycling", item.checkTodayAvailableRecycling(selectedDay));
-        bundle.putString("memo", item.getMemo(selectedDay));
-        bundle.putString("lineid", item.getLineID());
-        bundle.putString("line", item.getLine());
-        bundle.putString("carno", item.getCarNo());
-        bundle.putString("city", item.getCity());
-        bundle.putString("day", Time.getDayOfWeekName(Integer.valueOf(selectedDay)));
-
+        bundle.putString("selectedDay", selectedDay);
         intent.putExtras(bundle);
 
         startActivity(intent);

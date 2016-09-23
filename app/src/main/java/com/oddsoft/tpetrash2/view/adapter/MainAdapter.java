@@ -1,4 +1,4 @@
-package com.oddsoft.tpetrash2.adapter;
+package com.oddsoft.tpetrash2.view.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

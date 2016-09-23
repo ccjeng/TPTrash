@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -35,8 +36,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.oddsoft.tpetrash2.R;
-import com.oddsoft.tpetrash2.adapter.ArrayItem;
-import com.oddsoft.tpetrash2.adapter.ArrayItemAdapter;
+import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.view.adapter.ArrayItemAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
@@ -145,7 +146,6 @@ public class LBSActivity extends BaseActivity
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
 
         today = Integer.valueOf(Time.getDayOfWeekNumber());
 
@@ -480,29 +480,13 @@ public class LBSActivity extends BaseActivity
         ga.trackEvent(this, "Location", "Region", item.getRegion(), 0);
         ga.trackEvent(this, "Location", "Address", item.getFullAddress(), 0);
 
-
-        Intent intent = new Intent();
-        intent.setClass(this, InfoActivity.class);
+        Intent intent = new Intent(this, InfoActivity.class);
+        intent.putExtra("item", (Parcelable) item);
 
         Bundle bundle = new Bundle();
-
         bundle.putString("fromLat", String.valueOf(myLoc.getLatitude()));
         bundle.putString("fromLng", String.valueOf(myLoc.getLongitude()));
-        bundle.putString("toLat", String.valueOf(item.getLocation().getLatitude()));
-        bundle.putString("toLng", String.valueOf(item.getLocation().getLongitude()));
-
-        bundle.putString("address", item.getFullAddress());
-        bundle.putString("time", item.getCarTime());
-        bundle.putBoolean("garbage", item.checkTodayAvailableGarbage(selectedDay));
-        bundle.putBoolean("food", item.checkTodayAvailableFood(selectedDay));
-        bundle.putBoolean("recycling", item.checkTodayAvailableRecycling(selectedDay));
-        bundle.putString("memo", item.getMemo(selectedDay));
-        bundle.putString("lineid", item.getLineID());
-        bundle.putString("line", item.getLine());
-        bundle.putString("carno", item.getCarNo());
-        bundle.putString("city", item.getCity());
-        bundle.putString("day", Time.getDayOfWeekName(Integer.valueOf(selectedDay)));
-
+        bundle.putString("selectedDay", selectedDay);
         intent.putExtras(bundle);
 
         startActivity(intent);

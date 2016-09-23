@@ -1,4 +1,4 @@
-package com.oddsoft.tpetrash2.adapter;
+package com.oddsoft.tpetrash2.view.adapter;
 
 import android.content.Context;
 import android.location.Location;

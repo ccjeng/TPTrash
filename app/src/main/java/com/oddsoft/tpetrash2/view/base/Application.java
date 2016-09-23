@@ -13,7 +13,7 @@ import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 import com.oddsoft.tpetrash2.BuildConfig;
 import com.oddsoft.tpetrash2.R;
-import com.oddsoft.tpetrash2.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
 import com.oddsoft.tpetrash2.utils.Constant;
 
 import java.util.HashMap;

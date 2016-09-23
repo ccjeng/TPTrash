@@ -24,7 +24,7 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.R;
-import com.oddsoft.tpetrash2.adapter.MainAdapter;
+import com.oddsoft.tpetrash2.view.adapter.MainAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Utils;
 import com.oddsoft.tpetrash2.view.base.BaseActivity;

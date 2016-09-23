@@ -1,4 +1,4 @@
-package com.oddsoft.tpetrash2.adapter;
+package com.oddsoft.tpetrash2.view.adapter;
 
 /**
  * Data model for a trash item.
@@ -17,10 +17,11 @@ import com.avos.avoscloud.AVGeoPoint;
 import com.avos.avoscloud.AVObject;
 import com.oddsoft.tpetrash2.utils.Constant;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
 @AVClassName(Constant.LEANCLOUD_OBJECT_NAME)
-public class ArrayItem extends AVObject {
+public class ArrayItem extends AVObject implements Serializable {
 
     public String getAddress() {
 

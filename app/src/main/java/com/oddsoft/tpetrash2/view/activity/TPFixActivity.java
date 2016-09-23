@@ -25,7 +25,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.oddsoft.tpetrash2.R;
-import com.oddsoft.tpetrash2.adapter.CustomInfoWindowAdapter;
+import com.oddsoft.tpetrash2.view.adapter.CustomInfoWindowAdapter;
 import com.oddsoft.tpetrash2.controller.NewTaipeiOpenDataService;
 import com.oddsoft.tpetrash2.controller.TaipeiOpenDataService;
 import com.oddsoft.tpetrash2.model.NPRecycle;
