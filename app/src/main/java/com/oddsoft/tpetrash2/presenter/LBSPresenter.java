@@ -35,7 +35,7 @@ public class LBSPresenter extends BasePresenter<LBSView> implements LocationConn
     public int distance;
     public String sorting;
 
-    private boolean isQueryRunning;
+    public boolean isQueryRunning;
 
 
     public LBSPresenter(LBSView view, Context context) {
@@ -90,10 +90,6 @@ public class LBSPresenter extends BasePresenter<LBSView> implements LocationConn
 
         }
         isQueryRunning = false;
-    }
-
-    public boolean isQueryRunning() {
-        return isQueryRunning;
     }
 
     /*

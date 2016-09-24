@@ -18,21 +18,20 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.FindCallback;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.oddsoft.tpetrash2.R;
-import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
-import com.oddsoft.tpetrash2.view.adapter.ArrayItemAdapter;
+import com.oddsoft.tpetrash2.presenter.QueryPresenter;
+import com.oddsoft.tpetrash2.presenter.QueryView;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.oddsoft.tpetrash2.utils.Utils;
+import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.view.adapter.ArrayItemAdapter;
 import com.oddsoft.tpetrash2.view.base.Application;
-import com.oddsoft.tpetrash2.view.base.BaseActivity;
+import com.oddsoft.tpetrash2.view.base.MVPBaseActivity;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.util.Arrays;
@@ -42,10 +41,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class QueryActivity extends BaseActivity {
+public class QueryActivity extends MVPBaseActivity<QueryView, QueryPresenter> implements QueryView {
 
     private static final String TAG = QueryActivity.class.getSimpleName();
-    public static final String INTENT_EXTRA_ITEM = "intentItem";
 
     private static int hour;
     private static int currentHour;
@@ -75,8 +73,6 @@ public class QueryActivity extends BaseActivity {
     private String selectedDay;
     private String selectedHour;
     private String selectedRegion;
-    private boolean queryRunnung;
-
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -84,10 +80,7 @@ public class QueryActivity extends BaseActivity {
     @Bind(R.id.progress_wheel)
     ProgressWheel progressWheel;
 
-
     private Analytics ga;
-
-    private ArrayItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +90,13 @@ public class QueryActivity extends BaseActivity {
 
         ga = new Analytics();
         ga.trackerPage(this);
+
+        mPresenter.onCreate();
+
+    }
+
+    @Override
+    public void initView() {
 
         initActionBar();
         initSpinner();
@@ -121,11 +121,10 @@ public class QueryActivity extends BaseActivity {
 
 
         if (!Utils.isNetworkConnected(this)) {
-            Utils.showSnackBar(coordinatorlayout, getString(R.string.network_error), Utils.Mode.ERROR);
+            this.showError(getString(R.string.network_error), Utils.Mode.ERROR);
         }
 
         adView();
-
     }
 
     private void initSpinner() {
@@ -146,7 +145,7 @@ public class QueryActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                spinnerSelected();
+                mPresenter.spinnerSelected();
             }
 
             @Override
@@ -165,7 +164,7 @@ public class QueryActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                spinnerSelected();
+                mPresenter.spinnerSelected();
             }
 
             @Override
@@ -184,7 +183,7 @@ public class QueryActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
-                spinnerSelected();
+                mPresenter.spinnerSelected();
             }
 
             @Override
@@ -194,16 +193,19 @@ public class QueryActivity extends BaseActivity {
 
     }
 
-
-    private void spinnerSelected() {
+    @Override
+    public void spinnerSelected() {
         selectedDay = dayCode[daySpinner.getSelectedItemPosition()];
         selectedHour = hourCode[hourSpinner.getSelectedItemPosition()];
         selectedRegion = regionName[regionSpinner.getSelectedItemPosition()];
 
         if (regionSpinner.getSelectedItemPosition()!=0 &&
                 hourSpinner.getSelectedItemPosition() != 0 &&
-                !queryRunnung) {
-            runQuery(Integer.valueOf(selectedDay)
+                !mPresenter.isQueryRunning) {
+
+            progressWheel.setVisibility(View.VISIBLE);
+
+            mPresenter.runQuery(Integer.valueOf(selectedDay)
                     , Integer.valueOf(selectedHour)
                     , selectedRegion);
 
@@ -216,6 +218,7 @@ public class QueryActivity extends BaseActivity {
 
 
     }
+
     private void adView() {
 
         LinearLayout adBannerLayout = (LinearLayout) findViewById(R.id.footerLayout);
@@ -249,63 +252,6 @@ public class QueryActivity extends BaseActivity {
         }
     }
 
-
-    private void runQuery(final int day, final int hour, final String region) {
-
-
-        String strHour = String.valueOf(hour);
-        String weekTag = Utils.getWeekTag(day);
-        String strRegion = region.substring(3, region.length());
-
-        Log.d(TAG, day + " - " + hour + " - " + strRegion);
-
-
-        AVQuery<ArrayItem> query = AVQuery.getQuery(ArrayItem.class);
-
-        query.orderByAscending("time");
-
-        query.whereEqualTo(weekTag, "Y")
-                .whereEqualTo("region", strRegion)
-                .whereEqualTo("hour", strHour);
-
-        progressWheel.setVisibility(View.VISIBLE);
-
-        queryRunnung = true;
-        query.findInBackground(new FindCallback<ArrayItem>() {
-            public void done(List<ArrayItem> avObjects, AVException e) {
-
-                progressWheel.setVisibility(View.GONE);
-
-                if (e == null) {
-
-                    adapter = new ArrayItemAdapter(QueryActivity.this, avObjects, String.valueOf(day), currentHour, null);
-
-                    recyclerView.setAdapter(adapter);
-
-                    adapter.setOnItemClickListener(new ArrayItemAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(ArrayItem item) {
-                            Log.d(TAG, item.getAddress());
-                            goIntent(item);
-                        }
-                    });
-
-                    if (avObjects.size() == 0) {
-                        Utils.showSnackBar(coordinatorlayout, getString(R.string.data_not_found), Utils.Mode.INFO);
-                    }
-
-                } else {
-                    Utils.showSnackBar(coordinatorlayout, getString(R.string.network_error), Utils.Mode.ERROR);
-                }
-
-                queryRunnung = false;
-
-            }
-        });
-
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -332,11 +278,10 @@ public class QueryActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        mPresenter.onResume();
         if (adView != null)
             adView.resume();
     }
-
 
     @Override
     protected void onDestroy() {
@@ -345,7 +290,6 @@ public class QueryActivity extends BaseActivity {
 
         super.onDestroy();
     }
-
 
     private void goIntent(ArrayItem item) {
 
@@ -365,5 +309,35 @@ public class QueryActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void setRecyclerView(List<ArrayItem> items) {
 
+        progressWheel.setVisibility(View.GONE);
+
+        ArrayItemAdapter adapter = new ArrayItemAdapter(QueryActivity.this, items, selectedDay, currentHour, null);
+
+        recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new ArrayItemAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(ArrayItem item) {
+                Log.d(TAG, item.getAddress());
+                goIntent(item);
+            }
+        });
+
+        if (items.size() == 0) {
+            this.showError(getString(R.string.data_not_found), Utils.Mode.INFO);
+        }
+    }
+
+    @Override
+    public void showError(String message, Utils.Mode mode) {
+        Utils.showSnackBar(coordinatorlayout, message, mode);
+    }
+
+    @Override
+    protected QueryPresenter createPresenter() {
+        return new QueryPresenter(this, this);
+    }
 }

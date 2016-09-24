@@ -1,22 +1,18 @@
 package com.oddsoft.tpetrash2.presenter;
 
-import android.location.Location;
-
 import com.oddsoft.tpetrash2.utils.Utils;
 import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
 
 import java.util.List;
 
 /**
- * Created by andycheng on 2016/9/23.
+ * Created by andycheng on 2016/9/24.
  */
 
-public interface LBSView {
+public interface QueryView {
 
     void initView();
-    void spinnerSetSelection();
     void spinnerSelected();
-    void setRecyclerView(List<ArrayItem> items, Location location);
+    void setRecyclerView(List<ArrayItem> items);
     void showError(String message, Utils.Mode mode);
-
 }

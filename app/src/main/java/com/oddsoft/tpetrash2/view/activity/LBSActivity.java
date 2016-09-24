@@ -201,7 +201,7 @@ public class LBSActivity extends MVPBaseActivity<LBSView, LBSPresenter> implemen
         selectedSort = sortCode[sortSpinner.getSelectedItemPosition()];
 
         if (hourSpinner.getSelectedItemPosition()!=0 &&
-                !mPresenter.isQueryRunning()) {
+                !mPresenter.isQueryRunning) {
 
             progressWheel.setVisibility(View.VISIBLE);
 
