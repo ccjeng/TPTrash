@@ -28,4 +28,5 @@ public abstract class BasePresenter<T> implements Presenter {
         }
     }
 
+
 }

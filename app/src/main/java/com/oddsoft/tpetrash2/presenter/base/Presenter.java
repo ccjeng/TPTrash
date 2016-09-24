@@ -5,5 +5,11 @@ package com.oddsoft.tpetrash2.presenter.base;
  */
 public interface Presenter {
 
+    void onCreate();
+    void onStart();
+    void onStop();
+    void onResume();
+    void onPause();
     void onDestroy();
+
 }
