@@ -118,6 +118,13 @@ public class LBSActivity extends MVPBaseActivity<LBSView, LBSPresenter> implemen
             hour = 5;
         }
 
+        //set today's day by default
+        daySpinner.setSelection(Arrays.asList(dayCode).indexOf(String.valueOf(today)));
+
+        if (mPresenter.currentLocation != null) {
+            hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
+        }
+
         adView();
     }
 
@@ -218,12 +225,25 @@ public class LBSActivity extends MVPBaseActivity<LBSView, LBSPresenter> implemen
 
     }
 
+    /**
+     * Run first time when activity launch, trigger by LocationService.onConnected
+     * **/
     @Override
     public void spinnerSetSelection() {
-        if (Application.getRefreshFlag()) {
-            daySpinner.setSelection(Arrays.asList(dayCode).indexOf(String.valueOf(today)));
-            hourSpinner.setSelection(Arrays.asList(hourCode).indexOf(String.valueOf(hour)));
-            Application.setRefreshFlag(false);
+
+        int newPositionValue = Arrays.asList(hourCode).indexOf(String.valueOf(hour));
+        int currentPosition = hourSpinner.getSelectedItemPosition();
+
+        Log.d(TAG, "hourSpinner.getSelectedItemPosition() = " + currentPosition);
+        /*
+        if (!currentPosition.equals(newPositionValue)) {
+            Log.d(TAG, "!currentPosition.equals(newPositionValue)");
+            // do noting (do not refresh when infoactivy back to lbsactivity)
+        }*/
+        if (currentPosition == 0) {
+            Log.d(TAG, "currentPosition == 0");
+            // only run the first time when activity launch
+            hourSpinner.setSelection(newPositionValue);
         }
     }
 
@@ -245,8 +265,6 @@ public class LBSActivity extends MVPBaseActivity<LBSView, LBSPresenter> implemen
         if (items.size() == 0) {
             this.showError(getString(R.string.data_not_found), Utils.Mode.INFO);
         }
-
-
     }
 
     private void adView() {
@@ -336,7 +354,6 @@ public class LBSActivity extends MVPBaseActivity<LBSView, LBSPresenter> implemen
         mPresenter.onDestroy();
         super.onDestroy();
     }
-
 
     private void goIntent(ArrayItem item, Location location) {
 

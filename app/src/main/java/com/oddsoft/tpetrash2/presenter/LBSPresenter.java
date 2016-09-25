@@ -30,7 +30,7 @@ public class LBSPresenter extends BasePresenter<LBSView> implements LocationConn
     private LBSView view;
     private Context context;
     private LocationService locationService;
-    private Location currentLocation;
+    public Location currentLocation;
 
     public int distance;
     public String sorting;
@@ -48,9 +48,6 @@ public class LBSPresenter extends BasePresenter<LBSView> implements LocationConn
         currentLocation = locationService.getCurrentLocation();
 
         if (currentLocation != null) {
-
-            //set current location to global veriable
-            Application.setCurrentLocation(currentLocation);
 
             if (Application.APPDEBUG)
                 Log.d(TAG, "location = " + currentLocation.toString());
@@ -77,6 +74,7 @@ public class LBSPresenter extends BasePresenter<LBSView> implements LocationConn
 
                     if (e == null) {
                         view.setRecyclerView(avObjects, currentLocation);
+                      //  Application.setRefreshFlag(true);
 
                     } else {
                         view.showError(context.getString(R.string.network_error), Utils.Mode.ERROR);
@@ -122,8 +120,8 @@ public class LBSPresenter extends BasePresenter<LBSView> implements LocationConn
         }
     }
 
-    /*
-      LocationConnectedListener
+    /**
+     * LocationConnectedListener
     * */
     @Override
     public void onLocationServiceConnected(Location location) {
