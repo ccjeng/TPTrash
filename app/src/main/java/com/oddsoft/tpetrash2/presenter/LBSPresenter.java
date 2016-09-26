@@ -130,7 +130,13 @@ public class LBSPresenter extends BasePresenter<LBSView> implements LocationConn
         currentLocation = location;
 
         //auto set selected selection on spinner
-        view.spinnerSetSelection();
+        if (currentLocation != null) {
+            view.spinnerSetSelection();
+        } else {
+            //location error
+            view.showError(context.getString(R.string.location_error), Utils.Mode.ERROR);
+        }
+
     }
 
     @Override

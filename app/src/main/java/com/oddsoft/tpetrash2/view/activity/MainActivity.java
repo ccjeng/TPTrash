@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,15 +20,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.R;
-import com.oddsoft.tpetrash2.view.adapter.MainAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Utils;
+import com.oddsoft.tpetrash2.view.adapter.MainAdapter;
 import com.oddsoft.tpetrash2.view.base.BaseActivity;
 
 import java.util.ArrayList;
@@ -54,14 +60,15 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
+    @Bind(R.id.cvMessage)
+    CardView cvMessage;
+    @Bind(R.id.message)
+    TextView messageView;
+
     private Analytics ga;
 
     private static final int DIALOG_WELCOME = 1;
     private static final int DIALOG_UPDATE = 2;
-
-    private MainAdapter adapter;
-
-    //private ArrayItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +83,15 @@ public class MainActivity extends BaseActivity {
         initDrawer();
         initRecyclerView();
 
+        //show remote message if it is enabled
+        showMessage();
+
         if (Utils.isNewInstallation(this)) {
             this.showDialog(DIALOG_WELCOME);
         } else
         if (Utils.newVersionInstalled(this)) {
             this.showDialog(DIALOG_UPDATE);
         }
-
 
     }
 
@@ -195,7 +204,7 @@ public class MainActivity extends BaseActivity {
         mainItems.add(getString(R.string.ntrecycle));
         mainItems.add(getString(R.string.recycle));
 
-        adapter = new MainAdapter(mainItems);
+        MainAdapter adapter = new MainAdapter(mainItems);
 
         adapter.setOnItemClickListener(new MainAdapter.OnItemClickListener(){
             @Override
@@ -291,4 +300,44 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    private void showMessage() {
+
+        //get Firebase Remote Config data
+        final FirebaseRemoteConfig mRemoteConfig = FirebaseRemoteConfig.getInstance();
+
+        // cache expiration in seconds
+        long cacheExpiration = 3600; //1 hour
+
+        //Settings
+        /*
+        FirebaseRemoteConfigSettings remoteConfigSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(true)
+                .build();
+        mRemoteConfig.setConfigSettings(remoteConfigSettings);
+
+        //expire the cache immediately for development mode.
+        if (mRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+            cacheExpiration = 0;
+        }*/
+
+        mRemoteConfig.fetch(cacheExpiration)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            //Make the values available to your app
+                            mRemoteConfig.activateFetched();
+                            //get value from remote config
+                            String messageText = mRemoteConfig.getString("message");
+                            Boolean messageEnabled = mRemoteConfig.getBoolean("message_enabled");
+
+                            cvMessage.setVisibility(messageEnabled ? View.VISIBLE : View.GONE);
+
+                            if (messageEnabled) {
+                                messageView.setText(messageText);
+                            }
+                        }
+                    }
+                });
+    }
 }
