@@ -40,7 +40,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="@android:style/TextAppearance.Small"
-                    android:textColor="@color/red"/>
+                    android:textColor="@color/red"
+                    android:autoLink="web" />
             </android.support.v7.widget.CardView>>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"

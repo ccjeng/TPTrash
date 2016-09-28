@@ -306,10 +306,10 @@ public class MainActivity extends BaseActivity {
         final FirebaseRemoteConfig mRemoteConfig = FirebaseRemoteConfig.getInstance();
 
         // cache expiration in seconds
-        long cacheExpiration = 3600; //1 hour
+        long cacheExpiration = 3600 * 3; //3 hour
 
         //Settings
-        /*
+/*
         FirebaseRemoteConfigSettings remoteConfigSettings = new FirebaseRemoteConfigSettings.Builder()
                 .setDeveloperModeEnabled(true)
                 .build();
@@ -318,8 +318,8 @@ public class MainActivity extends BaseActivity {
         //expire the cache immediately for development mode.
         if (mRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
             cacheExpiration = 0;
-        }*/
-
+        }
+*/
         mRemoteConfig.fetch(cacheExpiration)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -334,7 +334,7 @@ public class MainActivity extends BaseActivity {
                             cvMessage.setVisibility(messageEnabled ? View.VISIBLE : View.GONE);
 
                             if (messageEnabled) {
-                                messageView.setText(messageText);
+                                messageView.setText(messageText.replace("\\n", System.getProperty("line.separator")));
                             }
                         }
                     }
