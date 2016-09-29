@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.oddsoft.tpetrash2.R;
+import com.oddsoft.tpetrash2.model.ArrayItem;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.oddsoft.tpetrash2.utils.Utils;
 

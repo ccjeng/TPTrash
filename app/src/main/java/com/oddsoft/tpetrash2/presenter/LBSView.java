@@ -3,7 +3,7 @@ package com.oddsoft.tpetrash2.presenter;
 import android.location.Location;
 
 import com.oddsoft.tpetrash2.utils.Utils;
-import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.model.ArrayItem;
 
 import java.util.List;
 

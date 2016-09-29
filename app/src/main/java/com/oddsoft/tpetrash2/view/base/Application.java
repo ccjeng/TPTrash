@@ -4,6 +4,8 @@ package com.oddsoft.tpetrash2.view.base;
  * Created by andycheng on 2015/5/5.
  */
 
+import android.support.multidex.MultiDexApplication;
+
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -12,11 +14,11 @@ import com.google.android.gms.analytics.Tracker;
 import com.oddsoft.tpetrash2.BuildConfig;
 import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.utils.Constant;
-import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.model.ArrayItem;
 
 import java.util.HashMap;
 
-public class Application extends android.app.Application {
+public class Application extends MultiDexApplication {
     // Debugging switch 
     public static final boolean APPDEBUG = BuildConfig.DEBUG;
     public static final String APPTAG = Application.class.getSimpleName();

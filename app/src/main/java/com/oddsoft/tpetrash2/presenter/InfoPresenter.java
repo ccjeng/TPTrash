@@ -29,7 +29,7 @@ import com.oddsoft.tpetrash2.presenter.base.BasePresenter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
-import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.model.ArrayItem;
 import com.oddsoft.tpetrash2.view.adapter.CustomInfoWindowAdapter;
 import com.oddsoft.tpetrash2.view.base.Application;
 

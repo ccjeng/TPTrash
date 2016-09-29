@@ -1,4 +1,4 @@
-package com.oddsoft.tpetrash2.view.adapter;
+package com.oddsoft.tpetrash2.model;
 
 /**
  * Data model for a trash item.

@@ -14,7 +14,7 @@ import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.controller.LocationService;
 import com.oddsoft.tpetrash2.presenter.base.BasePresenter;
 import com.oddsoft.tpetrash2.utils.Utils;
-import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.model.ArrayItem;
 import com.oddsoft.tpetrash2.view.base.Application;
 
 import java.util.List;

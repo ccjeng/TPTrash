@@ -28,7 +28,7 @@ import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.oddsoft.tpetrash2.utils.Utils;
-import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.model.ArrayItem;
 import com.oddsoft.tpetrash2.view.adapter.ArrayItemAdapter;
 import com.oddsoft.tpetrash2.view.base.Application;
 import com.oddsoft.tpetrash2.view.base.MVPBaseActivity;

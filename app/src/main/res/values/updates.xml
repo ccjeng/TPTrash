@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>4.3.1\n增加訊息公告
-			\n\n歡迎加入臉書粉絲專頁
+    	<item>4.3.2\n修正Android 4.x裝置無法使用部分功能的問題
 		</item>
 </string-array>
 </resources>

@@ -1,7 +1,7 @@
 package com.oddsoft.tpetrash2.presenter;
 
 import com.oddsoft.tpetrash2.utils.Utils;
-import com.oddsoft.tpetrash2.view.adapter.ArrayItem;
+import com.oddsoft.tpetrash2.model.ArrayItem;
 
 import java.util.List;
 
