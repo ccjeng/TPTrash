@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:title="@string/action_settings">
+	<PreferenceCategory android:title="@string/pref_group">
 	 	<ListPreference
             android:title="@string/pref_distance"
             android:summary="@string/pref_distance_summary"
@@ -16,5 +16,11 @@
             android:defaultValue="DIST"
             android:entries="@array/pref_sorting_item"
             android:entryValues="@array/pref_sorting_code" />
+		<SwitchPreference
+			android:title="@string/pref_relatecars"
+			android:summary="@string/pref_relatecars_summary"
+			android:key="relatecars"
+			android:defaultValue="false"
+			/>
     </PreferenceCategory>
 </PreferenceScreen>

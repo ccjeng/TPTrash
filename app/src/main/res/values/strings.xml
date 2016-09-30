@@ -34,6 +34,7 @@
     <string name="processing">正在取得資料..</string>
     <string name="google_play_service_missing">裝置沒有安裝Google Play服務</string>
 
+    <string name="pref_group">垃圾車班表</string>
     <string name="pref_distance">查詢範圍</string>
     <string name="pref_distance_summary">查詢距離(公里)</string>
     <string-array name="pref_distance_item">
@@ -60,6 +61,8 @@
         <item>DIST</item>
     </string-array>
 
+    <string name="pref_relatecars">地圖顯示垃圾車同班次全部時段的站點</string>
+    <string name="pref_relatecars_summary">在地圖上顯示同一班次垃圾車全部時段的站點</string>
 
     <string name="day_spinner_prompt">星期幾</string>
     <string-array name="day_spinnner_name">

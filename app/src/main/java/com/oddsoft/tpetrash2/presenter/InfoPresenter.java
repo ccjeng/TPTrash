@@ -3,11 +3,14 @@ package com.oddsoft.tpetrash2.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.avos.avoscloud.AVException;
@@ -24,12 +27,13 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.controller.NewTaipeiOpenDataService;
+import com.oddsoft.tpetrash2.model.ArrayItem;
 import com.oddsoft.tpetrash2.model.RealtimeCar;
 import com.oddsoft.tpetrash2.presenter.base.BasePresenter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
+import com.oddsoft.tpetrash2.utils.MapUtils;
 import com.oddsoft.tpetrash2.utils.Time;
-import com.oddsoft.tpetrash2.model.ArrayItem;
 import com.oddsoft.tpetrash2.view.adapter.CustomInfoWindowAdapter;
 import com.oddsoft.tpetrash2.view.base.Application;
 
@@ -86,10 +90,17 @@ public class InfoPresenter extends BasePresenter<InfoView> implements OnMapReady
 
     private Analytics ga;
 
+    private Boolean relateCars;
 
     public InfoPresenter(InfoView view, Context context){
         this.view = view;
         this.context = context;
+
+
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        relateCars = prefs.getBoolean("relatecars", false);
+
     }
 
     @Override
@@ -103,11 +114,14 @@ public class InfoPresenter extends BasePresenter<InfoView> implements OnMapReady
         map.setMyLocationEnabled(true);
 
         //Marker
+
+        Bitmap bitmap = MapUtils.getBitmap(context, R.drawable.ic_pin);
+
         MarkerOptions markerOpt = new MarkerOptions();
         markerOpt.position(new LatLng(toLat, toLng))
                 .title(address)
                 // .snippet(time + "\n\n" + memo)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
+                .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
 
         markerOpt.snippet(time + "\n\n" + todayInfo + memo);
 
@@ -127,7 +141,9 @@ public class InfoPresenter extends BasePresenter<InfoView> implements OnMapReady
             line = map.addPolyline(polylineOpt);
         }
 
-        this.drawLineCar(map);
+        if (relateCars) {
+            this.drawLineCar(map);
+        }
 
         //show realtime car
         if (!lineid.equals("")) {

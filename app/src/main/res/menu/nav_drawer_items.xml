@@ -3,15 +3,19 @@
     <group android:checkableBehavior="all">
         <item
             android:id="@+id/navSetting"
-            android:title="@string/action_settings"/>
+            android:title="@string/action_settings"
+            android:icon="@drawable/ic_cog_wheel_silhouette"/>
         <item
             android:id="@+id/navAbout"
-            android:title="@string/about_subject"/>
+            android:title="@string/about_subject"
+            android:icon="@drawable/ic_exclamation_sign"/>
         <item
             android:id="@+id/navSuggest"
-            android:title="@string/action_suggest"/>
+            android:title="@string/action_suggest"
+            android:icon="@drawable/ic_thumbs_up"/>
         <item
             android:id="@+id/navFacebook"
-            android:title="@string/action_facebook"/>
+            android:title="@string/action_facebook"
+            android:icon="@drawable/ic_facebook_logo"/>
     </group>
 </menu>

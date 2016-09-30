@@ -1,6 +1,5 @@
 package com.oddsoft.tpetrash2.view.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -11,8 +10,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.maps.MapFragment;
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.presenter.InfoPresenter;
 import com.oddsoft.tpetrash2.presenter.InfoView;
@@ -70,9 +67,6 @@ public class InfoActivity extends MVPBaseActivity<InfoView, InfoPresenter> imple
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.info, menu);
-
-        MenuItem menuItem1 = menu.findItem(R.id.menu_navi);
-        menuItem1.setIcon(new IconicsDrawable(this, CommunityMaterial.Icon.cmd_navigation).actionBar().color(Color.WHITE));
 
         return true;
     }
