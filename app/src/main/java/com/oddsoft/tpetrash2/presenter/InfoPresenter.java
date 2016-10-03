@@ -115,7 +115,7 @@ public class InfoPresenter extends BasePresenter<InfoView> implements OnMapReady
 
         //Marker
 
-        Bitmap bitmap = MapUtils.getBitmap(context, R.drawable.ic_pin);
+        Bitmap bitmap = MapUtils.getBitmap(context, R.drawable.ic_map_location);
 
         MarkerOptions markerOpt = new MarkerOptions();
         markerOpt.position(new LatLng(toLat, toLng))
@@ -162,10 +162,14 @@ public class InfoPresenter extends BasePresenter<InfoView> implements OnMapReady
             query.whereEqualTo("carno", carNo);
         }
 
+
         query.findInBackground(new com.avos.avoscloud.FindCallback<ArrayItem>() {
             @Override
             public void done(List<ArrayItem> item, AVException e) {
                 if (item != null) {
+
+                    Bitmap bitmap = MapUtils.getBitmap(context, R.drawable.ic_placeholder);
+
                     for (ArrayItem i : item) {
                         //Marker
                         MarkerOptions markerOption = new MarkerOptions();
@@ -173,7 +177,7 @@ public class InfoPresenter extends BasePresenter<InfoView> implements OnMapReady
                                 , i.getLocation().getLongitude()));
                         markerOption.title(i.getAddress())
                                 .snippet(i.getCarTime());
-                        markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.bullet_red));
+                        markerOption.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
 
                         markerCar = gmap.addMarker(markerOption);
                     }
@@ -185,12 +189,14 @@ public class InfoPresenter extends BasePresenter<InfoView> implements OnMapReady
 
     private void drawRealTimeCar(GoogleMap gmap, Double lat, Double lng, String time, String address) {
 
+        Bitmap bitmap = MapUtils.getBitmap(context, R.drawable.ic_truck);
+
         //Marker
         MarkerOptions markerOption = new MarkerOptions();
         markerOption.position(new LatLng(lat, lng));
         markerOption.title(address);
         markerOption.snippet(time);
-        markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_truck));
+        markerOption.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
 
         gmap.addMarker(markerOption);
 

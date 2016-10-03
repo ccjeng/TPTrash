@@ -61,7 +61,7 @@
         <item>DIST</item>
     </string-array>
 
-    <string name="pref_relatecars">地圖顯示垃圾車同班次全部時段的站點</string>
+    <string name="pref_relatecars">顯示同班次全部時段的站點</string>
     <string name="pref_relatecars_summary">在地圖上顯示同一班次垃圾車全部時段的站點</string>
 
     <string name="day_spinner_prompt">星期幾</string>

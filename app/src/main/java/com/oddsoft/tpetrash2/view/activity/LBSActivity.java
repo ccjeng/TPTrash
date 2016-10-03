@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -23,17 +24,16 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.oddsoft.tpetrash2.R;
+import com.oddsoft.tpetrash2.model.ArrayItem;
 import com.oddsoft.tpetrash2.presenter.LBSPresenter;
 import com.oddsoft.tpetrash2.presenter.LBSView;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Time;
 import com.oddsoft.tpetrash2.utils.Utils;
-import com.oddsoft.tpetrash2.model.ArrayItem;
 import com.oddsoft.tpetrash2.view.adapter.ArrayItemAdapter;
 import com.oddsoft.tpetrash2.view.base.Application;
 import com.oddsoft.tpetrash2.view.base.MVPBaseActivity;
-import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -79,7 +79,7 @@ public class LBSActivity extends MVPBaseActivity<LBSView, LBSPresenter> implemen
     Toolbar toolbar;
 
     @Bind(R.id.progress_wheel)
-    ProgressWheel progressWheel;
+    ProgressBar progressWheel;
 
     private Analytics ga;
 

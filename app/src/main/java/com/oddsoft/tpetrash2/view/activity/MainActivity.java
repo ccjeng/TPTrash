@@ -195,16 +195,16 @@ public class MainActivity extends BaseActivity {
                         startActivity(new Intent(MainActivity.this, QueryActivity.class));
                         break;
                     case 2:
-                        gotoTaipeiFixActivity("tpfix");
+                        gotoCustomMapActivity("tpfix");
                         break;
                     case 3:
                         startActivity(new Intent(MainActivity.this, NTFixActivity.class));
                         break;
                     case 4:
-                        gotoTaipeiFixActivity("tpfood");
+                        gotoCustomMapActivity("tpfood");
                         break;
                     case 5:
-                        gotoTaipeiFixActivity("ntrecycle");
+                        gotoCustomMapActivity("ntrecycle");
                         break;
                     case 6:
                         startActivity(new Intent(MainActivity.this, RecycleActivity.class));
@@ -237,13 +237,6 @@ public class MainActivity extends BaseActivity {
 
     protected final Dialog onCreateDialog(final int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //builder.setIcon(android.R.drawable.ic_dialog_info);
-
-        /*
-        builder.setIcon(new IconicsDrawable(this)
-                        .icon(FontAwesome.Icon.faw_info_circle)
-                        .color(Color.GRAY)
-                        .sizeDp(24));*/
 
         builder.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_exclamation_sign));
 
@@ -271,9 +264,9 @@ public class MainActivity extends BaseActivity {
         return builder.create();
     }
 
-    private void gotoTaipeiFixActivity(String mapType){
+    private void gotoCustomMapActivity(String mapType){
         Intent intent = new Intent();
-        intent.setClass(MainActivity.this, TPFixActivity.class);
+        intent.setClass(MainActivity.this, CustomMapActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("mapType", mapType);
         intent.putExtras(bundle);

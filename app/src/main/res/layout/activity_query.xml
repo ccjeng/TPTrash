@@ -85,6 +85,18 @@
 
         </LinearLayout>
 
+        <ProgressBar
+            android:id="@+id/progress_wheel"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="gone"/>
+
+        <!--
         <com.pnikosis.materialishprogress.ProgressWheel
             android:id="@+id/progress_wheel"
             android:layout_width="80dp"
@@ -97,7 +109,7 @@
             wheel:matProg_barColor="@color/color_progress"
             wheel:matProg_progressIndeterminate="true"
             android:visibility="gone"/>
-
+-->
         <LinearLayout
             android:id="@+id/footerLayout"
             android:layout_width="fill_parent"

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="updates">
-    	<item>4.3.2\n修正Android 4.x裝置無法使用部分功能的問題
+    	<item>5.0.0\n地圖標示改為向量圖形
+			\n新增設定：在地圖上顯示同一班次垃圾車全部時段的站點(預設為關閉)
 		</item>
 </string-array>
 </resources>

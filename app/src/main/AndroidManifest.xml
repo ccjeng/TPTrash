@@ -63,7 +63,7 @@
             android:label="@string/query"/>
 
         <activity
-            android:name=".view.activity.TPFixActivity"
+            android:name=".view.activity.CustomMapActivity"
             android:label="@string/tpfix"/>
 
         <activity
