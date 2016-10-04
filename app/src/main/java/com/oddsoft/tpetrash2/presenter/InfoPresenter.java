@@ -168,8 +168,6 @@ public class InfoPresenter extends BasePresenter<InfoView> implements OnMapReady
             public void done(List<ArrayItem> item, AVException e) {
                 if (item != null) {
 
-                    Bitmap bitmap = MapUtils.getBitmap(context, R.drawable.ic_placeholder);
-
                     for (ArrayItem i : item) {
                         //Marker
                         MarkerOptions markerOption = new MarkerOptions();
@@ -177,7 +175,7 @@ public class InfoPresenter extends BasePresenter<InfoView> implements OnMapReady
                                 , i.getLocation().getLongitude()));
                         markerOption.title(i.getAddress())
                                 .snippet(i.getCarTime());
-                        markerOption.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                        markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
 
                         markerCar = gmap.addMarker(markerOption);
                     }

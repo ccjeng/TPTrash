@@ -2,7 +2,6 @@ package com.oddsoft.tpetrash2.presenter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.util.Log;
 
@@ -22,7 +21,6 @@ import com.oddsoft.tpetrash2.model.TPFix.TPFix;
 import com.oddsoft.tpetrash2.model.TPFood.TPFood;
 import com.oddsoft.tpetrash2.presenter.base.BasePresenter;
 import com.oddsoft.tpetrash2.utils.Constant;
-import com.oddsoft.tpetrash2.utils.MapUtils;
 import com.oddsoft.tpetrash2.utils.Utils;
 import com.oddsoft.tpetrash2.view.adapter.CustomInfoWindowAdapter;
 import com.oddsoft.tpetrash2.view.base.Application;
@@ -140,15 +138,12 @@ public class CustomMapPresenter extends BasePresenter<CustomMapView>
                             Double lat = Double.valueOf(tpFixs.getResult().getResults().get(i).getLat());
                             Double lng = Double.valueOf(tpFixs.getResult().getResults().get(i).getLng());
 
-
-                            Bitmap bitmap = MapUtils.getBitmap(context, R.drawable.ic_placeholder);
-
                             //Marker
                             MarkerOptions markerOption = new MarkerOptions();
                             markerOption.position(new LatLng(lat, lng));
                             markerOption.title(team + "\n" + address);
                             markerOption.snippet(memo + "\n" + phone);
-                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                            markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
 
                             CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter((Activity) context);
                             gmap.setInfoWindowAdapter(adapter);
@@ -207,14 +202,12 @@ public class CustomMapPresenter extends BasePresenter<CustomMapView>
                             Double lat = Double.valueOf(tpFoods.getResult().getResults().get(i).getLat());
                             Double lng = Double.valueOf(tpFoods.getResult().getResults().get(i).getLng());
 
-                            Bitmap bitmap = MapUtils.getBitmap(context, R.drawable.ic_placeholder);
-
                             //Marker
                             MarkerOptions markerOption = new MarkerOptions();
                             markerOption.position(new LatLng(lat, lng));
                             markerOption.title(team + "\n" + address);
                             markerOption.snippet(memo);
-                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                            markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
 
                             CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter((Activity) context);
                             gmap.setInfoWindowAdapter(adapter);
@@ -281,8 +274,6 @@ public class CustomMapPresenter extends BasePresenter<CustomMapView>
                                 lat = Double.valueOf(item.getWgs84aY());
                                 lng = Double.valueOf(item.getWgs84aX());
 
-                                Bitmap bitmap = MapUtils.getBitmap(context, R.drawable.ic_placeholder);
-
                                 //Marker
                                 MarkerOptions markerOption = new MarkerOptions();
                                 markerOption.position(new LatLng(lat, lng));
@@ -290,7 +281,7 @@ public class CustomMapPresenter extends BasePresenter<CustomMapView>
                                 markerOption.snippet(open_time + " \n"+ state + " \n電話 : " + tel +
                                         "\n里長姓名 : " + name + "\n里辦地址 : " +address);
 
-                                markerOption.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                                markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
 
                                 CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter((Activity) context);
                                 gmap.setInfoWindowAdapter(adapter);
