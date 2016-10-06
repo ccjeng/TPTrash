@@ -7,7 +7,7 @@ android {
         applicationId 'com.oddsoft.tpetrash2'
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 59
+        versionCode 60
         versionName '5.0.0.100516TT'
         multiDexEnabled true
     }
@@ -53,7 +53,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:9.6.1'
     compile 'com.google.firebase:firebase-core:9.6.1'
     compile 'com.google.firebase:firebase-ads:9.6.1'
-    compile 'com.google.firebase:firebase-crash:9.6.1'
+    releaseCompile 'com.google.firebase:firebase-crash:9.6.1'
     compile 'com.google.firebase:firebase-config:9.6.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
