@@ -7,7 +7,7 @@ android {
         applicationId 'com.oddsoft.tpetrash2'
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 60
+        versionCode 61
         versionName '5.0.1.110616TT'
         multiDexEnabled true
     }
