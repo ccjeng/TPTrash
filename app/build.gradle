@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.1'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId 'com.oddsoft.tpetrash2'
         minSdkVersion 16
         targetSdkVersion 21
         versionCode 60
-        versionName '5.0.0.100516TT'
+        versionName '5.0.1.110616TT'
         multiDexEnabled true
     }
     buildTypes {
@@ -47,25 +47,30 @@ dependencies {
     compile files('libs/vpadn-sdk-obf460-20906102-1609021438-69c7670.jar')
     compile files('libs/admob-adapter-1.0.0-1505261651-830485e.jar')
     compile files('libs/FacebookAdapter.jar')
-    compile 'com.facebook.android:audience-network-sdk:4.15.0'
-    compile 'com.google.android.gms:play-services-maps:9.6.1'
-    compile 'com.google.android.gms:play-services-analytics:9.6.1'
-    compile 'com.google.android.gms:play-services-location:9.6.1'
-    compile 'com.google.firebase:firebase-core:9.6.1'
-    compile 'com.google.firebase:firebase-ads:9.6.1'
-    releaseCompile 'com.google.firebase:firebase-crash:9.6.1'
-    compile 'com.google.firebase:firebase-config:9.6.1'
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile 'com.facebook.android:audience-network-sdk:4.17.0'
+    compile 'com.google.android.gms:play-services-maps:9.8.0'
+    compile 'com.google.android.gms:play-services-analytics:9.8.0'
+    compile 'com.google.android.gms:play-services-location:9.8.0'
+    compile 'com.google.firebase:firebase-core:9.8.0'
+    compile 'com.google.firebase:firebase-ads:9.8.0'
+    releaseCompile 'com.google.firebase:firebase-crash:9.8.0'
+    compile 'com.google.firebase:firebase-config:9.8.0'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'cn.leancloud.android:avoscloud-sdk:v3.14.4'
     compile 'io.reactivex:rxjava:1.2.0'
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    //LeanCloud
+    //compile 'cn.leancloud.android:avoscloud-sdk:v3.14.4'
+    compile files('libs/avoscloud-sdk-v3.14.9.jar')
+    compile files('libs/fastjson.jar')
+    compile files('libs/okhttp-2.6.0-leancloud.jar')
+    compile files('libs/okio-1.6.0-leancloud.jar')
 }
 
 apply plugin: 'com.google.gms.google-services'
