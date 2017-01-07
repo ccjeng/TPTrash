@@ -306,6 +306,8 @@ public class MainActivity extends BaseActivity {
 
                             cvMessage.setVisibility(messageEnabled ? View.VISIBLE : View.GONE);
 
+                            cvMessage.setVisibility(messageEnabled ? View.GONE : View.VISIBLE);
+
                             if (messageEnabled) {
                                 messageView.setText(messageText.replace("\\n", System.getProperty("line.separator")));
                             }

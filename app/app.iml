@@ -172,8 +172,8 @@
     <orderEntry type="library" exported="" name="okio-1.9.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-analytics-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="design-25.1.0" level="project" />
+    <orderEntry type="library" exported="" name="vpadn-sdk-obf463-22216102-1612221555-54fff67" level="project" />
     <orderEntry type="library" exported="" name="play-services-tasks-10.0.1" level="project" />
-    <orderEntry type="library" exported="" name="vpadn-sdk-obf460-20906102-1609021438-69c7670" level="project" />
     <orderEntry type="library" exported="" name="audience-network-sdk-4.17.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-base-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-fragment-25.1.0" level="project" />
