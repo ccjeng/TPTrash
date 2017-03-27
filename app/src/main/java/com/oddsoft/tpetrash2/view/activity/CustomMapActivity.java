@@ -64,15 +64,18 @@ public class CustomMapActivity extends MVPBaseActivity<CustomMapView, CustomMapP
             case "tpfood": //台北市週三、週日廚餘專用限時收受點
                 title = getString(R.string.tpfood);
                 break;
+            case "tpcloth": //台北市舊衣回收箱
+                title = getString(R.string.tpcloth);
+                break;
             case "ntrecycle": //新北市黃金資收站設置資訊
                 title = getString(R.string.ntrecycle);
                 break;
+
          }
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
             getSupportActionBar().setTitle(title);
-
         }
     }
 

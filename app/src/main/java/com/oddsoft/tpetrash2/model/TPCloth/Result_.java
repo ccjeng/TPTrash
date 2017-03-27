@@ -1,5 +1,5 @@
 
-package com.oddsoft.tpetrash2.model.TPFix;
+package com.oddsoft.tpetrash2.model.TPCloth;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,27 +9,30 @@ public class Result_ {
     @SerializedName("_id")
     @Expose
     private String id;
-    @SerializedName("\ufeffRegion")
+    @SerializedName("行政區")
     @Expose
     private String region;
-    @SerializedName("Branch")
+    @SerializedName("團體名稱")
     @Expose
     private String branch;
-    @SerializedName("Phone")
-    @Expose
-    private String phone;
-    @SerializedName("Address")
+    @SerializedName("臺北市核准地點")
     @Expose
     private String address;
-    @SerializedName("Memo")
+    @SerializedName("備註")
     @Expose
     private String memo;
-    @SerializedName("Lng")
+    @SerializedName("經度")
     @Expose
     private String lng;
-    @SerializedName("Lat")
+    @SerializedName("緯度")
     @Expose
     private String lat;
+    @SerializedName("\ufeff核准編號")
+    @Expose
+    private String no;
+    @SerializedName("電話")
+    @Expose
+    private String tel;
 
     /**
      * 
@@ -83,24 +86,6 @@ public class Result_ {
      */
     public void setBranch(String branch) {
         this.branch = branch;
-    }
-
-    /**
-     * 
-     * @return
-     *     The phone
-     */
-    public String getPhone() {
-        return phone;
-    }
-
-    /**
-     * 
-     * @param phone
-     *     The Phone
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     /**
@@ -175,4 +160,19 @@ public class Result_ {
         this.lat = lat;
     }
 
+    public String getNo() {
+        return no;
+    }
+
+    public void setNo(String no) {
+        this.no = no;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
 }

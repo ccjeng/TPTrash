@@ -8,6 +8,7 @@
     <string name="query">垃圾車班表\n依行政區查詢</string>
     <string name="tpfix">台北市垃圾資源回收、廚餘回收限時收受點</string>
     <string name="tpfood">台北市週三、週日廚餘專用限時收受點</string>
+    <string name="tpcloth">台北市舊衣回收箱</string>
     <string name="ntfix">新北市定點清運查詢</string>
     <string name="ntrecycle">新北市黃金資收站設置資訊</string>
     <string name="newtaipeirealtime">新北市垃圾車即時資訊</string>
@@ -180,6 +181,8 @@
     <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=74643872-ee76-4727-bd02-d73b536eaad7>台北市資源回收分類方式</a>
     <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=1acf38f3-1509-4cb1-898a-9b1d4f31a3af>台北市垃圾資源回收、廚餘回收限時收受點</a>
     <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=1acf38f3-1509-4cb1-898a-9b1d4f31a3af>台北市週三、週日廚餘專用限時收受點</a>
+    <br/><a href=http://data.taipei/opendata/datalist/datasetMeta?oid=33de0950-24df-463d-b199-da3fbf612ef1>台北市核准身障福利團體設置舊衣回收箱</a>
+
 
     <br/><br/>新北市政府資料開放平台
     <br/><a href=http://data.ntpc.gov.tw/od/detail?oid=EDC3AD26-8AE7-4916-A00B-BC6048D19BF8>新北市垃圾車路線</a>

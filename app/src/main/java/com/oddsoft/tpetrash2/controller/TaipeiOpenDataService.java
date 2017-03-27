@@ -1,5 +1,6 @@
 package com.oddsoft.tpetrash2.controller;
 
+import com.oddsoft.tpetrash2.model.TPCloth.TPCloth;
 import com.oddsoft.tpetrash2.model.TPFix.TPFix;
 import com.oddsoft.tpetrash2.model.TPFood.TPFood;
 
@@ -16,5 +17,9 @@ public interface TaipeiOpenDataService {
 
     @GET("raw/TaipeiFood.json")
     Observable<TPFood> getTaipeiFoodLocation();
+
+    @GET("raw/TaipeiCloth.json")
+    Observable<TPCloth> getTaipeiClothLocation();
+
 
 }

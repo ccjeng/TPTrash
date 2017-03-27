@@ -2,7 +2,6 @@ package com.oddsoft.tpetrash2.view.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -179,6 +178,7 @@ public class MainActivity extends BaseActivity {
         mainItems.add(getString(R.string.ntfix));
         mainItems.add(getString(R.string.tpfood));
         mainItems.add(getString(R.string.ntrecycle));
+        mainItems.add(getString(R.string.tpcloth));
         mainItems.add(getString(R.string.recycle));
 
         MainAdapter adapter = new MainAdapter(mainItems);
@@ -207,6 +207,9 @@ public class MainActivity extends BaseActivity {
                         gotoCustomMapActivity("ntrecycle");
                         break;
                     case 6:
+                        gotoCustomMapActivity("tpcloth");
+                        break;
+                    case 7:
                         startActivity(new Intent(MainActivity.this, RecycleActivity.class));
                         break;
                 }
@@ -243,7 +246,7 @@ public class MainActivity extends BaseActivity {
                 builder.setCancelable(true);
         builder.setPositiveButton(android.R.string.ok, null);
 
-        final Context context = this;
+        //final Context context = this;
 
         switch (id) {
             case DIALOG_WELCOME:

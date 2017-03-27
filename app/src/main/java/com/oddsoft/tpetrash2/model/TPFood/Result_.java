@@ -56,9 +56,9 @@ public class Result_ {
     }
 
     /**
-     * 
+     *
      * @param region
-     *     The ﻿Region
+     *     The Region
      */
     public void setRegion(String region) {
         this.region = region;

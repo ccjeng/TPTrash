@@ -17,6 +17,7 @@ import com.oddsoft.tpetrash2.controller.LocationService;
 import com.oddsoft.tpetrash2.controller.NewTaipeiOpenDataService;
 import com.oddsoft.tpetrash2.controller.TaipeiOpenDataService;
 import com.oddsoft.tpetrash2.model.NPRecycle;
+import com.oddsoft.tpetrash2.model.TPCloth.TPCloth;
 import com.oddsoft.tpetrash2.model.TPFix.TPFix;
 import com.oddsoft.tpetrash2.model.TPFood.TPFood;
 import com.oddsoft.tpetrash2.presenter.base.BasePresenter;
@@ -36,14 +37,14 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static com.google.android.gms.internal.zzs.TAG;
-
 /**
  * Created by andycheng on 2016/10/3.
  */
 
 public class CustomMapPresenter extends BasePresenter<CustomMapView>
         implements OnMapReadyCallback, LocationConnectedListener {
+
+    private static final String TAG = CustomMapPresenter.class.getSimpleName();
 
     private CustomMapView view;
     private Context context;
@@ -72,6 +73,9 @@ public class CustomMapPresenter extends BasePresenter<CustomMapView>
                 break;
             case "tpfood": //台北市週三、週日廚餘專用限時收受點
                 drawLocationTPFood(map);
+                break;
+            case "tpcloth": //台北市舊衣回收箱
+                drawLocationTPCloth(map);
                 break;
             case "ntrecycle": //新北市黃金資收站設置資訊
                 drawLocationNTRecycle(map);
@@ -207,6 +211,70 @@ public class CustomMapPresenter extends BasePresenter<CustomMapView>
                             markerOption.position(new LatLng(lat, lng));
                             markerOption.title(team + "\n" + address);
                             markerOption.snippet(memo);
+                            markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
+
+                            CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter((Activity) context);
+                            gmap.setInfoWindowAdapter(adapter);
+
+                            gmap.addMarker(markerOption);
+                        }
+                    }
+                });
+
+    }
+
+    private void drawLocationTPCloth(final GoogleMap gmap) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        if (Application.APPDEBUG) {
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        } else {
+            logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+        }
+
+        OkHttpClient okhttpClient = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constant.GITHUB_GIST)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okhttpClient)
+                .build();
+
+        TaipeiOpenDataService service = retrofit.create(TaipeiOpenDataService.class);
+
+        service.getTaipeiClothLocation()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<TPCloth>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("Error", e.getMessage());
+                        view.showError(context.getString(R.string.data_error), Utils.Mode.ERROR);
+                    }
+
+                    @Override
+                    public void onNext(TPCloth tpCloths) {
+
+                        for(int i=0; i<tpCloths.getResult().getResults().size(); i++){
+
+                            String team = tpCloths.getResult().getResults().get(i).getBranch();
+                            String address = tpCloths.getResult().getResults().get(i).getAddress();
+                            //String tel = tpCloths.getResult().getResults().get(i).getTel();
+                            Double lat = Double.valueOf(tpCloths.getResult().getResults().get(i).getLat());
+                            Double lng = Double.valueOf(tpCloths.getResult().getResults().get(i).getLng());
+
+                            //Marker
+                            MarkerOptions markerOption = new MarkerOptions();
+                            markerOption.position(new LatLng(lat, lng));
+                            markerOption.title(team);
+                            markerOption.snippet(address);
                             markerOption.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
 
                             CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter((Activity) context);
