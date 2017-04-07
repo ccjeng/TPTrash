@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
+import com.oddsoft.tpetrash2.BuildConfig;
 import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Utils;
@@ -285,17 +286,10 @@ public class MainActivity extends BaseActivity {
         long cacheExpiration = 3600 * 3; //3 hour
 
         //Settings
-/*
-        FirebaseRemoteConfigSettings remoteConfigSettings = new FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(true)
-                .build();
-        mRemoteConfig.setConfigSettings(remoteConfigSettings);
-
-        //expire the cache immediately for development mode.
-        if (mRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+        if(BuildConfig.DEBUG) {
             cacheExpiration = 0;
         }
-*/
+
         mRemoteConfig.fetch(cacheExpiration)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -308,8 +302,6 @@ public class MainActivity extends BaseActivity {
                             Boolean messageEnabled = mRemoteConfig.getBoolean("message_enabled");
 
                             cvMessage.setVisibility(messageEnabled ? View.VISIBLE : View.GONE);
-
-                            cvMessage.setVisibility(messageEnabled ? View.GONE : View.VISIBLE);
 
                             if (messageEnabled) {
                                 messageView.setText(messageText.replace("\\n", System.getProperty("line.separator")));

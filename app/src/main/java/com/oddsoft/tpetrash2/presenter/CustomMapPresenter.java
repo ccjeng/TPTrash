@@ -67,6 +67,7 @@ public class CustomMapPresenter extends BasePresenter<CustomMapView>
         map.getUiSettings().setZoomControlsEnabled(true);
         map.setMyLocationEnabled(true);
 
+        float zoom = 14;
         switch (mapType) {
             case "tpfix":  //台北市資源回收及廚餘限時收受點
                 drawLocationTPFix(map);
@@ -76,6 +77,7 @@ public class CustomMapPresenter extends BasePresenter<CustomMapView>
                 break;
             case "tpcloth": //台北市舊衣回收箱
                 drawLocationTPCloth(map);
+                zoom = 16;
                 break;
             case "ntrecycle": //新北市黃金資收站設置資訊
                 drawLocationNTRecycle(map);
@@ -86,7 +88,7 @@ public class CustomMapPresenter extends BasePresenter<CustomMapView>
 
         if (currentLocation != null) {
             LatLng myLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 14));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, zoom));
 
         } else {
             view.showError(context.getString(R.string.location_error), Utils.Mode.ERROR);

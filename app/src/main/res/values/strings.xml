@@ -8,7 +8,7 @@
     <string name="query">垃圾車班表\n依行政區查詢</string>
     <string name="tpfix">台北市垃圾資源回收、廚餘回收限時收受點</string>
     <string name="tpfood">台北市週三、週日廚餘專用限時收受點</string>
-    <string name="tpcloth">台北市舊衣回收箱</string>
+    <string name="tpcloth">台北市\n舊衣回收箱</string>
     <string name="ntfix">新北市定點清運查詢</string>
     <string name="ntrecycle">新北市黃金資收站設置資訊</string>
     <string name="newtaipeirealtime">新北市垃圾車即時資訊</string>
