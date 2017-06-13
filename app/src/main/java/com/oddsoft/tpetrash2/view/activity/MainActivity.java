@@ -283,7 +283,7 @@ public class MainActivity extends BaseActivity {
         final FirebaseRemoteConfig mRemoteConfig = FirebaseRemoteConfig.getInstance();
 
         // cache expiration in seconds
-        long cacheExpiration = 3600 * 3; //3 hour
+        long cacheExpiration = 0; //3600 * 3; //3 hour
 
         //Settings
         if(BuildConfig.DEBUG) {
