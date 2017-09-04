@@ -106,12 +106,12 @@
     <orderEntry type="library" exported="" name="transition-25.3.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-impl-11.0.4" level="project" />
     <orderEntry type="library" exported="" name="play-services-ads-11.0.4" level="project" />
-    <orderEntry type="library" exported="" name="FacebookAdapter" level="project" />
     <orderEntry type="library" exported="" name="firebase-config-11.0.4" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-24.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-gass-11.0.4" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="multidex-instrumentation-1.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-location-11.0.4" level="project" />
+    <orderEntry type="library" exported="" name="facebook-4.25.0.0" level="project" />
     <orderEntry type="library" exported="" name="fastadapter-1.6.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-clearcut-11.0.4" level="project" />
     <orderEntry type="library" exported="" name="adapter-rxjava-2.1.0" level="project" />
