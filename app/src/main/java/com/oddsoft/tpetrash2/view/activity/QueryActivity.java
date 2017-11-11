@@ -38,7 +38,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class QueryActivity extends MVPBaseActivity<QueryView, QueryPresenter> implements QueryView {
@@ -48,17 +48,17 @@ public class QueryActivity extends MVPBaseActivity<QueryView, QueryPresenter> im
     private static int hour;
     private static int currentHour;
 
-    @Bind(R.id.day_spinner)
+    @BindView(R.id.day_spinner)
     Spinner daySpinner;
-    @Bind(R.id.hour_spinner)
+    @BindView(R.id.hour_spinner)
     Spinner hourSpinner;
-    @Bind(R.id.region_spinner)
+    @BindView(R.id.region_spinner)
     Spinner regionSpinner;
 
-    @Bind(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    @Bind(R.id.coordinatorlayout)
+    @BindView(R.id.coordinatorlayout)
     CoordinatorLayout coordinatorlayout;
 
     private AdView adView;
@@ -74,10 +74,10 @@ public class QueryActivity extends MVPBaseActivity<QueryView, QueryPresenter> im
     private String selectedHour;
     private String selectedRegion;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.progress_wheel)
+    @BindView(R.id.progress_wheel)
     ProgressBar progressWheel;
 
     private Analytics ga;

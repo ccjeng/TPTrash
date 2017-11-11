@@ -18,7 +18,7 @@ import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.view.base.Application;
 import com.oddsoft.tpetrash2.view.base.MVPBaseActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
@@ -26,7 +26,7 @@ public class InfoActivity extends MVPBaseActivity<InfoView, InfoPresenter> imple
 
     private static final String TAG = InfoActivity.class.getSimpleName();
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     private Analytics ga;

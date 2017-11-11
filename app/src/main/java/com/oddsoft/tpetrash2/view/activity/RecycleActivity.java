@@ -14,11 +14,11 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.oddsoft.tpetrash2.R;
-import com.oddsoft.tpetrash2.view.adapter.RecycleItem;
-import com.oddsoft.tpetrash2.view.adapter.RecycleListAdapter;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Constant;
 import com.oddsoft.tpetrash2.utils.Utils;
+import com.oddsoft.tpetrash2.view.adapter.RecycleItem;
+import com.oddsoft.tpetrash2.view.adapter.RecycleListAdapter;
 import com.oddsoft.tpetrash2.view.base.Application;
 import com.oddsoft.tpetrash2.view.base.BaseActivity;
 
@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -38,13 +38,13 @@ import butterknife.ButterKnife;
  */
 public class RecycleActivity extends BaseActivity {
 
-    @Bind(R.id.searchText)
+    @BindView(R.id.searchText)
     AutoCompleteTextView searchText;
 
-    @Bind(R.id.listRecycleInfo)
+    @BindView(R.id.listRecycleInfo)
     ListView recycleView;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     private AdView adView;

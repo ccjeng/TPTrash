@@ -12,15 +12,15 @@ import com.oddsoft.tpetrash2.R;
 import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.view.base.BaseActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class NTFixActivity extends BaseActivity {
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.webView)
+    @BindView(R.id.webView)
     WebView webView;
 
     private Analytics ga;

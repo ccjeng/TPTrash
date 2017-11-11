@@ -39,7 +39,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LBSActivity extends MVPBaseActivity<LBSView, LBSPresenter> implements LBSView  {
@@ -49,17 +49,17 @@ public class LBSActivity extends MVPBaseActivity<LBSView, LBSPresenter> implemen
     private static int hour;
     private static int currentHour;
 
-    @Bind(R.id.day_spinner)
+    @BindView(R.id.day_spinner)
     Spinner daySpinner;
-    @Bind(R.id.hour_spinner)
+    @BindView(R.id.hour_spinner)
     Spinner hourSpinner;
-    @Bind(R.id.sort_spinner)
+    @BindView(R.id.sort_spinner)
     Spinner sortSpinner;
 
-    @Bind(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    @Bind(R.id.coordinatorlayout)
+    @BindView(R.id.coordinatorlayout)
     CoordinatorLayout coordinatorlayout;
 
     private AdView adView;
@@ -75,10 +75,10 @@ public class LBSActivity extends MVPBaseActivity<LBSView, LBSPresenter> implemen
     private String selectedHour;
     private String selectedSort;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.progress_wheel)
+    @BindView(R.id.progress_wheel)
     ProgressBar progressWheel;
 
     private Analytics ga;

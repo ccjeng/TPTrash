@@ -36,31 +36,31 @@ import com.oddsoft.tpetrash2.view.base.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    @Bind(R.id.navigation)
+    @BindView(R.id.navigation)
     NavigationView navigation;
 
-    @Bind(R.id.drawerlayout)
+    @BindView(R.id.drawerlayout)
     DrawerLayout drawerLayout;
 
-    @Bind(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
     private ActionBar actionbar;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.cvMessage)
+    @BindView(R.id.cvMessage)
     CardView cvMessage;
-    @Bind(R.id.message)
+    @BindView(R.id.message)
     TextView messageView;
 
     private Analytics ga;

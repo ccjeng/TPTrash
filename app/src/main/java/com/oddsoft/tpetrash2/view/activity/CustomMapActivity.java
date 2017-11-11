@@ -18,16 +18,16 @@ import com.oddsoft.tpetrash2.utils.Utils;
 import com.oddsoft.tpetrash2.view.base.Application;
 import com.oddsoft.tpetrash2.view.base.MVPBaseActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CustomMapActivity extends MVPBaseActivity<CustomMapView, CustomMapPresenter> implements CustomMapView {
 
     private static final String TAG = CustomMapActivity.class.getSimpleName();
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.coordinatorlayout)
+    @BindView(R.id.coordinatorlayout)
     RelativeLayout coordinatorlayout;
 
     //MapFragment mapFragment;
