@@ -1,5 +1,6 @@
 package com.oddsoft.tpetrash2.view.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -16,10 +17,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,12 +35,14 @@ import com.oddsoft.tpetrash2.utils.Analytics;
 import com.oddsoft.tpetrash2.utils.Utils;
 import com.oddsoft.tpetrash2.view.adapter.MainAdapter;
 import com.oddsoft.tpetrash2.view.base.BaseActivity;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.functions.Consumer;
 
 public class MainActivity extends BaseActivity {
 
@@ -91,6 +96,7 @@ public class MainActivity extends BaseActivity {
             this.showDialog(DIALOG_UPDATE);
         }
 
+        getPermission();
     }
 
     private void initActionBar() {
@@ -308,6 +314,29 @@ public class MainActivity extends BaseActivity {
                             }
                         }
                     }
+                });
+    }
+
+    public void getPermission() {
+
+        RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions
+                .request(Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) // ask single or multiple permission once
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+                            //申請的權限全部允許
+                            Log.d(TAG,"PERMISSION GRANT");
+                        } else {
+                            //只要有一個權限被拒絕，就會執行
+                            Log.d(TAG,"PERMISSION DENY");
+                            Toast.makeText(MainActivity.this, "未授權權限，地圖功能不能使用", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
                 });
     }
 }

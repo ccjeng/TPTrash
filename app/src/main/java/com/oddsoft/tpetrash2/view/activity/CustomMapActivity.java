@@ -167,5 +167,6 @@ public class CustomMapActivity extends MVPBaseActivity<CustomMapView, CustomMapP
         return new CustomMapPresenter(this, this);
     }
 
+
 }
 

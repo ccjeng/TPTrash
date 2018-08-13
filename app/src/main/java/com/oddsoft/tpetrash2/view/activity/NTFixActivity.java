@@ -82,5 +82,4 @@ public class NTFixActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
 }

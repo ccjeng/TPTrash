@@ -8,8 +8,8 @@ android {
         applicationId 'com.oddsoft.tpetrash2'
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 68
-        versionName '5.1.4.081218TT'
+        versionCode 69
+        versionName '5.1.5.081218TT'
         multiDexEnabled true
     }
     buildTypes {
@@ -68,6 +68,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     //LeanCloud
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.5.3'
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
